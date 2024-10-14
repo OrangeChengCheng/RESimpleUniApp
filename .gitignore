@@ -1,2 +1,4 @@
-
 /SDK
+xcuserdata
+project.xcworkspace
+*.xcuserstate

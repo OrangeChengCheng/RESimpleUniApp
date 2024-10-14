@@ -21,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (RELoadingView *)initWithFrame:(CGRect)frame;
 
+- (void)showLoading;
+
+- (void)hiddenLoading;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -43,8 +43,14 @@
 	self.view.backgroundColor = [UIColor whiteColor];
 	[self addReaderView];
 	
-	
 	[self.view addSubview:self.loadingView];
+	[self.loadingView showLoading];
+	
+	WEAKSELF
+	[[BlackHole3D sharedSingleton] dataSetLoadProgress:^(float progress, NSString * _Nullable info) {
+		STRONGSELF
+		strongSelf.loadingView.loadingProgress.progress = progress / 100.0;
+	}];
 }
 
 - (void)addReaderView {
@@ -164,9 +170,10 @@
 			if (success) {
 //				[[BlackHole3D sharedSingleton].BIM setContourLineClr:@"" lineClr:REColorMake_RGB(0, 0, 0)];
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
-				if (self.shareType == 2 && self.camDefaultDataSetId.length > 0) {
-					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:self.camDefaultDataSetId backDepth:1.0];
+				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0) {
+					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
 				}
+				[strongSelf.loadingView hiddenLoading];
 			} else {
 				[strongSelf endRenderAndExit];
 			}
