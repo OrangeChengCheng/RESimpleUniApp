@@ -8,6 +8,7 @@
 #import "REAppDelegate.h"
 #import "BlackHole3D.h"
 #import <CoreTelephony/CTCellularData.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 
 @implementation SDLUIKitDelegate (reAppDelegate)
 
@@ -19,6 +20,7 @@
 
 
 @interface REAppDelegate ()
+@property (assign, nonatomic) SCNetworkReachabilityRef reachabilityRef;
 
 @end
 
@@ -85,18 +87,42 @@
 }
 
 
+// 前往设置
+- (void)gotoSysSetting {
+	// 在主线程中弹出提示框
+	dispatch_async(dispatch_get_main_queue(), ^{
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"网络设置"
+																			   message:@"当前网络不可用，是否前往设置？"
+																		preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"设置"
+															   style:UIAlertActionStyleDefault
+															 handler:^(UIAlertAction * _Nonnull action) {
+																 // 跳转到设置页面
+																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+															 }];
+		UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"
+															   style:UIAlertActionStyleCancel
+															 handler:nil];
+		[alertController addAction:settingsAction];
+		[alertController addAction:cancelAction];
+		[self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	});
+}
+
 
 // 该方法不要写内容
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[super application:application didFinishLaunchingWithOptions:launchOptions];
 	
+	[self networkStatus];
+	
 	//1.获取网络权限 根据权限进行人机交互
-	if (__IPHONE_10_0) {
-		[self networkStatus];
-	}else {
-		//2.2已经开启网络权限 监听网络状态
-		[self initBlackHoleEngine];
-	}
+//	if (__IPHONE_10_0) {
+//		[self networkStatus];
+//	}else {
+//		//2.2已经开启网络权限 监听网络状态
+//		[self initBlackHoleEngine];
+//	}
 	return YES;
 }
 

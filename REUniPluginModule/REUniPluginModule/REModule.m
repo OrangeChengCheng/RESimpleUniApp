@@ -31,6 +31,8 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	id worldCRS = [options objectForKey:@"worldCRS"];
 	id shareType = [options objectForKey:@"shareType"];
 	id camDefaultDataSetId = [options objectForKey:@"camDefaultDataSetId"];
+	id shareViewMode = [options objectForKey:@"shareViewMode"];
+	id shareDataType = [options objectForKey:@"shareDataType"];
 	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
 	engineVC.dataSetList = list;
@@ -38,6 +40,8 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	engineVC.worldCRS = worldCRS ? [options[@"worldCRS"] stringValue] : @"";
 	engineVC.shareType = shareType ?  [options[@"shareType"] intValue] : 0;
 	engineVC.camDefaultDataSetId = camDefaultDataSetId ? [options[@"camDefaultDataSetId"] stringValue] : @"";
+	engineVC.shareViewMode = shareViewMode ? [options[@"shareViewMode"] stringValue] : @"";
+	engineVC.shareDataType = shareDataType ? [options[@"shareDataType"] stringValue] : @"";
 	engineVC.isUniAppComp = NO;
 	engineVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;

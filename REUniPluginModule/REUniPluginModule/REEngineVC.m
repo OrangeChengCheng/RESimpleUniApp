@@ -136,9 +136,35 @@
 	if (self.worldCRS.length > 0) {
 		[[BlackHole3D sharedSingleton].Coordinate setEngineWorldCRS:self.worldCRS];
 	}
-
 	
-	[[BlackHole3D sharedSingleton] startRender];
+	// 设置渲染模式
+	if (self.shareViewMode.length > 0 && [self.shareViewMode isEqual:@"Sphere"]) {
+		[[BlackHole3D sharedSingleton].Common setFakeSphMode:YES];
+	} else {
+		[[BlackHole3D sharedSingleton].Common setFakeSphMode:NO];
+	}
+
+	if (self.shareType == 1) {
+		if ([self.shareDataType isEqual:@"Bim"]
+			|| [self.shareDataType isEqual:@"Rs"]
+			|| [self.shareDataType isEqual:@"Wmts"]
+			|| [self.shareDataType isEqual:@"Osgb"]
+			|| [self.shareDataType isEqual:@"PointCloud"]) {
+			[self loadBim];
+		} else if ([self.shareDataType isEqual:@"Cad"]) {
+			[self loadCad];
+		} else {
+			[self endRenderAndExit];
+		}
+	} else {
+		[self loadBim];
+	}
+	
+	[[BlackHole3D sharedSingleton].Common setExpectMaxInstDrawFaceNum:self.maxInstDrawFaceNum];
+}
+
+
+- (void)loadBim {
 	//加载场景
 	NSMutableArray *dataSetList_temp = [NSMutableArray array];
 	for (REDataSetInfo *dataSetInfo in self.dataSetList) {
@@ -158,6 +184,7 @@
 		[dataSetList_temp addObject:dataSet];
 	}
 	
+	[[BlackHole3D sharedSingleton] startRender];
 	[[BlackHole3D sharedSingleton] setViewMode:BIM viewport1:None screenMode:Single];
 	WEAKSELF
 	[[BlackHole3D sharedSingleton].Model loadDataSet:dataSetList_temp clearLoaded:YES callBack:^(BOOL success) {
@@ -168,7 +195,6 @@
 			}
 		} else {
 			if (success) {
-//				[[BlackHole3D sharedSingleton].BIM setContourLineClr:@"" lineClr:REColorMake_RGB(0, 0, 0)];
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
 				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
@@ -179,10 +205,24 @@
 			}
 		}
 	}];
-	
-	[[BlackHole3D sharedSingleton].Common setExpectMaxInstDrawFaceNum:self.maxInstDrawFaceNum];
 }
 
+- (void)loadCad {
+	REDataSetInfo *dataSetInfo = self.dataSetList.firstObject;
+	
+	[[BlackHole3D sharedSingleton] startRender];
+	[[BlackHole3D sharedSingleton] setViewMode:CAD viewport1:None screenMode:Single];
+	WEAKSELF
+	[[BlackHole3D sharedSingleton].CAD loadCAD:dataSetInfo.resourcesAddress unit:dataSetInfo.unit scale:1.0 callBack:^(BOOL success) {
+		STRONGSELF
+		if (success) {
+			[strongSelf.loadingView hiddenLoading];
+			[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];
+		} else {
+			[strongSelf endRenderAndExit];
+		}
+	}];
+}
 
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

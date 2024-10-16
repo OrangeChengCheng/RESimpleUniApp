@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *worldCRS;
 @property (nonatomic, assign) int shareType;
 @property (nonatomic, copy) NSString *camDefaultDataSetId;
+@property (nonatomic, copy) NSString *shareViewMode;
+@property (nonatomic, copy) NSString *shareDataType;
 
 
 - (void)endRenderAndExit;//结束渲染并退出渲染
