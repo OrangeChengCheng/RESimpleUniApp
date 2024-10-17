@@ -110,7 +110,12 @@
 	[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];//关闭ui方式重新加载项目的时候先加载出来
 	[[BlackHole3D sharedSingleton] setViewMode:BIM viewport1:None screenMode:Single];
 	// 卸载所有场景
-	[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
+	if (self.shareType == 1 && [self.shareDataType isEqual:@"Cad"]) {
+		[[BlackHole3D sharedSingleton].CAD unloadCAD];
+	} else {
+		[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
+	}
+	
 	double delayInSeconds = 0.15;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
