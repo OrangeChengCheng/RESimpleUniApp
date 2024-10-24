@@ -33,6 +33,7 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	id camDefaultDataSetId = [options objectForKey:@"camDefaultDataSetId"];
 	id shareViewMode = [options objectForKey:@"shareViewMode"];
 	id shareDataType = [options objectForKey:@"shareDataType"];
+	id defaultCamLoc = [options objectForKey:@"defaultCamLoc"];
 	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
 	engineVC.dataSetList = list;
@@ -42,6 +43,11 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	engineVC.camDefaultDataSetId = camDefaultDataSetId ? [options[@"camDefaultDataSetId"] stringValue] : @"";
 	engineVC.shareViewMode = shareViewMode ? [options[@"shareViewMode"] stringValue] : @"";
 	engineVC.shareDataType = shareDataType ? [options[@"shareDataType"] stringValue] : @"";
+	if (defaultCamLoc) {
+		REForceCamLoc *forceCamLoc = [REForceCamLoc yy_modelWithDictionary:options[@"defaultCamLoc"]];
+		forceCamLoc.force = YES;
+		engineVC.defaultCamLoc = forceCamLoc;
+	}
 	engineVC.isUniAppComp = NO;
 	engineVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;

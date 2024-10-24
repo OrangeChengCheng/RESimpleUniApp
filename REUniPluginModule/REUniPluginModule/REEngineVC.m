@@ -10,7 +10,7 @@
 #import "Masonry.h"
 #import "REDataSetInfo.h"
 #import "RELoadingView.h"
-
+#import "RETip.h"
 
 
 @interface REEngineVC ()
@@ -50,6 +50,19 @@
 	[[BlackHole3D sharedSingleton] dataSetLoadProgress:^(float progress, NSString * _Nullable info) {
 		STRONGSELF
 		strongSelf.loadingView.loadingProgress.progress = progress / 100.0;
+	}];
+	[[BlackHole3D sharedSingleton] systemUIEvent:^(NSString * _Nullable btnName, int btnState) {
+		STRONGSELF
+		NSLog(@"btnName = %@  btnState = %d", btnName, btnState);
+		RETip_Level level = RETip_L0;
+		if ([btnName isEqualToString:@"BuiltIn_Btn_MainView"] || [btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"]) {
+			level = RETip_L1;
+		} else {
+			level = RETip_L2;
+		}
+		if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
+			[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
+		}
 	}];
 }
 
@@ -162,6 +175,9 @@
 			[self endRenderAndExit];
 		}
 	} else {
+		if (self.defaultCamLoc && self.defaultCamLoc.force) {
+			[[BlackHole3D sharedSingleton].Camera setCamForcedInitLoc:self.defaultCamLoc];
+		}
 		[self loadBim];
 	}
 	
@@ -201,7 +217,7 @@
 		} else {
 			if (success) {
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
-				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0) {
+				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0 && (!strongSelf.defaultCamLoc || !strongSelf.defaultCamLoc.force)) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
 				}
 				[strongSelf.loadingView hiddenLoading];

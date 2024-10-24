@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1851FC832CC8E7B200583FD8 /* RETip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1851FC822CC8E7B200583FD8 /* RETip.m */; };
+		1851FC842CC8E7B200583FD8 /* RETip.h in Headers */ = {isa = PBXBuildFile; fileRef = 1851FC812CC8E7B200583FD8 /* RETip.h */; };
 		185ABDBA2CB781D5003263DA /* RELoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185ABDB92CB781D5003263DA /* RELoadingView.m */; };
 		185ABDBB2CB781D5003263DA /* RELoadingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 185ABDB82CB781D5003263DA /* RELoadingView.h */; };
 		185ABDF82CB9091F003263DA /* icon_back_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 185ABDF32CB9091F003263DA /* icon_back_circle@3x.png */; };
@@ -89,6 +91,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1851FC812CC8E7B200583FD8 /* RETip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RETip.h; sourceTree = "<group>"; };
+		1851FC822CC8E7B200583FD8 /* RETip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RETip.m; sourceTree = "<group>"; };
 		185ABDB82CB781D5003263DA /* RELoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RELoadingView.h; sourceTree = "<group>"; };
 		185ABDB92CB781D5003263DA /* RELoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RELoadingView.m; sourceTree = "<group>"; };
 		185ABDD22CB90533003263DA /* REUniPluginModuleRes.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = REUniPluginModuleRes.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -249,6 +253,8 @@
 				18DCFF252C8060DA005BC93F /* REDataSetInfo.m */,
 				185ABDB82CB781D5003263DA /* RELoadingView.h */,
 				185ABDB92CB781D5003263DA /* RELoadingView.m */,
+				1851FC812CC8E7B200583FD8 /* RETip.h */,
+				1851FC822CC8E7B200583FD8 /* RETip.m */,
 				185ABDFF2CBA7BCB003263DA /* REUniPluginModulePrefix.pch */,
 			);
 			path = REUniPluginModule;
@@ -346,6 +352,7 @@
 				18DCFF262C8060DA005BC93F /* REDataSetInfo.h in Headers */,
 				18DCFED22C80536A005BC93F /* MASViewConstraint.h in Headers */,
 				18DCFEC52C80536A005BC93F /* MASCompositeConstraint.h in Headers */,
+				1851FC842CC8E7B200583FD8 /* RETip.h in Headers */,
 				18DCFEE62C80536A005BC93F /* REEngineVC.h in Headers */,
 				18DCFEE12C80536A005BC93F /* NSObject+YYModel.h in Headers */,
 				18DCFEC72C80536A005BC93F /* MASConstraint.h in Headers */,
@@ -479,6 +486,7 @@
 				18DCFEE02C80536A005BC93F /* RETestView.m in Sources */,
 				18DCFECD2C80536A005BC93F /* MASLayoutConstraint.m in Sources */,
 				18DCFEC82C80536A005BC93F /* MASConstraint.m in Sources */,
+				1851FC832CC8E7B200583FD8 /* RETip.m in Sources */,
 				18DCFED32C80536A005BC93F /* MASViewConstraint.m in Sources */,
 				18DCFEC62C80536A005BC93F /* MASCompositeConstraint.m in Sources */,
 				18DCFEDD2C80536A005BC93F /* ViewController+MASAdditions.m in Sources */,
