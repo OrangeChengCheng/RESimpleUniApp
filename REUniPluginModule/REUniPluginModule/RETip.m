@@ -9,7 +9,7 @@
 
 #define RETipHeight (40)
 #define RETipSpaceY_L1 (65)
-#define RETipSpaceY_L2 (120)
+#define RETipSpaceY_L2 (115)
 #define RETipAnimateHeight (40)
 #define RETipStaticDelay (0.8)
 #define RETipAnimateTime (0.5)
@@ -36,8 +36,7 @@ static RETip *curr_tip = nil;
 
 + (void)showTipStaticAnimte:(UIView *)superView message:(NSString *)message level:(RETip_Level)level {
 	if (curr_tip) {
-		[curr_tip hide];
-		curr_tip = nil;
+		[curr_tip clear];
 	}
 	
 	UIFont *font = [UIFont systemFontOfSize:14];
@@ -115,13 +114,16 @@ static RETip *curr_tip = nil;
 	[UIView animateWithDuration:RETipAnimateTime animations: ^{
 		self.alpha = 0; // 消失动画（透明度渐变）
 	} completion: ^(BOOL finished) {
-		self.hidden = YES;
-		[self removeFromSuperview];
-		if (curr_tip == self) {
-			curr_tip = nil;
-		}
+		[self clear];
 	}];
 }
 
+- (void)clear {
+	self.hidden = YES;
+	[self removeFromSuperview];
+	if (curr_tip == self) {
+		curr_tip = nil;
+	}
+}
 
 @end

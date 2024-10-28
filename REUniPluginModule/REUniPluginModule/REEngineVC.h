@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *worldCRS;
 @property (nonatomic, assign) int shareType;
 @property (nonatomic, copy) NSString *camDefaultDataSetId;
+@property (nonatomic, copy) NSString *shareUrl;
 @property (nonatomic, copy) NSString *shareViewMode;
 @property (nonatomic, copy) NSString *shareDataType;
 @property (nonatomic, strong) REForceCamLoc *defaultCamLoc;
