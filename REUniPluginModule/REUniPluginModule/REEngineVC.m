@@ -35,7 +35,7 @@
 
 - (RENav *)re_nav {
 	if (!_re_nav) {
-		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), 50) title:self.projName];
+		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight) title:self.projName];
 		_re_nav.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		WEAKSELF
 		_re_nav.backCallBack = ^{
@@ -101,14 +101,14 @@
 
 - (void)addReaderView {
 	[self changeEngineUI];
-	if (!self.isUniAppComp) [self addBtn];
+//	if (!self.isUniAppComp) [self addBtn];
 }
 
 #pragma mark - 创建显示界面
 - (void)changeEngineUI {
 	// 创建自定义界面
 	self.customView = [[UIView alloc] init];
-	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + 50, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - 50));
+	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
 	[self.view addSubview:self.customView];
 	self.customView.clipsToBounds = YES;
 	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;

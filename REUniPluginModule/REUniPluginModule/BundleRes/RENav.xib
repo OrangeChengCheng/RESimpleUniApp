@@ -11,28 +11,28 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="RENav">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3x1-KJ-lqo">
-                    <rect key="frame" x="10" y="0.0" width="100" height="50"/>
+                    <rect key="frame" x="10" y="0.0" width="80" height="44"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back_circle.png" translatesAutoresizingMaskIntoConstraints="NO" id="eO5-b5-v39">
-                            <rect key="frame" x="0.0" y="5" width="20" height="40"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back.png" translatesAutoresizingMaskIntoConstraints="NO" id="eO5-b5-v39">
+                            <rect key="frame" x="0.0" y="10" width="24" height="24"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="iE8-nF-QV4"/>
-                                <constraint firstAttribute="width" constant="20" id="nan-Uh-WbW"/>
+                                <constraint firstAttribute="height" constant="24" id="iE8-nF-QV4"/>
+                                <constraint firstAttribute="width" constant="24" id="nan-Uh-WbW"/>
                             </constraints>
                         </imageView>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back_circle.png" translatesAutoresizingMaskIntoConstraints="NO" id="RIU-OH-Afe">
-                            <rect key="frame" x="20" y="5" width="80" height="40"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="RIU-OH-Afe">
+                            <rect key="frame" x="24" y="10" width="52" height="24"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="3gN-u2-cpQ"/>
-                                <constraint firstAttribute="width" constant="80" id="aMk-cL-6Mp"/>
+                                <constraint firstAttribute="height" constant="24" id="3gN-u2-cpQ"/>
+                                <constraint firstAttribute="width" constant="52" id="aMk-cL-6Mp"/>
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71F-7B-Uta">
-                            <rect key="frame" x="5" y="5" width="90" height="40"/>
+                            <rect key="frame" x="5" y="5" width="70" height="34"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <connections>
                                 <action selector="backAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="oTH-iJ-h28"/>
@@ -47,25 +47,25 @@
                         <constraint firstItem="RIU-OH-Afe" firstAttribute="centerY" secondItem="3x1-KJ-lqo" secondAttribute="centerY" id="PCe-zc-uJP"/>
                         <constraint firstItem="71F-7B-Uta" firstAttribute="leading" secondItem="3x1-KJ-lqo" secondAttribute="leading" constant="5" id="Q8H-AM-1MY"/>
                         <constraint firstAttribute="bottom" secondItem="71F-7B-Uta" secondAttribute="bottom" constant="5" id="gE6-Ph-tuP"/>
-                        <constraint firstAttribute="width" constant="100" id="iO4-23-EG5"/>
+                        <constraint firstAttribute="width" constant="80" id="iO4-23-EG5"/>
                         <constraint firstItem="eO5-b5-v39" firstAttribute="centerY" secondItem="3x1-KJ-lqo" secondAttribute="centerY" id="pmU-hq-fv7"/>
                         <constraint firstItem="RIU-OH-Afe" firstAttribute="leading" secondItem="eO5-b5-v39" secondAttribute="trailing" id="yAF-Xl-m7E"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="50a-hK-7tc">
-                    <rect key="frame" x="283" y="0.0" width="100" height="50"/>
+                    <rect key="frame" x="303" y="0.0" width="80" height="44"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_back_circle.png" translatesAutoresizingMaskIntoConstraints="NO" id="dZc-q3-pPY">
-                            <rect key="frame" x="60" y="5" width="40" height="40"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_qrCode.png" translatesAutoresizingMaskIntoConstraints="NO" id="dZc-q3-pPY">
+                            <rect key="frame" x="56" y="10" width="24" height="24"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="qRf-vM-FHA"/>
-                                <constraint firstAttribute="height" constant="40" id="qum-hY-IcO"/>
+                                <constraint firstAttribute="width" constant="24" id="qRf-vM-FHA"/>
+                                <constraint firstAttribute="height" constant="24" id="qum-hY-IcO"/>
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVY-ud-zZe">
-                            <rect key="frame" x="60" y="5" width="40" height="40"/>
+                            <rect key="frame" x="50" y="0.0" width="30" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="S34-qG-3v4"/>
+                                <constraint firstAttribute="width" constant="30" id="S34-qG-3v4"/>
                             </constraints>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <connections>
@@ -78,14 +78,14 @@
                         <constraint firstAttribute="trailing" secondItem="HVY-ud-zZe" secondAttribute="trailing" id="0oP-WW-pVU"/>
                         <constraint firstAttribute="trailing" secondItem="dZc-q3-pPY" secondAttribute="trailing" id="Ce0-UE-gBe"/>
                         <constraint firstItem="dZc-q3-pPY" firstAttribute="centerY" secondItem="50a-hK-7tc" secondAttribute="centerY" id="Eve-mE-9Sq"/>
-                        <constraint firstItem="HVY-ud-zZe" firstAttribute="top" secondItem="50a-hK-7tc" secondAttribute="top" constant="5" id="dS1-Zl-fzU"/>
-                        <constraint firstAttribute="width" constant="100" id="fyF-B6-kF0"/>
-                        <constraint firstAttribute="bottom" secondItem="HVY-ud-zZe" secondAttribute="bottom" constant="5" id="iBr-o0-nni"/>
+                        <constraint firstItem="HVY-ud-zZe" firstAttribute="top" secondItem="50a-hK-7tc" secondAttribute="top" id="dS1-Zl-fzU"/>
+                        <constraint firstAttribute="width" constant="80" id="fyF-B6-kF0"/>
+                        <constraint firstAttribute="bottom" secondItem="HVY-ud-zZe" secondAttribute="bottom" id="iBr-o0-nni"/>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="模型展示" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GeJ-C1-VHk">
-                    <rect key="frame" x="115" y="5" width="163" height="40"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <rect key="frame" x="95" y="5" width="203" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -110,12 +110,15 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="qrCodeIV" destination="dZc-q3-pPY" id="l1n-1h-UcH"/>
                 <outlet property="titleLB" destination="GeJ-C1-VHk" id="ibx-Hj-IA3"/>
             </connections>
             <point key="canvasLocation" x="-419" y="-39"/>
         </view>
     </objects>
     <resources>
-        <image name="icon_back_circle.png" width="52" height="52"/>
+        <image name="icon_back.png" width="24" height="24"/>
+        <image name="icon_logo.png" width="52" height="20"/>
+        <image name="icon_qrCode.png" width="24" height="24"/>
     </resources>
 </document>
