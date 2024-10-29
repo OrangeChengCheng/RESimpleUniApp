@@ -29,6 +29,7 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	NSArray *list = [NSArray yy_modelArrayWithClass:REDataSetInfo.class json:options[@"dataSetList"]];
 	id maxInstDrawFaceNum = [options objectForKey:@"maxInstDrawFaceNum"];
 	id shareUrl = [options objectForKey:@"shareUrl"];
+	id projName = [options objectForKey:@"projName"];
 	id worldCRS = [options objectForKey:@"worldCRS"];
 	id shareType = [options objectForKey:@"shareType"];
 	id camDefaultDataSetId = [options objectForKey:@"camDefaultDataSetId"];
@@ -40,6 +41,7 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	engineVC.dataSetList = list;
 	engineVC.maxInstDrawFaceNum = maxInstDrawFaceNum ?  [options[@"maxInstDrawFaceNum"] intValue] : 1500000;
 	engineVC.shareUrl = shareUrl ? [options[@"shareUrl"] stringValue] : @"";
+	engineVC.projName = projName ? [options[@"projName"] stringValue] : @"";
 	engineVC.worldCRS = worldCRS ? [options[@"worldCRS"] stringValue] : @"";
 	engineVC.shareType = shareType ?  [options[@"shareType"] intValue] : 0;
 	engineVC.camDefaultDataSetId = camDefaultDataSetId ? [options[@"camDefaultDataSetId"] stringValue] : @"";

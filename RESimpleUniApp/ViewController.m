@@ -101,14 +101,22 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-    return _isFullScreen;/*
-                          NSString *model = [UIDevice currentDevice].model;
-                          if (UIUserInterfaceIdiomPhone == UI_USER_INTERFACE_IDIOM()
-                          && (NSOrderedSame == [@"iPad" caseInsensitiveCompare:model]
-                          || NSOrderedSame == [@"iPad Simulator" caseInsensitiveCompare:model])) {
-                          return YES;
-                          }
-                          return NO;*/
+	// 获取当前展示的控制器
+	UIViewController *currentPresentedViewController = [UIApplication sharedApplication].keyWindow.rootViewController.presentedViewController;
+	if ([currentPresentedViewController isKindOfClass:NSClassFromString(@"REEngineVC")]) {
+		return YES;
+	} else {
+		return _isFullScreen;
+	}
+
+	/*
+	 NSString *model = [UIDevice currentDevice].model;
+	 if (UIUserInterfaceIdiomPhone == UI_USER_INTERFACE_IDIOM()
+	 && (NSOrderedSame == [@"iPad" caseInsensitiveCompare:model]
+	 || NSOrderedSame == [@"iPad Simulator" caseInsensitiveCompare:model])) {
+	 return YES;
+	 }
+	 return NO;*/
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {

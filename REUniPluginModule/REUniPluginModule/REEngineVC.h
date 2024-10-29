@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray *dataSetList;
 @property (nonatomic, assign) int maxInstDrawFaceNum;
 @property (nonatomic, copy) NSString *worldCRS;
+@property (nonatomic, copy) NSString *projName;
 @property (nonatomic, assign) int shareType;
 @property (nonatomic, copy) NSString *camDefaultDataSetId;
 @property (nonatomic, copy) NSString *shareUrl;

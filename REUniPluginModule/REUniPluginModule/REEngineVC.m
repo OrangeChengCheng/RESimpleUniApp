@@ -11,10 +11,12 @@
 #import "REDataSetInfo.h"
 #import "RELoadingView.h"
 #import "RETip.h"
+#import "RENav.h"
 
 
 @interface REEngineVC ()
 @property (nonatomic, strong) RELoadingView *loadingView;
+@property (nonatomic, strong) RENav *re_nav;
 
 @end
 
@@ -31,6 +33,22 @@
 	return _loadingView;
 }
 
+- (RENav *)re_nav {
+	if (!_re_nav) {
+		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), 50) title:self.projName];
+		_re_nav.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		WEAKSELF
+		_re_nav.backCallBack = ^{
+			STRONGSELF
+			[strongSelf endRenderAndExit];
+		};
+		_re_nav.qrCodeCallBack = ^{
+			STRONGSELF
+		};
+	}
+	return _re_nav;
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -41,7 +59,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	self.view.backgroundColor = [UIColor whiteColor];
+	
 	[self addReaderView];
+	
+	[self.view addSubview:self.re_nav];
 	
 	[self.view addSubview:self.loadingView];
 	[self.loadingView showLoading];
@@ -87,12 +108,12 @@
 - (void)changeEngineUI {
 	// 创建自定义界面
 	self.customView = [[UIView alloc] init];
-	self.customView.frame = self.view.frame;
+	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + 50, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - 50));
 	[self.view addSubview:self.customView];
 	self.customView.clipsToBounds = YES;
-	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
 
-	[[BlackHole3D sharedSingleton] getRenderView].frame = self.customView.frame;
+	[[BlackHole3D sharedSingleton] getRenderView].frame = self.customView.bounds;
 	[self.customView addSubview:[[BlackHole3D sharedSingleton] getRenderView]];
 }
 
@@ -140,7 +161,6 @@
 	} else {
 		[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
 	}
-	
 	double delayInSeconds = 0.15;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -153,7 +173,11 @@
 			// 界面移除
 			[self.customView removeFromSuperview];
 			[[BlackHole3D sharedSingleton] endRender];
-			[self dismissViewControllerAnimated:YES completion:nil];
+			[self dismissViewControllerAnimated:YES completion:^{
+				UINavigationController *rootC = [UIApplication sharedApplication].keyWindow.rootViewController;
+				UIViewController *currentViewController = rootC.visibleViewController;
+				[currentViewController setNeedsStatusBarAppearanceUpdate];
+			}];
 		}
 	});
 }
