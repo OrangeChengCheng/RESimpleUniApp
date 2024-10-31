@@ -55,21 +55,21 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="50a-hK-7tc">
                     <rect key="frame" x="303" y="0.0" width="80" height="44"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_qrCode.png" translatesAutoresizingMaskIntoConstraints="NO" id="dZc-q3-pPY">
+                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_qrCode.png" translatesAutoresizingMaskIntoConstraints="NO" id="dZc-q3-pPY">
                             <rect key="frame" x="56" y="10" width="24" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="24" id="qRf-vM-FHA"/>
                                 <constraint firstAttribute="height" constant="24" id="qum-hY-IcO"/>
                             </constraints>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVY-ud-zZe">
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVY-ud-zZe">
                             <rect key="frame" x="50" y="0.0" width="30" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="30" id="S34-qG-3v4"/>
                             </constraints>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <connections>
-                                <action selector="qrCodeAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="uPT-V9-CfF"/>
+                                <action selector="qrCodeAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="fdC-TW-75P"/>
                             </connections>
                         </button>
                     </subviews>
@@ -110,10 +110,9 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="qrCodeIV" destination="dZc-q3-pPY" id="l1n-1h-UcH"/>
-                <outlet property="titleLB" destination="GeJ-C1-VHk" id="ibx-Hj-IA3"/>
+                <outlet property="titleLB" destination="GeJ-C1-VHk" id="twc-rm-GRs"/>
             </connections>
-            <point key="canvasLocation" x="-419" y="-39"/>
+            <point key="canvasLocation" x="-880" y="-56"/>
         </view>
     </objects>
     <resources>

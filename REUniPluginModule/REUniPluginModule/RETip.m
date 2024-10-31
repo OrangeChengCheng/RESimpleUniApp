@@ -8,8 +8,8 @@
 #import "RETip.h"
 
 #define RETipHeight (40)
-#define RETipSpaceY_L1 (65)
-#define RETipSpaceY_L2 (115)
+#define RETipSpaceY_L1 (105)
+#define RETipSpaceY_L2 (175)
 #define RETipAnimateHeight (40)
 #define RETipStaticDelay (0.8)
 #define RETipAnimateTime (0.5)

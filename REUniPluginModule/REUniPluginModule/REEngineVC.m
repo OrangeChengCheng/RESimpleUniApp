@@ -12,6 +12,7 @@
 #import "RELoadingView.h"
 #import "RETip.h"
 #import "RENav.h"
+#import "REQRCode.h"
 
 
 @interface REEngineVC ()
@@ -44,6 +45,7 @@
 		};
 		_re_nav.qrCodeCallBack = ^{
 			STRONGSELF
+			[REQRCode showQRCode:strongSelf.shareUrl name:strongSelf.projName];
 		};
 	}
 	return _re_nav;
@@ -84,18 +86,18 @@
 		if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
 			[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
 		}
-		if (([btnName isEqualToString:@"BuiltIn_Btn_MainView"] && btnState == 0)) {
-			[RETip showTipStaticAnimte:strongSelf.view message:@"主视图" level:level];
-		}
-		if (([btnName isEqualToString:@"BuiltIn_Btn_SelElem"] && btnState == 1)) {
-			[RETip showTipStaticAnimte:strongSelf.view message:@"选择模式" level:level];
-		}
-		if (([btnName isEqualToString:@"BuiltIn_Btn_Measure"] && btnState == 1)) {
-			[RETip showTipStaticAnimte:strongSelf.view message:@"测量" level:level];
-		}
-		if (([btnName isEqualToString:@"BuiltIn_Btn_More"] && btnState == 1)) {
-			[RETip showTipStaticAnimte:strongSelf.view message:@"更多" level:level];
-		}
+//		if (([btnName isEqualToString:@"BuiltIn_Btn_MainView"] && btnState == 0)) {
+//			[RETip showTipStaticAnimte:strongSelf.view message:@"主视图" level:level];
+//		}
+//		if (([btnName isEqualToString:@"BuiltIn_Btn_SelElem"] && btnState == 1)) {
+//			[RETip showTipStaticAnimte:strongSelf.view message:@"选择模式" level:level];
+//		}
+//		if (([btnName isEqualToString:@"BuiltIn_Btn_Measure"] && btnState == 1)) {
+//			[RETip showTipStaticAnimte:strongSelf.view message:@"测量" level:level];
+//		}
+//		if (([btnName isEqualToString:@"BuiltIn_Btn_More"] && btnState == 1)) {
+//			[RETip showTipStaticAnimte:strongSelf.view message:@"更多" level:level];
+//		}
 	}];
 }
 

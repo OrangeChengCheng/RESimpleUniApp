@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "18551BF22C8011C8000F9A94"
-               BuildableName = "RESimpleUniApp.app"
-               BlueprintName = "RESimpleUniApp"
-               ReferencedContainer = "container:RESimpleUniApp.xcodeproj">
+               BlueprintIdentifier = "185ABDD12CB90533003263DA"
+               BuildableName = "REUniPluginModuleRes.bundle"
+               BlueprintName = "REUniPluginModuleRes"
+               ReferencedContainer = "container:REUniPluginModule.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,16 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "18551BF22C8011C8000F9A94"
-            BuildableName = "RESimpleUniApp.app"
-            BlueprintName = "RESimpleUniApp"
-            ReferencedContainer = "container:RESimpleUniApp.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -57,16 +47,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "18551BF22C8011C8000F9A94"
-            BuildableName = "RESimpleUniApp.app"
-            BlueprintName = "RESimpleUniApp"
-            ReferencedContainer = "container:RESimpleUniApp.xcodeproj">
+            BlueprintIdentifier = "185ABDD12CB90533003263DA"
+            BuildableName = "REUniPluginModuleRes.bundle"
+            BlueprintName = "REUniPluginModuleRes"
+            ReferencedContainer = "container:REUniPluginModule.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
