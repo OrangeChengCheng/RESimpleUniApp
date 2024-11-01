@@ -47,7 +47,7 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	engineVC.camDefaultDataSetId = camDefaultDataSetId ? [options[@"camDefaultDataSetId"] stringValue] : @"";
 	engineVC.shareViewMode = shareViewMode ? [options[@"shareViewMode"] stringValue] : @"";
 	engineVC.shareDataType = shareDataType ? [options[@"shareDataType"] stringValue] : @"";
-	if (defaultCamLoc && [(NSDictionary *)defaultCamLoc allKeys].count > 0) {
+	if (defaultCamLoc && ![defaultCamLoc isKindOfClass:[NSNull class]] && [(NSDictionary *)defaultCamLoc allKeys].count > 0) {
 		REForceCamLoc *forceCamLoc = [REForceCamLoc yy_modelWithDictionary:options[@"defaultCamLoc"]];
 		forceCamLoc.force = YES;
 		engineVC.defaultCamLoc = forceCamLoc;

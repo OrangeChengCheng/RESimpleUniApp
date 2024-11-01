@@ -36,6 +36,8 @@
 		187D33042CD2103D005DA0F5 /* icon_blue_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187D33012CD2103C005DA0F5 /* icon_blue_logo@3x.png */; };
 		187D33052CD2103D005DA0F5 /* icon_blue_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187D33022CD2103C005DA0F5 /* icon_blue_logo@2x.png */; };
 		187D33062CD2103D005DA0F5 /* icon_blue_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 187D33032CD2103C005DA0F5 /* icon_blue_logo.png */; };
+		18CF16CB2CD4780500F57EE7 /* Module-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18CF16CA2CD4780500F57EE7 /* Module-Info.plist */; };
+		18CF16CD2CD47A3D00F57EE7 /* ModuleRes-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18CF16CC2CD47A3C00F57EE7 /* ModuleRes-Info.plist */; };
 		18DCFEC22C80536A005BC93F /* RETestView.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9A2C80536A005BC93F /* RETestView.h */; };
 		18DCFEC32C80536A005BC93F /* REModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9B2C80536A005BC93F /* REModule.h */; };
 		18DCFEC42C80536A005BC93F /* RERenderComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9C2C80536A005BC93F /* RERenderComponent.h */; };
@@ -140,6 +142,8 @@
 		187D33012CD2103C005DA0F5 /* icon_blue_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_blue_logo@3x.png"; sourceTree = "<group>"; };
 		187D33022CD2103C005DA0F5 /* icon_blue_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_blue_logo@2x.png"; sourceTree = "<group>"; };
 		187D33032CD2103C005DA0F5 /* icon_blue_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_blue_logo.png; sourceTree = "<group>"; };
+		18CF16CA2CD4780500F57EE7 /* Module-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Module-Info.plist"; sourceTree = "<group>"; };
+		18CF16CC2CD47A3C00F57EE7 /* ModuleRes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ModuleRes-Info.plist"; sourceTree = "<group>"; };
 		18DCFBF32C804B6D005BC93F /* REUniPluginModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = REUniPluginModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18DCFE9A2C80536A005BC93F /* RETestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETestView.h; sourceTree = "<group>"; };
 		18DCFE9B2C80536A005BC93F /* REModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REModule.h; sourceTree = "<group>"; };
@@ -291,6 +295,8 @@
 		18DCFBF52C804B6D005BC93F /* REUniPluginModule */ = {
 			isa = PBXGroup;
 			children = (
+				18CF16CC2CD47A3C00F57EE7 /* ModuleRes-Info.plist */,
+				18CF16CA2CD4780500F57EE7 /* Module-Info.plist */,
 				185ABDF22CB90899003263DA /* BundleRes */,
 				18DCFEBF2C80536A005BC93F /* YYModel */,
 				18DCFEB62C80536A005BC93F /* Masonry */,
@@ -519,6 +525,7 @@
 				185ABDFA2CB9091F003263DA /* loading.gif in Resources */,
 				181C34B32CD0E2A900259672 /* icon_qrCode@2x.png in Resources */,
 				187D33042CD2103D005DA0F5 /* icon_blue_logo@3x.png in Resources */,
+				18CF16CD2CD47A3D00F57EE7 /* ModuleRes-Info.plist in Resources */,
 				185ABDF92CB9091F003263DA /* icon_back_circle@2x.png in Resources */,
 				185ABDFC2CB9091F003263DA /* icon_back_circle.png in Resources */,
 				185ABDFB2CB9091F003263DA /* RELoadingView.xib in Resources */,
@@ -534,6 +541,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18CF16CB2CD4780500F57EE7 /* Module-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,10 +601,12 @@
 				COMBINE_HIDPI_IMAGES = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RGUJSJASMG;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "REUniPluginModule/ModuleRes-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACH_O_TYPE = mh_bundle;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Lemon.REUniPluginModuleRes;
@@ -606,6 +616,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -617,10 +628,12 @@
 				COMBINE_HIDPI_IMAGES = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RGUJSJASMG;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "REUniPluginModule/ModuleRes-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACH_O_TYPE = mh_bundle;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Lemon.REUniPluginModuleRes;
@@ -630,6 +643,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -773,12 +787,13 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/lib\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/apple/BJWork/uniApp/RESimpleUniApp/REUniPluginModule/REUniPluginModule/REUniPluginModulePrefix.pch;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../SDK/inc\"/**",
 					"\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/include\"",
 					"\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/include/SDL/Apple/ios_arm64/include\"",
 				);
+				INFOPLIST_FILE = "REUniPluginModule/Module-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -822,12 +837,13 @@
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/lib\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/apple/BJWork/uniApp/RESimpleUniApp/REUniPluginModule/REUniPluginModule/REUniPluginModulePrefix.pch;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../SDK/inc\"/**",
 					"\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/include\"",
 					"\"$(SRCROOT)/../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/include/SDL/Apple/ios_arm64/include\"",
 				);
+				INFOPLIST_FILE = "REUniPluginModule/Module-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
