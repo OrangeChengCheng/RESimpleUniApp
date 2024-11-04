@@ -14,6 +14,7 @@
 #import "RENav.h"
 #import "REQRCode.h"
 
+static CGFloat stateBarHeight = 0.0;
 
 @interface REEngineVC ()
 @property (nonatomic, strong) RELoadingView *loadingView;
@@ -36,7 +37,7 @@
 
 - (RENav *)re_nav {
 	if (!_re_nav) {
-		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight) title:self.projName];
+		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight) title:self.projName];
 		_re_nav.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		WEAKSELF
 		_re_nav.backCallBack = ^{
@@ -61,6 +62,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	self.view.backgroundColor = [UIColor whiteColor];
+	stateBarHeight = kStatusBarHeight;
 	
 	[self addReaderView];
 	
@@ -101,6 +103,23 @@
 	}];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+	
+	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+		// 在动画过程中执行布局更改
+		if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight);
+			_customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
+		} else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight);
+			self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
+		}
+		
+	} completion:nil];
+}
+
 - (void)addReaderView {
 	[self changeEngineUI];
 //	if (!self.isUniAppComp) [self addBtn];
@@ -110,7 +129,7 @@
 - (void)changeEngineUI {
 	// 创建自定义界面
 	self.customView = [[UIView alloc] init];
-	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
+	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
 	[self.view addSubview:self.customView];
 	self.customView.clipsToBounds = YES;
 	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
@@ -235,6 +254,7 @@
 		dataSet.offset = REDVec3Make([dataSetInfo.offset[0] doubleValue], [dataSetInfo.offset[1] doubleValue], [dataSetInfo.offset[2] doubleValue]);
 		dataSet.dataSetCRS = dataSetInfo.dataSetCRS;
 		dataSet.dataSetCRSNorth = dataSetInfo.dataSetCRSNorth;
+		dataSet.engineOrigin = REDVec3Make([dataSetInfo.engineOrigin[0] doubleValue], [dataSetInfo.engineOrigin[1] doubleValue], [dataSetInfo.engineOrigin[2] doubleValue]);
 		dataSet.dataSetSGContent = dataSetInfo.dataSetSGContent;
 		[dataSetList_temp addObject:dataSet];
 	}
@@ -257,6 +277,14 @@
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
 				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0 && (!strongSelf.defaultCamLoc || !strongSelf.defaultCamLoc.force)) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
+				}
+				// 处理地形数据层级
+				for (REDataSetInfo *dataSetInfo in strongSelf.dataSetList) {
+					if (dataSetInfo.terrainLayerLev > 0) {
+						NSArray *unitIDs = [[BlackHole3D sharedSingleton].Terrain getAllUnitNames:dataSetInfo.dataSetId];
+						NSString *unitID = unitIDs.count > 0 ? unitIDs.firstObject : @"";
+						[[BlackHole3D sharedSingleton].Terrain setUnitLayerlev:dataSetInfo.dataSetId unitId:unitID resType:RETerrResEm_ALL layerLev:dataSetInfo.terrainLayerLev];
+					}
 				}
 				[strongSelf.loadingView hiddenLoading];
 			} else {

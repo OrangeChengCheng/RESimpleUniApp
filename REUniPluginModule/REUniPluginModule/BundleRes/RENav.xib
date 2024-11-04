@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="RENav">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RENav">
             <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -46,6 +46,7 @@
                         <constraint firstItem="71F-7B-Uta" firstAttribute="top" secondItem="3x1-KJ-lqo" secondAttribute="top" constant="5" id="JpI-sm-IFc"/>
                         <constraint firstItem="RIU-OH-Afe" firstAttribute="centerY" secondItem="3x1-KJ-lqo" secondAttribute="centerY" id="PCe-zc-uJP"/>
                         <constraint firstItem="71F-7B-Uta" firstAttribute="leading" secondItem="3x1-KJ-lqo" secondAttribute="leading" constant="5" id="Q8H-AM-1MY"/>
+                        <constraint firstAttribute="height" constant="44" id="TsG-DL-go7"/>
                         <constraint firstAttribute="bottom" secondItem="71F-7B-Uta" secondAttribute="bottom" constant="5" id="gE6-Ph-tuP"/>
                         <constraint firstAttribute="width" constant="80" id="iO4-23-EG5"/>
                         <constraint firstItem="eO5-b5-v39" firstAttribute="centerY" secondItem="3x1-KJ-lqo" secondAttribute="centerY" id="pmU-hq-fv7"/>
@@ -81,10 +82,14 @@
                         <constraint firstItem="HVY-ud-zZe" firstAttribute="top" secondItem="50a-hK-7tc" secondAttribute="top" id="dS1-Zl-fzU"/>
                         <constraint firstAttribute="width" constant="80" id="fyF-B6-kF0"/>
                         <constraint firstAttribute="bottom" secondItem="HVY-ud-zZe" secondAttribute="bottom" id="iBr-o0-nni"/>
+                        <constraint firstAttribute="height" constant="44" id="w1z-oM-exX"/>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="模型展示" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GeJ-C1-VHk">
-                    <rect key="frame" x="95" y="5" width="203" height="34"/>
+                    <rect key="frame" x="95" y="0.0" width="203" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="IIt-m1-M1g"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
@@ -93,26 +98,20 @@
             <viewLayoutGuide key="safeArea" id="2RN-cZ-wPi"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="GeJ-C1-VHk" secondAttribute="bottom" constant="5" id="3uu-bj-U88"/>
+                <constraint firstAttribute="bottom" secondItem="GeJ-C1-VHk" secondAttribute="bottom" id="3uu-bj-U88"/>
                 <constraint firstItem="50a-hK-7tc" firstAttribute="leading" secondItem="GeJ-C1-VHk" secondAttribute="trailing" constant="5" id="7Pr-pw-44q"/>
-                <constraint firstItem="GeJ-C1-VHk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="Fs8-sF-VCt"/>
-                <constraint firstItem="50a-hK-7tc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="GKW-mg-oaa"/>
-                <constraint firstItem="3x1-KJ-lqo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="GN1-Q9-QIH"/>
                 <constraint firstItem="3x1-KJ-lqo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="NOc-m9-Ske"/>
                 <constraint firstItem="GeJ-C1-VHk" firstAttribute="leading" secondItem="3x1-KJ-lqo" secondAttribute="trailing" constant="5" id="OBf-o4-dh7"/>
                 <constraint firstAttribute="trailing" secondItem="50a-hK-7tc" secondAttribute="trailing" constant="10" id="R9K-Ml-ahG"/>
-                <constraint firstItem="GeJ-C1-VHk" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZMy-Y9-bCn"/>
                 <constraint firstAttribute="bottom" secondItem="3x1-KJ-lqo" secondAttribute="bottom" id="bqD-6p-vkk"/>
-                <constraint firstItem="GeJ-C1-VHk" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="pVi-EE-7us"/>
                 <constraint firstAttribute="bottom" secondItem="50a-hK-7tc" secondAttribute="bottom" id="zMa-IA-GGc"/>
             </constraints>
-            <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="titleLB" destination="GeJ-C1-VHk" id="twc-rm-GRs"/>
             </connections>
-            <point key="canvasLocation" x="-880" y="-56"/>
+            <point key="canvasLocation" x="-1018" y="-96"/>
         </view>
     </objects>
     <resources>

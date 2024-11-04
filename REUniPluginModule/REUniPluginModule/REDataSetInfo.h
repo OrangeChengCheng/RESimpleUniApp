@@ -19,8 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray *offset;
 @property (nonatomic, copy) NSString *dataSetCRS;
 @property (nonatomic, assign) double dataSetCRSNorth;
+@property (nonatomic, strong) NSArray *engineOrigin;
 @property (nonatomic, copy) NSString *dataSetSGContent;
 @property (nonatomic, assign) RECadUnitEm unit;// 单位 Meter：米 Centimeter：厘米 Millimeter：毫米 Kilometer：千米 Inch：英寸 Foot：英尺 Mile：英里
+@property (nonatomic, assign) int terrainLayerLev;// 地形层级
 
 @end
 

@@ -16,8 +16,8 @@
 	if (self) {
 		_type = 0; _dataSetId = @""; _resourcesAddress = @"";
 		_scale = @[@1.0, @1.0, @1.0]; _rotate = @[@0.0, @0.0, @0.0, @1.0]; _offset = @[@0.0, @0.0, @0.0];
-		_dataSetCRS = @""; _dataSetCRSNorth = 0; _dataSetSGContent = @"";
-		_unit = CAD_UNIT_Mile;
+		_dataSetCRS = @""; _dataSetCRSNorth = 0; _engineOrigin = @[@0.0, @0.0, @0.0]; _dataSetSGContent = @"";
+		_unit = CAD_UNIT_Mile; _terrainLayerLev = 0;
 	}
 	return self;
 }
