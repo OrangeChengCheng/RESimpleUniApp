@@ -10,7 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^ REModuleCallback)(NSString *response);
+
+
 @interface REModule : DCUniModule
+
+
+// 类方法，用于发送消息并接收回调
++ (void)sendMessage:(NSString *)message completion:(REModuleCallback)completion;
 
 @end
 

@@ -13,6 +13,7 @@
 #import "RETip.h"
 #import "RENav.h"
 #import "REQRCode.h"
+#import "REModule.h"
 
 static CGFloat stateBarHeight = 0.0;
 
@@ -46,7 +47,10 @@ static CGFloat stateBarHeight = 0.0;
 		};
 		_re_nav.qrCodeCallBack = ^{
 			STRONGSELF
-			[REQRCode showQRCode:strongSelf.shareUrl name:strongSelf.projName];
+//			[REQRCode showQRCode:strongSelf.shareUrl name:strongSelf.projName];
+			[REModule sendMessage:@"Hello from ActivityA to ClassB" completion:^(NSString * _Nonnull response) {
+				NSLog(@"*****************   %@", response);
+			}];
 		};
 	}
 	return _re_nav;
