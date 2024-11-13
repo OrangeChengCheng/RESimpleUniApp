@@ -71,7 +71,6 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 }
 
 
-
 // 通过宏 UNI_EXPORT_METHOD 将异步方法暴露给 js 端
 UNI_EXPORT_METHOD(@selector(unipluginLog:))
 
@@ -109,17 +108,6 @@ UNI_EXPORT_METHOD_SYNC(@selector(reUniPostData:))
 	if (appToUniCallBack != nil) {
 		appToUniCallBack(@{@"code":@"success"}, YES);
 	}
-//	// 模拟异步任务
-//	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//		// 这里进行耗时操作，比如网络请求或数据处理
-//		sleep(2); // 假设需要2秒来处理
-//		
-//		// 异步任务完成后，调用回调块
-//		if (completion) {
-//			completion(@"Response from ClassB");
-//		}
-//	});
-	
 	uniToAppCallBack = completion;
 }
 
