@@ -48,7 +48,7 @@ static CGFloat stateBarHeight = 0.0;
 		_re_nav.qrCodeCallBack = ^{
 			STRONGSELF
 //			[REQRCode showQRCode:strongSelf.shareUrl name:strongSelf.projName];
-			[REModule sendMessage:@"Hello from ActivityA to ClassB" completion:^(NSString * _Nonnull response) {
+			[REModule sendMessage:REModuleMsg_T1 message:@"Hello from ActivityA to ClassB" completion:^(NSString * _Nonnull response) {
 				NSLog(@"*****************   %@", response);
 			}];
 		};
@@ -301,6 +301,9 @@ static CGFloat stateBarHeight = 0.0;
 				}
 				[strongSelf.loadingView hiddenLoading];
 			} else {
+				[REModule sendMessage:REModuleMsg_T2 message:@"模型资源加载失败！" completion:^(NSString * _Nonnull response) {
+					NSLog(@"*****************   %@", response);
+				}];
 				[strongSelf endRenderAndExit];
 			}
 		}
@@ -319,6 +322,9 @@ static CGFloat stateBarHeight = 0.0;
 			[strongSelf.loadingView hiddenLoading];
 			[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];
 		} else {
+			[REModule sendMessage:REModuleMsg_T2 message:@"模型资源加载失败！" completion:^(NSString * _Nonnull response) {
+				NSLog(@"*****************   %@", response);
+			}];
 			[strongSelf endRenderAndExit];
 		}
 	}];

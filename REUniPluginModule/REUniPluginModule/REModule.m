@@ -103,12 +103,29 @@ UNI_EXPORT_METHOD_SYNC(@selector(reUniPostData:))
 }
 
 
-+ (void)sendMessage:(NSString *)message completion:(REModuleCallback)completion {
++ (void)sendMessage:(REModuleMsgType)type message:(id)message completion:(REModuleCallback)completion {
 	NSLog(@"************* 【app -> uni】 :  %@", message);
-	if (appToUniCallBack != nil) {
-		appToUniCallBack(@{@"code":@"success"}, YES);
+	switch (type) {
+		case REModuleMsg_T1:
+		{
+			if (appToUniCallBack != nil) {
+				appToUniCallBack(@{@"code":@"success"}, YES);
+				uniToAppCallBack = completion;
+			}
+		}
+			break;
+		case REModuleMsg_T2:
+		{
+			if (appToUniCallBack != nil) {
+				NSString *msg = (NSString *)message;
+				appToUniCallBack(@{@"code":@"error", @"msg":msg}, YES);
+				uniToAppCallBack = completion;
+			}
+		}
+			break;
+		default:
+			break;
 	}
-	uniToAppCallBack = completion;
 }
 
 
