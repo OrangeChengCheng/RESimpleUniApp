@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *customView;
 
 @property (nonatomic, strong) NSArray *dataSetList;
+@property (nonatomic, strong) NSArray *entityList;
+@property (nonatomic, strong) NSArray *waterList;
+@property (nonatomic, strong) NSArray *extrudeList;
 @property (nonatomic, assign) int maxInstDrawFaceNum;
 @property (nonatomic, copy) NSString *worldCRS;
 @property (nonatomic, copy) NSString *projName;

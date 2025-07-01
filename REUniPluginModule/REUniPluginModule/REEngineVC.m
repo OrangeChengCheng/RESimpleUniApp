@@ -8,12 +8,13 @@
 #import "REEngineVC.h"
 #import "BlackHole3D.h"
 #import "Masonry.h"
-#import "REDataSetInfo.h"
+#import "REUniClass.h"
 #import "RELoadingView.h"
 #import "RETip.h"
 #import "RENav.h"
 #import "REQRCode.h"
 #import "REModule.h"
+#import "REWebVC.h"
 
 static CGFloat stateBarHeight = 0.0;
 
@@ -136,6 +137,7 @@ static CGFloat stateBarHeight = 0.0;
 - (void)addReaderView {
 	[self changeEngineUI];
 //	if (!self.isUniAppComp) [self addBtn];
+//	[self addBtn];
 }
 
 #pragma mark - 创建显示界面
@@ -182,7 +184,12 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 - (void)backBtnAction:(UIButton *)sender {
-	[self endRenderAndExit];
+//	[self endRenderAndExit];
+	NSLog(@"");
+	REWebVC *webVC = [[REWebVC alloc] init];
+//	webVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+//	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;
+	[self presentViewController:webVC animated:YES completion:nil];
 }
 
 
@@ -287,6 +294,7 @@ static CGFloat stateBarHeight = 0.0;
 			}
 		} else {
 			if (success) {
+				if (![[BlackHole3D sharedSingleton].Model getAllDataSetReady]) return;
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
 				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0 && (!strongSelf.defaultCamLoc || !strongSelf.defaultCamLoc.force)) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
@@ -299,6 +307,9 @@ static CGFloat stateBarHeight = 0.0;
 						[[BlackHole3D sharedSingleton].Terrain setUnitLayerlev:dataSetInfo.dataSetId unitId:unitID resType:RETerrResEm_ALL layerLev:dataSetInfo.terrainLayerLev];
 					}
 				}
+				[strongSelf addEntity];
+				[strongSelf addWater];
+				[strongSelf addExtrude];
 				[strongSelf.loadingView hiddenLoading];
 			} else {
 				[REModule sendMessage:REModuleMsg_T2 message:@"模型资源加载失败！" completion:^(NSString * _Nonnull response) {
@@ -310,6 +321,8 @@ static CGFloat stateBarHeight = 0.0;
 	}];
 }
 
+
+#pragma mark - CAD加载
 - (void)loadCad {
 	REDataSetInfo *dataSetInfo = self.dataSetList.firstObject;
 	
@@ -329,6 +342,105 @@ static CGFloat stateBarHeight = 0.0;
 		}
 	}];
 }
+
+
+
+
+#pragma mark - 单构件加载
+- (void)addEntity {
+	if (!self.entityList || !self.entityList.count) {
+		return;
+	}
+	NSMutableArray *re_entityList = [NSMutableArray array];
+	for (REEntityUniData *entityInfo in self.entityList) {
+		REEntityInfo *entity = [[REEntityInfo alloc] init];
+		entity.dataSetId = entityInfo.dataSetId;
+		entity.entityType = entityInfo.entityType;
+		entity.dataSetCRS = entityInfo.dataSetCRS;
+		entity.elemId = entityInfo.elemId;
+		entity.scale = REDVec3Make([entityInfo.scale[0] doubleValue], [entityInfo.scale[1] doubleValue], [entityInfo.scale[2] doubleValue]);
+		entity.rotate = REDVec4Make([entityInfo.rotate[0] doubleValue], [entityInfo.rotate[1] doubleValue], [entityInfo.rotate[2] doubleValue], [entityInfo.rotate[3] doubleValue]);
+		entity.offset = REDVec3Make([entityInfo.offset[0] doubleValue], [entityInfo.offset[1] doubleValue], [entityInfo.offset[2] doubleValue]);
+		[re_entityList addObject:entity];
+	}
+	[[BlackHole3D sharedSingleton].Entity enterEditMode];
+	[[BlackHole3D sharedSingleton].Entity addEntities:re_entityList callBack:^(BOOL success) {
+		NSLog(@"add entity success: %d", success);
+	}];
+	[[BlackHole3D sharedSingleton].Entity exitEditMode];
+}
+
+
+
+#pragma mark - 水面加载
+- (void)addWater {
+	if (!self.waterList || !self.waterList.count) {
+		return;
+	}
+	
+	NSMutableArray *re_waterList = [NSMutableArray array];
+	for (REWaterUniData *waterInfo in self.waterList) {
+		NSMutableArray *rgnList = [NSMutableArray array];
+		RECornerRgnUniData *uni_cornerRgnInfo = waterInfo.rgnList.firstObject;
+		RECornerRgnInfo *cornerRgnInfo = [[RECornerRgnInfo alloc] init];
+		NSMutableArray *potList = [NSMutableArray array];
+		for (NSArray<NSNumber *> *pot in uni_cornerRgnInfo.pointList) {
+			[potList addObject:[REPoint3D initDvec3:[RETool arrtToDVec3:pot]]];
+		}
+		cornerRgnInfo.pointList = potList;
+		cornerRgnInfo.indexList = uni_cornerRgnInfo.indexList;
+		[rgnList addObject:cornerRgnInfo];
+		
+		REWaterInfo *re_waterInfo = [[REWaterInfo alloc] init];
+		re_waterInfo.waterName = waterInfo.waterName;
+		re_waterInfo.waterClr = [RETool arrtToColor:waterInfo.waterClr];
+		re_waterInfo.blendDist = waterInfo.blendDist;
+		re_waterInfo.visible = waterInfo.visible;
+		re_waterInfo.visDist = waterInfo.visDist;
+		re_waterInfo.depthBias = waterInfo.depthBias;
+		re_waterInfo.expandDist = waterInfo.expandDist;
+		re_waterInfo.rgnList = rgnList;
+		
+		[re_waterList addObject:re_waterInfo];
+	}
+	[[BlackHole3D sharedSingleton].Water setData:re_waterList];
+}
+
+
+
+#pragma mark - 挤出加载
+- (void)addExtrude {
+	if (!self.extrudeList || !self.extrudeList.count) {
+		return;
+	}
+	
+	NSMutableArray *re_extrudeList = [NSMutableArray array];
+	for (REExtrudeUniData *extrudeInfo in self.extrudeList) {
+		NSMutableArray *rgnList = [NSMutableArray array];
+		NSMutableArray *potList = [NSMutableArray array];
+		NSArray *uni_cornerRgnInfo = extrudeInfo.rgnList.firstObject;
+		for (NSArray<NSNumber *> *pot in uni_cornerRgnInfo) {
+			[potList addObject:[REPoint3D initDvec3:[RETool arrtToDVec3:pot]]];
+		}
+		[rgnList addObject:potList];
+		
+		REExtrudeInfo *re_extrudeInfo = [[REExtrudeInfo alloc] init];
+		re_extrudeInfo.extrudeId = extrudeInfo.extrudeId;
+		re_extrudeInfo.dataSetIdList = extrudeInfo.dataSetIdList;
+		re_extrudeInfo.depthLimitRange = [RETool arrtToDVec2:extrudeInfo.depthLimitRange];
+		re_extrudeInfo.type = extrudeInfo.type;
+		re_extrudeInfo.texId = extrudeInfo.texId;
+		re_extrudeInfo.texPath = extrudeInfo.texPath;
+		re_extrudeInfo.texSize = [RETool arrtToDVec2:extrudeInfo.texSize];
+		re_extrudeInfo.rgnList = rgnList;
+		
+		[re_extrudeList addObject:re_extrudeInfo];
+	}
+	[[BlackHole3D sharedSingleton].Extrude setData:re_extrudeList];
+}
+
+
+
 
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

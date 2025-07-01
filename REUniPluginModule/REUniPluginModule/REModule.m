@@ -10,7 +10,7 @@
 #import "BlackHole3D.h"
 #import <objc/runtime.h>
 #import "YYModel.h"
-#import "REDataSetInfo.h"
+#import "REUniClass.h"
 
 
 
@@ -31,7 +31,10 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	
 	// 可以在该方法中实现原生能力，然后通过 callback 回调到 js
 	
-	NSArray *list = [NSArray yy_modelArrayWithClass:REDataSetInfo.class json:options[@"dataSetList"]];
+	NSArray *dataSetList = [NSArray yy_modelArrayWithClass:REDataSetInfo.class json:options[@"dataSetList"]];
+	NSArray *entityList = [NSArray yy_modelArrayWithClass:REEntityUniData.class json:options[@"entityList"]];
+	NSArray *waterList = [NSArray yy_modelArrayWithClass:REWaterUniData.class json:options[@"waterList"]];
+	NSArray *extrudeList = [NSArray yy_modelArrayWithClass:REExtrudeUniData.class json:options[@"extrudeList"]];
 	id maxInstDrawFaceNum = [options objectForKey:@"maxInstDrawFaceNum"];
 	id shareUrl = [options objectForKey:@"shareUrl"];
 	id projName = [options objectForKey:@"projName"];
@@ -43,7 +46,10 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	id defaultCamLoc = [options objectForKey:@"defaultCamLoc"];
 	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
-	engineVC.dataSetList = list;
+	engineVC.dataSetList = dataSetList;
+	engineVC.entityList = entityList;
+	engineVC.waterList = waterList;
+	engineVC.extrudeList = extrudeList;
 	engineVC.maxInstDrawFaceNum = maxInstDrawFaceNum ?  [options[@"maxInstDrawFaceNum"] intValue] : 1500000;
 	engineVC.shareUrl = shareUrl ? [options[@"shareUrl"] stringValue] : @"";
 	engineVC.projName = projName ? [options[@"projName"] stringValue] : @"";
