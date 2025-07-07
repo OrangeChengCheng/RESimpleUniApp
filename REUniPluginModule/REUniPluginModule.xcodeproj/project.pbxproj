@@ -20,6 +20,13 @@
 		1834CAFB2E13902400D2036C /* REWaterUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CAF82E13902400D2036C /* REWaterUniData.h */; };
 		1834CAFE2E13939100D2036C /* REExtrudeUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834CAFD2E13939100D2036C /* REExtrudeUniData.m */; };
 		1834CAFF2E13939100D2036C /* REExtrudeUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CAFC2E13939100D2036C /* REExtrudeUniData.h */; };
+		1834CB4D2E1BAF7500D2036C /* REWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834CB4C2E1BAF7500D2036C /* REWebViewManager.m */; };
+		1834CB4E2E1BAF7500D2036C /* REWebViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CB4B2E1BAF7500D2036C /* REWebViewManager.h */; };
+		1834CB502E1BAFCD00D2036C /* REAppUIClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CB4F2E1BAFCD00D2036C /* REAppUIClass.h */; };
+		1834CB552E1BB1E000D2036C /* RESceneUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834CB542E1BB1E000D2036C /* RESceneUniData.m */; };
+		1834CB562E1BB1E000D2036C /* RESceneUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CB532E1BB1E000D2036C /* RESceneUniData.h */; };
+		1834CB592E1BB29700D2036C /* RECamInfoUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834CB582E1BB29700D2036C /* RECamInfoUniData.m */; };
+		1834CB5A2E1BB29700D2036C /* RECamInfoUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 1834CB572E1BB29700D2036C /* RECamInfoUniData.h */; };
 		1851FC832CC8E7B200583FD8 /* RETip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1851FC822CC8E7B200583FD8 /* RETip.m */; };
 		1851FC842CC8E7B200583FD8 /* RETip.h in Headers */ = {isa = PBXBuildFile; fileRef = 1851FC812CC8E7B200583FD8 /* RETip.h */; };
 		1851FC872CD0748300583FD8 /* RENav.m in Sources */ = {isa = PBXBuildFile; fileRef = 1851FC862CD0748300583FD8 /* RENav.m */; };
@@ -101,8 +108,8 @@
 		18DCFF0E2C8054E9005BC93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF0D2C8054E9005BC93F /* UIKit.framework */; };
 		18DCFF102C8054F0005BC93F /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF0F2C8054F0005BC93F /* IOKit.framework */; };
 		18DCFF122C8054F7005BC93F /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF112C8054F7005BC93F /* IOSurface.framework */; };
-		18DCFF262C8060DA005BC93F /* REDataSetInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFF242C8060DA005BC93F /* REDataSetInfo.h */; };
-		18DCFF272C8060DA005BC93F /* REDataSetInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DCFF252C8060DA005BC93F /* REDataSetInfo.m */; };
+		18DCFF262C8060DA005BC93F /* REDataSetUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFF242C8060DA005BC93F /* REDataSetUniData.h */; };
+		18DCFF272C8060DA005BC93F /* REDataSetUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DCFF252C8060DA005BC93F /* REDataSetUniData.m */; };
 		18EB94602DF14B3A009DCFBD /* REEntityUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */; };
 		18EB94612DF14B3A009DCFBD /* REEntityUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */; };
 		18EB94652DF14D59009DCFBD /* REUniClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB94642DF14D59009DCFBD /* REUniClass.h */; };
@@ -134,6 +141,13 @@
 		1834CAF92E13902400D2036C /* REWaterUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REWaterUniData.m; sourceTree = "<group>"; };
 		1834CAFC2E13939100D2036C /* REExtrudeUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REExtrudeUniData.h; sourceTree = "<group>"; };
 		1834CAFD2E13939100D2036C /* REExtrudeUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REExtrudeUniData.m; sourceTree = "<group>"; };
+		1834CB4B2E1BAF7500D2036C /* REWebViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REWebViewManager.h; sourceTree = "<group>"; };
+		1834CB4C2E1BAF7500D2036C /* REWebViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REWebViewManager.m; sourceTree = "<group>"; };
+		1834CB4F2E1BAFCD00D2036C /* REAppUIClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REAppUIClass.h; sourceTree = "<group>"; };
+		1834CB532E1BB1E000D2036C /* RESceneUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RESceneUniData.h; sourceTree = "<group>"; };
+		1834CB542E1BB1E000D2036C /* RESceneUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RESceneUniData.m; sourceTree = "<group>"; };
+		1834CB572E1BB29700D2036C /* RECamInfoUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RECamInfoUniData.h; sourceTree = "<group>"; };
+		1834CB582E1BB29700D2036C /* RECamInfoUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RECamInfoUniData.m; sourceTree = "<group>"; };
 		1851FC812CC8E7B200583FD8 /* RETip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RETip.h; sourceTree = "<group>"; };
 		1851FC822CC8E7B200583FD8 /* RETip.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RETip.m; sourceTree = "<group>"; };
 		1851FC852CD0748300583FD8 /* RENav.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RENav.h; sourceTree = "<group>"; };
@@ -217,8 +231,8 @@
 		18DCFF0D2C8054E9005BC93F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		18DCFF0F2C8054F0005BC93F /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		18DCFF112C8054F7005BC93F /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/IOSurface.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF242C8060DA005BC93F /* REDataSetInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REDataSetInfo.h; sourceTree = "<group>"; };
-		18DCFF252C8060DA005BC93F /* REDataSetInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REDataSetInfo.m; sourceTree = "<group>"; };
+		18DCFF242C8060DA005BC93F /* REDataSetUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REDataSetUniData.h; sourceTree = "<group>"; };
+		18DCFF252C8060DA005BC93F /* REDataSetUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REDataSetUniData.m; sourceTree = "<group>"; };
 		18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REEntityUniData.h; sourceTree = "<group>"; };
 		18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REEntityUniData.m; sourceTree = "<group>"; };
 		18EB94642DF14D59009DCFBD /* REUniClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REUniClass.h; sourceTree = "<group>"; };
@@ -412,14 +426,18 @@
 			isa = PBXGroup;
 			children = (
 				18EB94642DF14D59009DCFBD /* REUniClass.h */,
-				18DCFF242C8060DA005BC93F /* REDataSetInfo.h */,
-				18DCFF252C8060DA005BC93F /* REDataSetInfo.m */,
+				18DCFF242C8060DA005BC93F /* REDataSetUniData.h */,
+				18DCFF252C8060DA005BC93F /* REDataSetUniData.m */,
 				18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */,
 				18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */,
 				1834CAF82E13902400D2036C /* REWaterUniData.h */,
 				1834CAF92E13902400D2036C /* REWaterUniData.m */,
 				1834CAFC2E13939100D2036C /* REExtrudeUniData.h */,
 				1834CAFD2E13939100D2036C /* REExtrudeUniData.m */,
+				1834CB532E1BB1E000D2036C /* RESceneUniData.h */,
+				1834CB542E1BB1E000D2036C /* RESceneUniData.m */,
+				1834CB572E1BB29700D2036C /* RECamInfoUniData.h */,
+				1834CB582E1BB29700D2036C /* RECamInfoUniData.m */,
 			);
 			path = UniClass;
 			sourceTree = "<group>";
@@ -427,6 +445,9 @@
 		18EB945D2DF14A6E009DCFBD /* AppUI */ = {
 			isa = PBXGroup;
 			children = (
+				1834CB4F2E1BAFCD00D2036C /* REAppUIClass.h */,
+				1834CB4B2E1BAF7500D2036C /* REWebViewManager.h */,
+				1834CB4C2E1BAF7500D2036C /* REWebViewManager.m */,
 				187D32F62CD1DA72005DA0F5 /* REQRCode.h */,
 				187D32F72CD1DA72005DA0F5 /* REQRCode.m */,
 				185ABDB82CB781D5003263DA /* RELoadingView.h */,
@@ -453,6 +474,7 @@
 				18DCFEC22C80536A005BC93F /* RETestView.h in Headers */,
 				18DCFEC32C80536A005BC93F /* REModule.h in Headers */,
 				185ABE002CBA7BCB003263DA /* REUniPluginModulePrefix.pch in Headers */,
+				1834CB502E1BAFCD00D2036C /* REAppUIClass.h in Headers */,
 				187D32F92CD1DA72005DA0F5 /* REQRCode.h in Headers */,
 				1834CAFB2E13902400D2036C /* REWaterUniData.h in Headers */,
 				18DCFEE32C80536A005BC93F /* YYClassInfo.h in Headers */,
@@ -464,7 +486,9 @@
 				18DCFEC92C80536A005BC93F /* MASConstraint+Private.h in Headers */,
 				18EB94602DF14B3A009DCFBD /* REEntityUniData.h in Headers */,
 				1834CAFF2E13939100D2036C /* REExtrudeUniData.h in Headers */,
-				18DCFF262C8060DA005BC93F /* REDataSetInfo.h in Headers */,
+				1834CB562E1BB1E000D2036C /* RESceneUniData.h in Headers */,
+				18DCFF262C8060DA005BC93F /* REDataSetUniData.h in Headers */,
+				1834CB5A2E1BB29700D2036C /* RECamInfoUniData.h in Headers */,
 				18DCFED22C80536A005BC93F /* MASViewConstraint.h in Headers */,
 				18DCFEC52C80536A005BC93F /* MASCompositeConstraint.h in Headers */,
 				1851FC842CC8E7B200583FD8 /* RETip.h in Headers */,
@@ -479,6 +503,7 @@
 				18DCFECF2C80536A005BC93F /* MASUtilities.h in Headers */,
 				18DCFED42C80536A005BC93F /* NSArray+MASAdditions.h in Headers */,
 				18DCFED72C80536A005BC93F /* NSLayoutConstraint+MASDebugAdditions.h in Headers */,
+				1834CB4E2E1BAF7500D2036C /* REWebViewManager.h in Headers */,
 				18DCFED62C80536A005BC93F /* NSArray+MASShorthandAdditions.h in Headers */,
 				18DCFED92C80536A005BC93F /* View+MASAdditions.h in Headers */,
 			);
@@ -610,8 +635,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				18DCFED52C80536A005BC93F /* NSArray+MASAdditions.m in Sources */,
-				18DCFF272C8060DA005BC93F /* REDataSetInfo.m in Sources */,
+				18DCFF272C8060DA005BC93F /* REDataSetUniData.m in Sources */,
 				1851FC872CD0748300583FD8 /* RENav.m in Sources */,
+				1834CB552E1BB1E000D2036C /* RESceneUniData.m in Sources */,
 				185ABDBA2CB781D5003263DA /* RELoadingView.m in Sources */,
 				18DCFED12C80536A005BC93F /* MASViewAttribute.m in Sources */,
 				18EB94692DF19F8B009DCFBD /* REWebVC.m in Sources */,
@@ -625,11 +651,13 @@
 				18DCFED32C80536A005BC93F /* MASViewConstraint.m in Sources */,
 				18EB94612DF14B3A009DCFBD /* REEntityUniData.m in Sources */,
 				18DCFEC62C80536A005BC93F /* MASCompositeConstraint.m in Sources */,
+				1834CB4D2E1BAF7500D2036C /* REWebViewManager.m in Sources */,
 				187D32F82CD1DA72005DA0F5 /* REQRCode.m in Sources */,
 				18DCFEDD2C80536A005BC93F /* ViewController+MASAdditions.m in Sources */,
 				18DCFEE22C80536A005BC93F /* NSObject+YYModel.m in Sources */,
 				18DCFEDF2C80536A005BC93F /* RERenderComponent.m in Sources */,
 				1834CAFA2E13902400D2036C /* REWaterUniData.m in Sources */,
+				1834CB592E1BB29700D2036C /* RECamInfoUniData.m in Sources */,
 				18DCFECB2C80536A005BC93F /* MASConstraintMaker.m in Sources */,
 				18DCFED82C80536A005BC93F /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				18DCFEE42C80536A005BC93F /* YYClassInfo.m in Sources */,

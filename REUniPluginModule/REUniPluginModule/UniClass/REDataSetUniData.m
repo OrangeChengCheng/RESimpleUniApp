@@ -1,14 +1,14 @@
 //
-//  REDataSetInfo.m
+//  REDataSetUniData.m
 //  REUniPluginModule
 //
 //  Created by Apple on 2024/8/29.
 //
 
-#import "REDataSetInfo.h"
+#import "REDataSetUniData.h"
 #import "NSObject+YYModel.h"
 
-@implementation REDataSetInfo
+@implementation REDataSetUniData
 
 //重写初始化方法，附默认值
 - (instancetype)init {
@@ -17,7 +17,7 @@
 		_type = 0; _dataSetId = @""; _resourcesAddress = @"";
 		_scale = @[@1.0, @1.0, @1.0]; _rotate = @[@0.0, @0.0, @0.0, @1.0]; _offset = @[@0.0, @0.0, @0.0];
 		_dataSetCRS = @""; _dataSetCRSNorth = 0; _engineOrigin = @[@0.0, @0.0, @0.0]; _dataSetSGContent = @"";
-		_unit = CAD_UNIT_Mile; _terrainLayerLev = 0;
+		_dataSetType = 0; _unit = CAD_UNIT_Mile; _terrainLayerLev = 0;
 	}
 	return self;
 }

@@ -7,20 +7,17 @@
 
 #import "REEngineVC.h"
 #import "BlackHole3D.h"
-#import "Masonry.h"
 #import "REUniClass.h"
-#import "RELoadingView.h"
-#import "RETip.h"
-#import "RENav.h"
-#import "REQRCode.h"
+#import "REAppUIClass.h"
 #import "REModule.h"
 #import "REWebVC.h"
 
 static CGFloat stateBarHeight = 0.0;
 
-@interface REEngineVC ()
+@interface REEngineVC ()<REWebViewManagerDelegate>
 @property (nonatomic, strong) RELoadingView *loadingView;
 @property (nonatomic, strong) RENav *re_nav;
+@property (nonatomic, strong) REWebViewManager *webViewManager;
 
 @end
 
@@ -39,7 +36,7 @@ static CGFloat stateBarHeight = 0.0;
 
 - (RENav *)re_nav {
 	if (!_re_nav) {
-		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight) title:self.projName];
+		_re_nav = [RENav initWithFrame:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight) title:self.sceneUniData.projName];
 		_re_nav.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		WEAKSELF
 		_re_nav.backCallBack = ^{
@@ -55,6 +52,13 @@ static CGFloat stateBarHeight = 0.0;
 		};
 	}
 	return _re_nav;
+}
+
+- (REWebViewManager *)webViewManager {
+	if (!_webViewManager) {
+		_webViewManager = [[REWebViewManager alloc] initWithDelegate:self];
+	}
+	return _webViewManager;
 }
 
 
@@ -154,6 +158,28 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
+#pragma mark - REWebViewManagerDelegate
+- (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
+	NSLog(@"webData: %@", result);
+	
+	int state = [[result objectForKey:@"state"] intValue];
+	if (state == 100) {
+		
+	} else if (state == 200) {
+		[_webViewManager hideAnimated:YES];
+	}
+}
+
+- (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
+	if (success) {
+		NSLog(@"WebView 加载成功");
+	} else {
+		NSLog(@"WebView 加载失败");
+	}
+}
+
+
+#pragma mark - 自定义界面
 - (void)addBtn {
 	UIView *backView = [[UIView alloc] init];
 	[self.customView addSubview:backView];
@@ -197,7 +223,7 @@ static CGFloat stateBarHeight = 0.0;
 	[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];//关闭ui方式重新加载项目的时候先加载出来
 	[[BlackHole3D sharedSingleton] setViewMode:BIM viewport1:None screenMode:Single];
 	// 卸载所有场景
-	if (self.shareType == 1 && [self.shareDataType isEqual:@"Cad"]) {
+	if (self.sceneUniData.shareType == 1 && [self.sceneUniData.shareDataType isEqual:@"Cad"]) {
 		[[BlackHole3D sharedSingleton].CAD unloadCAD];
 	} else {
 		[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
@@ -224,48 +250,59 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
+#pragma mark - 工具栏
+- (void)customToolUI {
+	
+}
+
 
 
 #pragma mark - 模型加载
 - (void)loadDataSet {
-	if (self.worldCRS.length > 0) {
-		[[BlackHole3D sharedSingleton].Coordinate setEngineWorldCRS:self.worldCRS];
+	if (self.sceneUniData.worldCRS.length > 0) {
+		[[BlackHole3D sharedSingleton].Coordinate setEngineWorldCRS:self.sceneUniData.worldCRS];
 	}
 	
 	// 设置渲染模式
-	if (self.shareViewMode.length > 0 && [self.shareViewMode isEqual:@"Sphere"]) {
+	if (self.sceneUniData.shareViewMode.length > 0 && [self.sceneUniData.shareViewMode isEqual:@"Sphere"]) {
 		[[BlackHole3D sharedSingleton].Common setFakeSphMode:YES];
 	} else {
 		[[BlackHole3D sharedSingleton].Common setFakeSphMode:NO];
 	}
 
-	if (self.shareType == 1) {
-		if ([self.shareDataType isEqual:@"Bim"]
-			|| [self.shareDataType isEqual:@"Rs"]
-			|| [self.shareDataType isEqual:@"Wmts"]
-			|| [self.shareDataType isEqual:@"Osgb"]
-			|| [self.shareDataType isEqual:@"PointCloud"]) {
+	if (self.sceneUniData.shareType == 1) {
+		if ([self.sceneUniData.shareDataType isEqual:@"Bim"]
+			|| [self.sceneUniData.shareDataType isEqual:@"Rs"]
+			|| [self.sceneUniData.shareDataType isEqual:@"Wmts"]
+			|| [self.sceneUniData.shareDataType isEqual:@"Osgb"]
+			|| [self.sceneUniData.shareDataType isEqual:@"PointCloud"]) {
 			[self loadBim];
-		} else if ([self.shareDataType isEqual:@"Cad"]) {
+		} else if ([self.sceneUniData.shareDataType isEqual:@"Cad"]) {
 			[self loadCad];
 		} else {
 			[self endRenderAndExit];
 		}
 	} else {
-		if (self.defaultCamLoc && self.defaultCamLoc.force) {
-			[[BlackHole3D sharedSingleton].Camera setCamForcedInitLoc:self.defaultCamLoc];
+		if (self.sceneUniData.defaultCamLoc && self.sceneUniData.defaultCamLoc.camPos && self.sceneUniData.defaultCamLoc.force) {
+			REForceCamLoc *forceCamLoc = [[REForceCamLoc alloc] init];
+			forceCamLoc.force = YES;
+			forceCamLoc.camPos = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camPos];
+			forceCamLoc.camDir = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camDir];
+			forceCamLoc.camRotate = [RETool arrtToDVec4:self.sceneUniData.defaultCamLoc.camRotate];
+//			engineVC.defaultCamLoc = forceCamLoc;
+			[[BlackHole3D sharedSingleton].Camera setCamForcedInitLoc:forceCamLoc];
 		}
 		[self loadBim];
 	}
 	
-	[[BlackHole3D sharedSingleton].Common setExpectMaxInstDrawFaceNum:self.maxInstDrawFaceNum];
+	[[BlackHole3D sharedSingleton].Common setExpectMaxInstDrawFaceNum:self.sceneUniData.maxInstDrawFaceNum];
 }
 
 
 - (void)loadBim {
 	//加载场景
 	NSMutableArray *dataSetList_temp = [NSMutableArray array];
-	for (REDataSetInfo *dataSetInfo in self.dataSetList) {
+	for (REDataSetUniData *dataSetInfo in self.sceneUniData.dataSetList) {
 		REDataSet *dataSet = [[REDataSet alloc] init];
 		dataSet.dataSetId = dataSetInfo.dataSetId;
 		dataSet.resourcesAddress = dataSetInfo.resourcesAddress;
@@ -278,7 +315,7 @@ static CGFloat stateBarHeight = 0.0;
 		dataSet.dataSetSGContent = dataSetInfo.dataSetSGContent;
 		[dataSetList_temp addObject:dataSet];
 	}
-	if (!self.dataSetList.count) {
+	if (!self.sceneUniData.dataSetList.count) {
 		REDataSet *dataSet = [REDataSet initModel:@"res_jifang" resourcesAddress:@"https://demo.bjblackhole.com/default.aspx?dir=url_res03&path=7624a001668d4e5495f101da54d3bee0"];
 		[dataSetList_temp addObject:dataSet];
 	}
@@ -296,11 +333,11 @@ static CGFloat stateBarHeight = 0.0;
 			if (success) {
 				if (![[BlackHole3D sharedSingleton].Model getAllDataSetReady]) return;
 				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
-				if (strongSelf.shareType == 2 && strongSelf.camDefaultDataSetId.length > 0 && (!strongSelf.defaultCamLoc || !strongSelf.defaultCamLoc.force)) {
-					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.camDefaultDataSetId backDepth:1.0];
+				if (strongSelf.sceneUniData.shareType == 2 && strongSelf.sceneUniData.camDefaultDataSetId.length > 0 && (!(strongSelf.sceneUniData.defaultCamLoc && strongSelf.sceneUniData.defaultCamLoc.camPos && strongSelf.sceneUniData.defaultCamLoc.force))) {
+					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.sceneUniData.camDefaultDataSetId backDepth:1.0];
 				}
 				// 处理地形数据层级
-				for (REDataSetInfo *dataSetInfo in strongSelf.dataSetList) {
+				for (REDataSetUniData *dataSetInfo in strongSelf.sceneUniData.dataSetList) {
 					if (dataSetInfo.terrainLayerLev > 0) {
 						NSArray *unitIDs = [[BlackHole3D sharedSingleton].Terrain getAllUnitNames:dataSetInfo.dataSetId];
 						NSString *unitID = unitIDs.count > 0 ? unitIDs.firstObject : @"";
@@ -324,7 +361,7 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - CAD加载
 - (void)loadCad {
-	REDataSetInfo *dataSetInfo = self.dataSetList.firstObject;
+	REDataSetUniData *dataSetInfo = self.sceneUniData.dataSetList.firstObject;
 	
 	[[BlackHole3D sharedSingleton] startRender];
 	[[BlackHole3D sharedSingleton] setViewMode:CAD viewport1:None screenMode:Single];
@@ -348,11 +385,11 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 单构件加载
 - (void)addEntity {
-	if (!self.entityList || !self.entityList.count) {
+	if (!self.sceneUniData.entityList || !self.sceneUniData.entityList.count) {
 		return;
 	}
 	NSMutableArray *re_entityList = [NSMutableArray array];
-	for (REEntityUniData *entityInfo in self.entityList) {
+	for (REEntityUniData *entityInfo in self.sceneUniData.entityList) {
 		REEntityInfo *entity = [[REEntityInfo alloc] init];
 		entity.dataSetId = entityInfo.dataSetId;
 		entity.entityType = entityInfo.entityType;
@@ -374,12 +411,12 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 水面加载
 - (void)addWater {
-	if (!self.waterList || !self.waterList.count) {
+	if (!self.sceneUniData.waterList || !self.sceneUniData.waterList.count) {
 		return;
 	}
 	
 	NSMutableArray *re_waterList = [NSMutableArray array];
-	for (REWaterUniData *waterInfo in self.waterList) {
+	for (REWaterUniData *waterInfo in self.sceneUniData.waterList) {
 		NSMutableArray *rgnList = [NSMutableArray array];
 		RECornerRgnUniData *uni_cornerRgnInfo = waterInfo.rgnList.firstObject;
 		RECornerRgnInfo *cornerRgnInfo = [[RECornerRgnInfo alloc] init];
@@ -410,12 +447,12 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 挤出加载
 - (void)addExtrude {
-	if (!self.extrudeList || !self.extrudeList.count) {
+	if (!self.sceneUniData.extrudeList || !self.sceneUniData.extrudeList.count) {
 		return;
 	}
 	
 	NSMutableArray *re_extrudeList = [NSMutableArray array];
-	for (REExtrudeUniData *extrudeInfo in self.extrudeList) {
+	for (REExtrudeUniData *extrudeInfo in self.sceneUniData.extrudeList) {
 		NSMutableArray *rgnList = [NSMutableArray array];
 		NSMutableArray *potList = [NSMutableArray array];
 		NSArray *uni_cornerRgnInfo = extrudeInfo.rgnList.firstObject;

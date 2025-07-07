@@ -8,11 +8,12 @@
 #ifndef REUniClass_h
 #define REUniClass_h
 
-
-#import "REDataSetInfo.h"
+#import "RESceneUniData.h"
+#import "REDataSetUniData.h"
 #import "REEntityUniData.h"
 #import "REWaterUniData.h"
 #import "REExtrudeUniData.h"
+#import "RECamInfoUniData.h"
 
 
 #endif /* REUniClass_h */

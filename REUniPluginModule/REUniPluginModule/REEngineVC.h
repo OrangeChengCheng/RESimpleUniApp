@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class RESceneUniData;
+
 @protocol RERenderDelegate <NSObject>
 
 // 退出结束渲染回调
@@ -24,19 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<RERenderDelegate> delegate;
 @property (nonatomic, strong) UIView *customView;
 
-@property (nonatomic, strong) NSArray *dataSetList;
-@property (nonatomic, strong) NSArray *entityList;
-@property (nonatomic, strong) NSArray *waterList;
-@property (nonatomic, strong) NSArray *extrudeList;
-@property (nonatomic, assign) int maxInstDrawFaceNum;
-@property (nonatomic, copy) NSString *worldCRS;
-@property (nonatomic, copy) NSString *projName;
-@property (nonatomic, assign) int shareType;
-@property (nonatomic, copy) NSString *camDefaultDataSetId;
-@property (nonatomic, copy) NSString *shareUrl;
-@property (nonatomic, copy) NSString *shareViewMode;
-@property (nonatomic, copy) NSString *shareDataType;
-@property (nonatomic, strong) REForceCamLoc *defaultCamLoc;
+@property (nonatomic, strong) RESceneUniData *sceneUniData;
 
 
 - (void)endRenderAndExit;//结束渲染并退出渲染

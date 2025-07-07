@@ -29,40 +29,10 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	// options 为 js 端调用此方法时传递的参数
 	NSLog(@"************* 【uni -> app】 : (realEngineRender)  %@",options);
 	
-	// 可以在该方法中实现原生能力，然后通过 callback 回调到 js
-	
-	NSArray *dataSetList = [NSArray yy_modelArrayWithClass:REDataSetInfo.class json:options[@"dataSetList"]];
-	NSArray *entityList = [NSArray yy_modelArrayWithClass:REEntityUniData.class json:options[@"entityList"]];
-	NSArray *waterList = [NSArray yy_modelArrayWithClass:REWaterUniData.class json:options[@"waterList"]];
-	NSArray *extrudeList = [NSArray yy_modelArrayWithClass:REExtrudeUniData.class json:options[@"extrudeList"]];
-	id maxInstDrawFaceNum = [options objectForKey:@"maxInstDrawFaceNum"];
-	id shareUrl = [options objectForKey:@"shareUrl"];
-	id projName = [options objectForKey:@"projName"];
-	id worldCRS = [options objectForKey:@"worldCRS"];
-	id shareType = [options objectForKey:@"shareType"];
-	id camDefaultDataSetId = [options objectForKey:@"camDefaultDataSetId"];
-	id shareViewMode = [options objectForKey:@"shareViewMode"];
-	id shareDataType = [options objectForKey:@"shareDataType"];
-	id defaultCamLoc = [options objectForKey:@"defaultCamLoc"];
+	RESceneUniData *sceneUniData = [RESceneUniData yy_modelWithDictionary:options];
 	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
-	engineVC.dataSetList = dataSetList;
-	engineVC.entityList = entityList;
-	engineVC.waterList = waterList;
-	engineVC.extrudeList = extrudeList;
-	engineVC.maxInstDrawFaceNum = maxInstDrawFaceNum ?  [options[@"maxInstDrawFaceNum"] intValue] : 1500000;
-	engineVC.shareUrl = shareUrl ? [options[@"shareUrl"] stringValue] : @"";
-	engineVC.projName = projName ? [options[@"projName"] stringValue] : @"";
-	engineVC.worldCRS = worldCRS ? [options[@"worldCRS"] stringValue] : @"";
-	engineVC.shareType = shareType ?  [options[@"shareType"] intValue] : 0;
-	engineVC.camDefaultDataSetId = camDefaultDataSetId ? [options[@"camDefaultDataSetId"] stringValue] : @"";
-	engineVC.shareViewMode = shareViewMode ? [options[@"shareViewMode"] stringValue] : @"";
-	engineVC.shareDataType = shareDataType ? [options[@"shareDataType"] stringValue] : @"";
-	if (defaultCamLoc && ![defaultCamLoc isKindOfClass:[NSNull class]] && [(NSDictionary *)defaultCamLoc allKeys].count > 0) {
-		REForceCamLoc *forceCamLoc = [REForceCamLoc yy_modelWithDictionary:options[@"defaultCamLoc"]];
-		forceCamLoc.force = YES;
-		engineVC.defaultCamLoc = forceCamLoc;
-	}
+	engineVC.sceneUniData = sceneUniData;
 	engineVC.isUniAppComp = NO;
 	engineVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;
