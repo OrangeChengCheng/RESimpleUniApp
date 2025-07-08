@@ -9,6 +9,7 @@
 #import <WebKit/WebKit.h>
 #import <UIKit/UIKit.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol REWebViewManagerDelegate <NSObject>
@@ -33,9 +34,13 @@ NS_ASSUME_NONNULL_BEGIN
 		   withRect:(CGRect)rect
 		fromBottom:(BOOL)fromBottom
 		  animated:(BOOL)animated;
+- (void)showInView:(UIView *)parentView
+		withHeight:(CGFloat)height;
 - (void)hideAnimated:(BOOL)animated;
 - (void)sendMessage:(NSString *)message;
 - (void)sendObject:(id)object;
+- (void)toggleFullScreen:(BOOL)isFullScreen animated:(BOOL)animated;
+- (void)destroy;
 
 @end
 

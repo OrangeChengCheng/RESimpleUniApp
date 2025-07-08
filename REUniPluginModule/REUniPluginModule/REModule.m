@@ -31,8 +31,20 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	
 	RESceneUniData *sceneUniData = [RESceneUniData yy_modelWithDictionary:options];
 	
+	NSMutableArray *toolDataList = [NSMutableArray array];
+	// 添加自定义按钮数据
+	{
+		REToolData *tool_tree = [REToolData initWithType:1 popViewHeight:400 toolBtnId:@"retool_btn_tree" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/cancelcut_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/tree"];
+		REToolData *tool_property = [REToolData initWithType:2 popViewHeight:400 toolBtnId:@"retool_btn_property" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/confirmcut_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/property"];
+		REToolData *tool_cad = [REToolData initWithType:3 popViewHeight:400 toolBtnId:@"retool_btn_cad" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/ctrlmouse_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/cad"];
+		[toolDataList addObject:tool_tree];
+		[toolDataList addObject:tool_property];
+		[toolDataList addObject:tool_cad];
+	}
+	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
 	engineVC.sceneUniData = sceneUniData;
+	engineVC.toolDataList = toolDataList;
 	engineVC.isUniAppComp = NO;
 	engineVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;

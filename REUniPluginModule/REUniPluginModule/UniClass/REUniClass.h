@@ -14,6 +14,8 @@
 #import "REWaterUniData.h"
 #import "REExtrudeUniData.h"
 #import "RECamInfoUniData.h"
+#import "REToolData.h"
+#import "REModelUniData.h"
 
 
 #endif /* REUniClass_h */

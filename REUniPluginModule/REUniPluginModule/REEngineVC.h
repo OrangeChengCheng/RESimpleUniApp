@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 
 @class RESceneUniData;
+@class REToolData;
 
 @protocol RERenderDelegate <NSObject>
 
@@ -27,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *customView;
 
 @property (nonatomic, strong) RESceneUniData *sceneUniData;
+@property (nonatomic, strong) NSArray<REToolData *> *toolDataList;
 
 
 - (void)endRenderAndExit;//结束渲染并退出渲染

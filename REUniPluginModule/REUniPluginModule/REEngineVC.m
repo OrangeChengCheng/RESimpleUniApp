@@ -9,6 +9,7 @@
 #import "BlackHole3D.h"
 #import "REUniClass.h"
 #import "REAppUIClass.h"
+#import "REToolHandle.h"
 #import "REModule.h"
 #import "REWebVC.h"
 
@@ -97,27 +98,49 @@ static CGFloat stateBarHeight = 0.0;
 	[[BlackHole3D sharedSingleton] systemUIEvent:^(NSString * _Nullable btnName, int btnState) {
 		STRONGSELF
 		NSLog(@"btnName = %@  btnState = %d", btnName, btnState);
-		RETip_Level level = RETip_L0;
-		if ([btnName isEqualToString:@"BuiltIn_Btn_MainView"] || [btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"]) {
-			level = RETip_L1;
+		
+		REToolData *toolBtn = nil;
+		for (REToolData *item in strongSelf.toolDataList) {
+			if ([item.toolBtnId isEqualToString:btnName]) {
+				toolBtn = item;
+				break;
+			}
+		}
+		if (toolBtn) {
+			if (strongSelf.webViewManager.isShowing) {
+				[strongSelf.webViewManager hideAnimated:YES];
+			} else {
+				NSArray *elemIdList = [[BlackHole3D sharedSingleton].BIM getSelElemIDs];
+				
+				// 显示 WebView
+				[strongSelf.webViewManager showInView:strongSelf.view withHeight:400];
+				
+				// 加载 URL
+				[strongSelf.webViewManager loadUrl:@"http://192.168.31.164:8080/#/cad"];
+			}
 		} else {
-			level = RETip_L2;
+			RETip_Level level = RETip_L0;
+			if ([btnName isEqualToString:@"BuiltIn_Btn_MainView"] || [btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"]) {
+				level = RETip_L1;
+			} else {
+				level = RETip_L2;
+			}
+			if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
+				[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
+			}
+	//		if (([btnName isEqualToString:@"BuiltIn_Btn_MainView"] && btnState == 0)) {
+	//			[RETip showTipStaticAnimte:strongSelf.view message:@"主视图" level:level];
+	//		}
+	//		if (([btnName isEqualToString:@"BuiltIn_Btn_SelElem"] && btnState == 1)) {
+	//			[RETip showTipStaticAnimte:strongSelf.view message:@"选择模式" level:level];
+	//		}
+	//		if (([btnName isEqualToString:@"BuiltIn_Btn_Measure"] && btnState == 1)) {
+	//			[RETip showTipStaticAnimte:strongSelf.view message:@"测量" level:level];
+	//		}
+	//		if (([btnName isEqualToString:@"BuiltIn_Btn_More"] && btnState == 1)) {
+	//			[RETip showTipStaticAnimte:strongSelf.view message:@"更多" level:level];
+	//		}
 		}
-		if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
-			[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
-		}
-//		if (([btnName isEqualToString:@"BuiltIn_Btn_MainView"] && btnState == 0)) {
-//			[RETip showTipStaticAnimte:strongSelf.view message:@"主视图" level:level];
-//		}
-//		if (([btnName isEqualToString:@"BuiltIn_Btn_SelElem"] && btnState == 1)) {
-//			[RETip showTipStaticAnimte:strongSelf.view message:@"选择模式" level:level];
-//		}
-//		if (([btnName isEqualToString:@"BuiltIn_Btn_Measure"] && btnState == 1)) {
-//			[RETip showTipStaticAnimte:strongSelf.view message:@"测量" level:level];
-//		}
-//		if (([btnName isEqualToString:@"BuiltIn_Btn_More"] && btnState == 1)) {
-//			[RETip showTipStaticAnimte:strongSelf.view message:@"更多" level:level];
-//		}
 	}];
 }
 
@@ -140,8 +163,7 @@ static CGFloat stateBarHeight = 0.0;
 
 - (void)addReaderView {
 	[self changeEngineUI];
-//	if (!self.isUniAppComp) [self addBtn];
-//	[self addBtn];
+	if (!self.isUniAppComp) [self addBtn];
 }
 
 #pragma mark - 创建显示界面
@@ -162,12 +184,21 @@ static CGFloat stateBarHeight = 0.0;
 - (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
 	NSLog(@"webData: %@", result);
 	
-	int state = [[result objectForKey:@"state"] intValue];
-	if (state == 100) {
-		
-	} else if (state == 200) {
-		[_webViewManager hideAnimated:YES];
+	NSString *type = [[result objectForKey:@"type"] stringValue];
+	NSDictionary *json_data = [result.allKeys containsObject:@"data"] ? [result objectForKey:@"data"] : nil;
+	if (!json_data) {
+		return;
 	}
+	
+	if ([type isEqualToString:@"cloose"]) {
+		[self.webViewManager hideAnimated:YES];
+	} else if ([type isEqualToString:@"popWebFull"]) {
+		[self.webViewManager toggleFullScreen:[json_data[@"full"] boolValue] animated:YES];
+	}
+	
+	[REToolHandle handleEngineSDK:result msgWhere:2];
+	
+
 }
 
 - (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
@@ -210,12 +241,7 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 - (void)backBtnAction:(UIButton *)sender {
-//	[self endRenderAndExit];
-	NSLog(@"");
-	REWebVC *webVC = [[REWebVC alloc] init];
-//	webVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
-//	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;
-	[self presentViewController:webVC animated:YES completion:nil];
+	[self endRenderAndExit];
 }
 
 
@@ -251,8 +277,16 @@ static CGFloat stateBarHeight = 0.0;
 
 
 #pragma mark - 工具栏
-- (void)customToolUI {
-	
+- (void)initToolUI {
+	for (REToolData *toolData in self.toolDataList) {
+		REUIBtnInfo *btnInfo = [[REUIBtnInfo alloc] init];
+		btnInfo.uiID = toolData.toolBtnId;
+		REUIBtnStateInfo *statePar1 = [[REUIBtnStateInfo alloc] init];
+		statePar1.texPath = toolData.btnImg;
+		btnInfo.stateParList = @[statePar1];
+		[[BlackHole3D sharedSingleton].Graphics createSysPanelBtn:btnInfo];
+	}
+	[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
 }
 
 
@@ -289,7 +323,6 @@ static CGFloat stateBarHeight = 0.0;
 			forceCamLoc.camPos = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camPos];
 			forceCamLoc.camDir = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camDir];
 			forceCamLoc.camRotate = [RETool arrtToDVec4:self.sceneUniData.defaultCamLoc.camRotate];
-//			engineVC.defaultCamLoc = forceCamLoc;
 			[[BlackHole3D sharedSingleton].Camera setCamForcedInitLoc:forceCamLoc];
 		}
 		[self loadBim];
@@ -332,7 +365,6 @@ static CGFloat stateBarHeight = 0.0;
 		} else {
 			if (success) {
 				if (![[BlackHole3D sharedSingleton].Model getAllDataSetReady]) return;
-				[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:YES];
 				if (strongSelf.sceneUniData.shareType == 2 && strongSelf.sceneUniData.camDefaultDataSetId.length > 0 && (!(strongSelf.sceneUniData.defaultCamLoc && strongSelf.sceneUniData.defaultCamLoc.camPos && strongSelf.sceneUniData.defaultCamLoc.force))) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.sceneUniData.camDefaultDataSetId backDepth:1.0];
 				}
@@ -344,6 +376,7 @@ static CGFloat stateBarHeight = 0.0;
 						[[BlackHole3D sharedSingleton].Terrain setUnitLayerlev:dataSetInfo.dataSetId unitId:unitID resType:RETerrResEm_ALL layerLev:dataSetInfo.terrainLayerLev];
 					}
 				}
+				[strongSelf initToolUI];
 				[strongSelf addEntity];
 				[strongSelf addWater];
 				[strongSelf addExtrude];
@@ -498,6 +531,13 @@ static CGFloat stateBarHeight = 0.0;
 	NSLog(@"touchesBegan --- endTime:%f \n", endTime);
 }
 
+
+
+- (void)dealloc {
+	if (self.webViewManager) {
+		[self.webViewManager destroy];		
+	}
+}
 
 
 @end
