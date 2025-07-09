@@ -19,6 +19,17 @@ static REModuleCallback uniToAppCallBack = nil;
 
 @implementation REModule
 
+
+#pragma mark - 注册UniToApp消息
+
+// 类方法，用于注册接受uniapp消息
++ (void)registerUniToAppMsg:(REModuleCallback)callback {
+	uniToAppCallBack = callback;
+}
+
+
+#pragma mark - 加载引擎
+
 // 通过宏 UNI_EXPORT_METHOD 将异步方法暴露给 js 端
 UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 
@@ -59,6 +70,8 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 }
 
 
+#pragma mark - 打印消息
+
 // 通过宏 UNI_EXPORT_METHOD 将异步方法暴露给 js 端
 UNI_EXPORT_METHOD(@selector(unipluginLog:))
 
@@ -70,35 +83,40 @@ UNI_EXPORT_METHOD(@selector(unipluginLog:))
 }
 
 
+#pragma mark - 注册AppToUni消息
+
 // 通过宏 UNI_EXPORT_METHOD_SYNC 将同步方法暴露给 js 端
-UNI_EXPORT_METHOD_SYNC(@selector(reAppToUniMessageHandler:))
+UNI_EXPORT_METHOD_SYNC(@selector(registerAppMsg:))
 /// 同步方法（注：同步方法会在 js 线程执行）
 /// @param callback 回调方法，回传参数给 js 端
-- (void)reAppToUniMessageHandler:(UniModuleKeepAliveCallback)callback {
+- (void)registerAppMsg:(UniModuleKeepAliveCallback)callback {
 	appToUniCallBack = callback;
 }
 
 
+#pragma mark - UniToApp消息
+
 // 通过宏 UNI_EXPORT_METHOD_SYNC 将同步方法暴露给 js 端
-UNI_EXPORT_METHOD_SYNC(@selector(reUniPostData:))
+UNI_EXPORT_METHOD_SYNC(@selector(sendMsgUniToApp:))
 /// 同步方法（注：同步方法会在 js 线程执行）
 /// @param options js 端调用方法时传递的参数   支持：String、Number、Boolean、JsonObject 类型
-- (void)reUniPostData:(NSDictionary *)options {
-	NSLog(@"************* 【uni -> app】 : (reUniPostData)   %@", options);
+- (void)sendMsgUniToApp:(NSDictionary *)options {
+	NSLog(@"************* 【uni -> app】 : (sendMsgUniToApp)   %@", options);
 	if (uniToAppCallBack != nil) {
-		uniToAppCallBack(@"--------------------------");
+		uniToAppCallBack(options);
 	}
 }
 
 
-+ (void)sendMessage:(REModuleMsgType)type message:(id)message completion:(REModuleCallback)completion {
-	NSLog(@"************* 【app -> uni】 :  %@", message);
+#pragma mark - AppToUni消息
+
++ (void)sendMsgAppToUni:(REModuleMsgType)type message:(id)message {
+	NSLog(@"************* 【app -> uni】 : (sendMsgAppToUni)  %@", message);
 	switch (type) {
 		case REModuleMsg_T1:
 		{
 			if (appToUniCallBack != nil) {
 				appToUniCallBack(@{@"code":@"success"}, YES);
-				uniToAppCallBack = completion;
 			}
 		}
 			break;
@@ -107,7 +125,6 @@ UNI_EXPORT_METHOD_SYNC(@selector(reUniPostData:))
 			if (appToUniCallBack != nil) {
 				NSString *msg = (NSString *)message;
 				appToUniCallBack(@{@"code":@"error", @"msg":msg}, YES);
-				uniToAppCallBack = completion;
 			}
 		}
 			break;

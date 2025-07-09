@@ -8,6 +8,7 @@
 #ifndef REUniClass_h
 #define REUniClass_h
 
+#import "YYModel.h"
 #import "RESceneUniData.h"
 #import "REDataSetUniData.h"
 #import "REEntityUniData.h"

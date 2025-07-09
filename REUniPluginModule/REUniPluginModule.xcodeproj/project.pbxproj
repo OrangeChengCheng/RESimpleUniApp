@@ -119,8 +119,6 @@
 		18EB94602DF14B3A009DCFBD /* REEntityUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */; };
 		18EB94612DF14B3A009DCFBD /* REEntityUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */; };
 		18EB94652DF14D59009DCFBD /* REUniClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB94642DF14D59009DCFBD /* REUniClass.h */; };
-		18EB94682DF19F8B009DCFBD /* REWebVC.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB94662DF19F8B009DCFBD /* REWebVC.h */; };
-		18EB94692DF19F8B009DCFBD /* REWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EB94672DF19F8B009DCFBD /* REWebVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -248,8 +246,6 @@
 		18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REEntityUniData.h; sourceTree = "<group>"; };
 		18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REEntityUniData.m; sourceTree = "<group>"; };
 		18EB94642DF14D59009DCFBD /* REUniClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REUniClass.h; sourceTree = "<group>"; };
-		18EB94662DF19F8B009DCFBD /* REWebVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REWebVC.h; sourceTree = "<group>"; };
-		18EB94672DF19F8B009DCFBD /* REWebVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REWebVC.m; sourceTree = "<group>"; };
 		18EB946C2DF29E7A009DCFBD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -364,8 +360,6 @@
 				18DCFE9C2C80536A005BC93F /* RERenderComponent.h */,
 				18DCFEB82C80536A005BC93F /* RERenderComponent.m */,
 				185ABDFF2CBA7BCB003263DA /* REUniPluginModulePrefix.pch */,
-				18EB94662DF19F8B009DCFBD /* REWebVC.h */,
-				18EB94672DF19F8B009DCFBD /* REWebVC.m */,
 			);
 			path = REUniPluginModule;
 			sourceTree = "<group>";
@@ -504,7 +498,6 @@
 				187D32F92CD1DA72005DA0F5 /* REQRCode.h in Headers */,
 				1834CAFB2E13902400D2036C /* REWaterUniData.h in Headers */,
 				18DCFEE32C80536A005BC93F /* YYClassInfo.h in Headers */,
-				18EB94682DF19F8B009DCFBD /* REWebVC.h in Headers */,
 				18DCFEC42C80536A005BC93F /* RERenderComponent.h in Headers */,
 				185ABDBB2CB781D5003263DA /* RELoadingView.h in Headers */,
 				18DCFED02C80536A005BC93F /* MASViewAttribute.h in Headers */,
@@ -669,7 +662,6 @@
 				1834CB552E1BB1E000D2036C /* RESceneUniData.m in Sources */,
 				185ABDBA2CB781D5003263DA /* RELoadingView.m in Sources */,
 				18DCFED12C80536A005BC93F /* MASViewAttribute.m in Sources */,
-				18EB94692DF19F8B009DCFBD /* REWebVC.m in Sources */,
 				18DCFEE72C80536A005BC93F /* REModule.m in Sources */,
 				18DCFEDE2C80536A005BC93F /* REEngineVC.m in Sources */,
 				18DCFEE02C80536A005BC93F /* RETestView.m in Sources */,

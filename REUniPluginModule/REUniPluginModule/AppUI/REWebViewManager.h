@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 		withHeight:(CGFloat)height;
 - (void)hideAnimated:(BOOL)animated;
 - (void)sendMessage:(NSString *)message;
-- (void)sendObject:(id)object;
+- (void)sendObjectToJs:(id)object type:(NSString *)type;
 - (void)toggleFullScreen:(BOOL)isFullScreen animated:(BOOL)animated;
 - (void)destroy;
 

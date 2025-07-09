@@ -11,7 +11,6 @@
 #import "REAppUIClass.h"
 #import "REToolHandle.h"
 #import "REModule.h"
-#import "REWebVC.h"
 
 static CGFloat stateBarHeight = 0.0;
 
@@ -19,10 +18,15 @@ static CGFloat stateBarHeight = 0.0;
 @property (nonatomic, strong) RELoadingView *loadingView;
 @property (nonatomic, strong) RENav *re_nav;
 @property (nonatomic, strong) REWebViewManager *webViewManager;
+@property (nonatomic, strong) REToolData *curToolPopWebData;
 
 @end
 
+
 @implementation REEngineVC
+
+#pragma mark - 对象初始化
+
 - (RELoadingView *)loadingView {
 	if (!_loadingView) {
 		_loadingView = [RELoadingView initWithFrame:self.view.bounds];
@@ -45,11 +49,8 @@ static CGFloat stateBarHeight = 0.0;
 			[strongSelf endRenderAndExit];
 		};
 		_re_nav.qrCodeCallBack = ^{
-			STRONGSELF
+//			STRONGSELF
 //			[REQRCode showQRCode:strongSelf.shareUrl name:strongSelf.projName];
-			[REModule sendMessage:REModuleMsg_T1 message:@"Hello from ActivityA to ClassB" completion:^(NSString * _Nonnull response) {
-				NSLog(@"*****************   %@", response);
-			}];
 		};
 	}
 	return _re_nav;
@@ -63,14 +64,12 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-	return UIInterfaceOrientationMaskPortrait;
+#pragma mark - 界面生命周期
+- (void)dealloc {
+	if (self.webViewManager) {
+		[self.webViewManager destroy];
+	}
 }
-
-- (BOOL)shouldAutorotate {
-	return false;
-}
-
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -94,6 +93,7 @@ static CGFloat stateBarHeight = 0.0;
 	[[BlackHole3D sharedSingleton] dataSetLoadProgress:^(float progress, NSString * _Nullable info) {
 		STRONGSELF
 		strongSelf.loadingView.loadingProgress.progress = progress / 100.0;
+		
 	}];
 	[[BlackHole3D sharedSingleton] systemUIEvent:^(NSString * _Nullable btnName, int btnState) {
 		STRONGSELF
@@ -109,14 +109,20 @@ static CGFloat stateBarHeight = 0.0;
 		if (toolBtn) {
 			if (strongSelf.webViewManager.isShowing) {
 				[strongSelf.webViewManager hideAnimated:YES];
+				strongSelf.curToolPopWebData = nil;
 			} else {
 				NSArray *elemIdList = [[BlackHole3D sharedSingleton].BIM getSelElemIDs];
-				
-				// 显示 WebView
-				[strongSelf.webViewManager showInView:strongSelf.view withHeight:400];
-				
-				// 加载 URL
-				[strongSelf.webViewManager loadUrl:@"http://192.168.31.164:8080/#/cad"];
+				NSMutableDictionary *params = [NSMutableDictionary dictionary];
+				params[@"baseUrl"] = strongSelf.sceneUniData.baseUrl;
+				params[@"token"] = strongSelf.sceneUniData.token;
+				params[@"toolBtnId"] = toolBtn.toolBtnId;
+				if (elemIdList.count) {
+					RESelElemInfo *selElemInfo = elemIdList.firstObject;
+					params[@"elemId"] = selElemInfo.elemIdList.firstObject;
+				}
+				[strongSelf.webViewManager showInView:strongSelf.view withHeight:toolBtn.popViewHeight];
+				[strongSelf.webViewManager loadUrl:toolBtn.popWebUrl withParams:params];
+				strongSelf.curToolPopWebData = toolBtn;
 			}
 		} else {
 			RETip_Level level = RETip_L0;
@@ -128,45 +134,32 @@ static CGFloat stateBarHeight = 0.0;
 			if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
 				[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
 			}
-	//		if (([btnName isEqualToString:@"BuiltIn_Btn_MainView"] && btnState == 0)) {
-	//			[RETip showTipStaticAnimte:strongSelf.view message:@"主视图" level:level];
-	//		}
-	//		if (([btnName isEqualToString:@"BuiltIn_Btn_SelElem"] && btnState == 1)) {
-	//			[RETip showTipStaticAnimte:strongSelf.view message:@"选择模式" level:level];
-	//		}
-	//		if (([btnName isEqualToString:@"BuiltIn_Btn_Measure"] && btnState == 1)) {
-	//			[RETip showTipStaticAnimte:strongSelf.view message:@"测量" level:level];
-	//		}
-	//		if (([btnName isEqualToString:@"BuiltIn_Btn_More"] && btnState == 1)) {
-	//			[RETip showTipStaticAnimte:strongSelf.view message:@"更多" level:level];
-	//		}
 		}
 	}];
+	
+	[[BlackHole3D sharedSingleton] systemSelElement:^(BOOL probeValid) {
+		STRONGSELF
+		if (strongSelf.curToolPopWebData) {
+			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurProbeRet];
+			[strongSelf.webViewManager sendObjectToJs:probe type:@"Probe.getCurProbeRet"];
+		}
+	}];
+	
+	// 注册UniToApp消息
+	[REModule registerUniToAppMsg:^(NSDictionary * _Nonnull options) {
+		STRONGSELF
+		[strongSelf handleEngineSDK:options msgWhere:1];
+	}];
+	[REModule sendMsgAppToUni:REModuleMsg_T1 message:@"iOS REEngineVC Created!"];
 }
 
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-//	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-//	
-//	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-//	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-//		// 在动画过程中执行布局更改
-//		if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
-//			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight);
-//			_customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
-//		} else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
-//			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight);
-//			self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
-//		}
-//		
-//	} completion:nil];
-//}
 
+#pragma mark - 初始化界面
 - (void)addReaderView {
 	[self changeEngineUI];
 	if (!self.isUniAppComp) [self addBtn];
 }
 
-#pragma mark - 创建显示界面
 - (void)changeEngineUI {
 	// 创建自定义界面
 	self.customView = [[UIView alloc] init];
@@ -180,37 +173,6 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
-#pragma mark - REWebViewManagerDelegate
-- (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
-	NSLog(@"webData: %@", result);
-	
-	NSString *type = [[result objectForKey:@"type"] stringValue];
-	NSDictionary *json_data = [result.allKeys containsObject:@"data"] ? [result objectForKey:@"data"] : nil;
-	if (!json_data) {
-		return;
-	}
-	
-	if ([type isEqualToString:@"cloose"]) {
-		[self.webViewManager hideAnimated:YES];
-	} else if ([type isEqualToString:@"popWebFull"]) {
-		[self.webViewManager toggleFullScreen:[json_data[@"full"] boolValue] animated:YES];
-	}
-	
-	[REToolHandle handleEngineSDK:result msgWhere:2];
-	
-
-}
-
-- (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
-	if (success) {
-		NSLog(@"WebView 加载成功");
-	} else {
-		NSLog(@"WebView 加载失败");
-	}
-}
-
-
-#pragma mark - 自定义界面
 - (void)addBtn {
 	UIView *backView = [[UIView alloc] init];
 	[self.customView addSubview:backView];
@@ -240,6 +202,8 @@ static CGFloat stateBarHeight = 0.0;
 	[btn addTarget:self action:@selector(backBtnAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+
+#pragma mark - 返回操作
 - (void)backBtnAction:(UIButton *)sender {
 	[self endRenderAndExit];
 }
@@ -276,6 +240,86 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
+#pragma mark - REWebViewManagerDelegate
+- (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
+	NSLog(@"webData: %@", result);
+	
+	[self handleEngineSDK:result msgWhere:2];
+	
+	[REToolHandle handleEngineSDK:result msgWhere:2];
+	
+
+}
+
+- (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
+	if (success) {
+		NSLog(@"WebView 加载成功");
+	} else {
+		NSLog(@"WebView 加载失败");
+	}
+}
+
+
+
+#pragma mark - 引擎sdk调用
+- (void)handleEngineSDK:(NSDictionary *)jsonObject msgWhere:(int)msgWhere {
+	NSString *type = [[jsonObject objectForKey:@"type"] stringValue];
+	NSDictionary *json_data = [jsonObject.allKeys containsObject:@"data"] ? [jsonObject objectForKey:@"data"] : nil;
+	if (!json_data) {
+		return;
+	}
+	
+	if ([type isEqualToString:@"cloose"]) {
+		[self.webViewManager hideAnimated:YES];
+	} else if ([type isEqualToString:@"popWebFull"]) {
+		[self.webViewManager toggleFullScreen:[json_data[@"full"] boolValue] animated:YES];
+	} else if ([type isEqualToString:@"setModelAlpha"]) {
+		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
+		[[BlackHole3D sharedSingleton].BIM setElemAlpha:modelUniData.dataSetId elemIdList:modelUniData.elemIdList elemAlpha:modelUniData.alpha alphaWeight:255];
+	} else if ([type isEqualToString:@"setModelVisible"]) {
+		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
+		[[BlackHole3D sharedSingleton].BIM setElemsValidState:modelUniData.dataSetId elemIdList:modelUniData.elemIdList enable:modelUniData.visible];
+	} else if ([type isEqualToString:@"locDataSet"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:json_data[@"dataSetId"] backDepth:[json_data[@"backDepth"] doubleValue]];
+	} else if ([type isEqualToString:@"locElem"]) {
+		NSArray *arrElemInfo = [NSArray yy_modelArrayWithClass:RESelElemInfo.class json:json_data[@"locIDList"]];
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToElem:arrElemInfo backDepth:[json_data[@"backDepth"] doubleValue]];
+	} else if ([type isEqualToString:@"setModelColor"]) {
+		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
+		REElemAttr *elemAttr = [[REElemAttr alloc] init];
+		elemAttr.dataSetId = modelUniData.dataSetId;
+		elemAttr.elemIdList = modelUniData.elemIdList;
+		elemAttr.elemClr = [RETool arrtToColor:modelUniData.elemClr];
+		[[BlackHole3D sharedSingleton].BIM setElemAttr:elemAttr];
+	} else if ([type isEqualToString:@"resetModelColor"]) {
+		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
+		[[BlackHole3D sharedSingleton].BIM resetElemAttr:modelUniData.dataSetId elemIdList:modelUniData.elemIdList];
+	} else if ([type isEqualToString:@"setCamLocTo"]) {
+		RECamInfoUniData *camInfoUniData = [RECamInfoUniData yy_modelWithDictionary:json_data];
+		RECamLoc *camLoc = [[RECamLoc alloc] init];
+		camLoc.camPos = [RETool arrtToDVec3:camInfoUniData.camPos];
+		camLoc.camDir = [RETool arrtToDVec3:camInfoUniData.camDir];
+		camLoc.camRotate = [RETool arrtToDVec4:camInfoUniData.camRotate];
+		[[BlackHole3D sharedSingleton].Camera setCamLocateTo:camLoc locDelay:camInfoUniData.locDelay locTime:camInfoUniData.locTime];
+	} else if ([type isEqualToString:@"clearModelSel"]) {
+		[[BlackHole3D sharedSingleton].BIM delAllSelElems];
+	} else if ([type isEqualToString:@"getCamLocInfo"]) {
+		RECamLoc *camLoc = [[BlackHole3D sharedSingleton].Camera getCamLocate];
+		if (self.curToolPopWebData && msgWhere == 2) {
+			[self.webViewManager sendObjectToJs:camLoc type:@"Camera.getCamLocate"];
+		} else if (msgWhere == 1) {
+			[REModule sendMsgAppToUni:REModule_GetCamLoc message:camLoc];
+		}
+	}
+}
+
+
+
+
+
+
+
+
 #pragma mark - 工具栏
 - (void)initToolUI {
 	for (REToolData *toolData in self.toolDataList) {
@@ -291,7 +335,7 @@ static CGFloat stateBarHeight = 0.0;
 
 
 
-#pragma mark - 模型加载
+#pragma mark - 加载资源
 - (void)loadDataSet {
 	if (self.sceneUniData.worldCRS.length > 0) {
 		[[BlackHole3D sharedSingleton].Coordinate setEngineWorldCRS:self.sceneUniData.worldCRS];
@@ -332,6 +376,7 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
+#pragma mark - 模型加载
 - (void)loadBim {
 	//加载场景
 	NSMutableArray *dataSetList_temp = [NSMutableArray array];
@@ -382,9 +427,7 @@ static CGFloat stateBarHeight = 0.0;
 				[strongSelf addExtrude];
 				[strongSelf.loadingView hiddenLoading];
 			} else {
-				[REModule sendMessage:REModuleMsg_T2 message:@"模型资源加载失败！" completion:^(NSString * _Nonnull response) {
-					NSLog(@"*****************   %@", response);
-				}];
+				[REModule sendMsgAppToUni:REModuleMsg_T2 message:@"模型资源加载失败！"];
 				[strongSelf endRenderAndExit];
 			}
 		}
@@ -405,9 +448,7 @@ static CGFloat stateBarHeight = 0.0;
 			[strongSelf.loadingView hiddenLoading];
 			[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];
 		} else {
-			[REModule sendMessage:REModuleMsg_T2 message:@"模型资源加载失败！" completion:^(NSString * _Nonnull response) {
-				NSLog(@"*****************   %@", response);
-			}];
+			[REModule sendMsgAppToUni:REModuleMsg_T2 message:@"模型资源加载失败！"];
 			[strongSelf endRenderAndExit];
 		}
 	}];
@@ -513,6 +554,20 @@ static CGFloat stateBarHeight = 0.0;
 
 
 
+#pragma mark - 设备支持操作
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+	return false;
+}
+
+
+
+#pragma mark - 可能会用到的设备操作
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 	for (UITouch *touch in touches) {
 		NSLog(@"%@ touchesBegan *** touch._timestamp: %f  \n", NSStringFromClass([self class]), touch.timestamp);
@@ -531,13 +586,26 @@ static CGFloat stateBarHeight = 0.0;
 	NSLog(@"touchesBegan --- endTime:%f \n", endTime);
 }
 
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+//	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+//
+//	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+//	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+//		// 在动画过程中执行布局更改
+//		if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+//			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight);
+//			_customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
+//		} else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+//			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight);
+//			self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
+//		}
+//
+//	} completion:nil];
+//}
 
 
-- (void)dealloc {
-	if (self.webViewManager) {
-		[self.webViewManager destroy];		
-	}
-}
+
+
 
 
 @end

@@ -81,7 +81,7 @@
 	if (params && params.count > 0) {
 		fullUrl = [self appendParams:url params:params];
 	}
-	
+	NSLog(@"完整的webview url: %@", fullUrl);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:fullUrl]];
 	[_webView loadRequest:request];
 }
@@ -230,10 +230,15 @@
 	[_webView evaluateJavaScript:script completionHandler:nil];
 }
 
-- (void)sendObject:(id)object {
+- (void)sendObjectToJs:(id)object type:(NSString *)type {
 	if (!object) return;
 	
-	NSString *jsonString = [object yy_modelToJSONString];
+	NSDictionary *result = @{
+		@"type": type,
+		@"data": object
+	};
+	
+	NSString *jsonString = [result yy_modelToJSONString];
 	
 //	NSString *jsonString = [REJSONSerializer jsonStringFromObject:object];
 	if (jsonString) {
@@ -272,10 +277,10 @@
 	}
 	
 	// 页面加载完成后发送初始化数据
-	if (_initData) {
-		[self sendObject:_initData];
-		_initData = nil;
-	}
+//	if (_initData) {
+//		[self sendObject:_initData];
+//		_initData = nil;
+//	}
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
