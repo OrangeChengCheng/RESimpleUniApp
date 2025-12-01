@@ -14,9 +14,12 @@
 #import "REEntityUniData.h"
 #import "REWaterUniData.h"
 #import "REExtrudeUniData.h"
+#import "REExtrudeTexUniData.h"
 #import "RECamInfoUniData.h"
 #import "REToolData.h"
 #import "REModelUniData.h"
+#import "REWebPopData.h"
+#import "REBridgeData.h"
 
 
 #endif /* REUniClass_h */

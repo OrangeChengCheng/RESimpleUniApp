@@ -24,6 +24,14 @@
 	} else {\
 		height = [UIApplication sharedApplication].statusBarFrame.size.height;\
 	}\
+	if (height <= 0) {\
+		if (@available(iOS 11.0, *)) {\
+			UIEdgeInsets safeAreaInsets = [UIApplication sharedApplication].keyWindow.safeAreaInsets;\
+			height = safeAreaInsets.top > 0 ? safeAreaInsets.top : 20.0;\
+		} else {\
+			height = 20.0;\
+		}\
+	}\
 	height;\
 })
 #define kNavBarHeight 44.0

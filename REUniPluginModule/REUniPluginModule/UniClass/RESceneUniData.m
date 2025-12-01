@@ -16,12 +16,13 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		_name = REEmptyStr; _token = REEmptyStr; _baseUrl = REEmptyStr; _shareUrl = REEmptyStr;
-		_projName = REEmptyStr; _worldCRS = REEmptyStr; _camDefaultDataSetId = REEmptyStr;
-		_shareViewMode = REEmptyStr; _shareDataType = REEmptyStr;
-		_maxInstDrawFaceNum = 1500000; _shareType = 0; _collect = NO;
+		_name = REEmptyStr; _token = REEmptyStr; _baseUrl = REEmptyStr; _source = 0;
+		_shareUrl = REEmptyStr; _projName = REEmptyStr; _maxInstDrawFaceNum = 1500000;
+		_worldCRS = REEmptyStr; _dataSetList = @[]; _collect = NO;
+		_shareType = 0; _sceneId = REEmptyStr;
+		_camDefaultDataSetId = REEmptyStr; _shareViewMode = REEmptyStr; _shareDataType = REEmptyStr;
 		_defaultCamLoc = nil;
-		_dataSetList = @[]; _entityList = @[]; _waterList = @[]; _extrudeList = @[];
+		_entityList = @[]; _waterList = @[]; _extrudeList = @[]; _extrudeTexList = @[];
 	}
 	return self;
 }
@@ -34,6 +35,7 @@
 		@"entityList": [REEntityUniData class],
 		@"waterList": [REWaterUniData class],
 		@"extrudeList": [REExtrudeUniData class],
+		@"extrudeTexList": [REExtrudeTexUniData class],
 	};
 }
 

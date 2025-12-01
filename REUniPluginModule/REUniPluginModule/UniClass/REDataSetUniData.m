@@ -14,7 +14,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		_type = 0; _dataSetId = @""; _resourcesAddress = @"";
+		_type = 0; _dataSetId = @""; _dataSetId_noline = REEmptyStr; _resourcesAddress = @"";
 		_scale = @[@1.0, @1.0, @1.0]; _rotate = @[@0.0, @0.0, @0.0, @1.0]; _offset = @[@0.0, @0.0, @0.0];
 		_dataSetCRS = @""; _dataSetCRSNorth = 0; _engineOrigin = @[@0.0, @0.0, @0.0]; _dataSetSGContent = @"";
 		_dataSetType = 0; _unit = CAD_UNIT_Mile; _terrainLayerLev = 0;
@@ -56,6 +56,20 @@
 }
 
 
+
+- (void)setDataSetId:(NSString *)dataSetId {
+	_dataSetId = dataSetId;
+	if (dataSetId && ![dataSetId isKindOfClass:[NSNull class]] && dataSetId.length > 0) {
+		self.dataSetId_noline = [dataSetId stringByReplacingOccurrencesOfString:@"-" withString:@""];
+	} else {
+		self.dataSetId_noline = @""; // 空值时赋空字符串，避免野指针
+	}
+}
+
+
+- (void)setDataSetSGContent:(NSString *)dataSetSGContent {
+	_dataSetSGContent = @"";
+}
 
 
 @end

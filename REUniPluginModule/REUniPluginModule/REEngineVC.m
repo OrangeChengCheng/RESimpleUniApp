@@ -17,8 +17,12 @@ static CGFloat stateBarHeight = 0.0;
 @interface REEngineVC ()<REWebViewManagerDelegate>
 @property (nonatomic, strong) RELoadingView *loadingView;
 @property (nonatomic, strong) RENav *re_nav;
-@property (nonatomic, strong) REWebViewManager *webViewManager;
-@property (nonatomic, strong) REToolData *curToolPopWebData;
+@property (nonatomic, strong) REBtnPlane *re_btnPlane;
+
+@property (nonatomic, strong) REWebPopData *currWebPop;
+@property (nonatomic, strong) NSMutableDictionary *curSelProInfo;
+@property (nonatomic, assign) BOOL currIsRoomClip;
+
 
 @end
 
@@ -56,18 +60,40 @@ static CGFloat stateBarHeight = 0.0;
 	return _re_nav;
 }
 
-- (REWebViewManager *)webViewManager {
-	if (!_webViewManager) {
-		_webViewManager = [[REWebViewManager alloc] initWithDelegate:self];
+- (REBtnPlane *)re_btnPlane {
+	if (!_re_btnPlane) {
+		
+		WEAKSELF
+		_re_btnPlane = [REBtnPlane initWithCallback:^(NSString * _Nonnull btnId, BOOL isSelected) {
+			STRONGSELF
+			NSInteger matchIndex = [strongSelf.webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+				return [obj.webPopId isEqualToString:btnId];
+			}];
+			if (matchIndex != NSNotFound) {
+				REWebPopData *webPopData = [strongSelf.webPopList objectAtIndex:matchIndex];
+				NSDictionary *params = @{@"webPopId": webPopData.webPopId};
+				if (isSelected) {
+					[webPopData.webPopManager showWebPop];
+					[webPopData.webPopManager sendObjAppToWebWithObject:params type:@"open"];
+					strongSelf.currWebPop = webPopData;
+				} else {
+					[webPopData.webPopManager sendObjAppToWebWithObject:params type:@"cloose"];
+				}
+				webPopData.webPopShow = isSelected;
+			}
+		}];
 	}
-	return _webViewManager;
+	return _re_btnPlane;
 }
 
 
 #pragma mark - 界面生命周期
 - (void)dealloc {
-	if (self.webViewManager) {
-		[self.webViewManager destroy];
+	if (_webPopList.count) {
+		for (REWebPopData *webPopData in _webPopList) {
+			[webPopData.webPopManager destroy];
+		}
+		_webPopList = nil;
 	}
 }
 
@@ -87,6 +113,9 @@ static CGFloat stateBarHeight = 0.0;
 	[self.view addSubview:self.re_nav];
 	
 	[self.view addSubview:self.loadingView];
+	
+	[self initWebView];
+	
 	[self.loadingView showLoading];
 	
 	WEAKSELF
@@ -100,30 +129,14 @@ static CGFloat stateBarHeight = 0.0;
 		NSLog(@"btnName = %@  btnState = %d", btnName, btnState);
 		
 		REToolData *toolBtn = nil;
-		for (REToolData *item in strongSelf.toolDataList) {
-			if ([item.toolBtnId isEqualToString:btnName]) {
-				toolBtn = item;
-				break;
-			}
+		NSInteger matchIndex = [strongSelf.toolDataList indexOfObjectPassingTest:^BOOL(REToolData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+			return [obj.toolBtnId isEqualToString:btnName];
+		}];
+		if (matchIndex != NSNotFound) {
+			toolBtn = [strongSelf.toolDataList objectAtIndex:matchIndex];
 		}
+		
 		if (toolBtn) {
-			if (strongSelf.webViewManager.isShowing) {
-				[strongSelf.webViewManager hideAnimated:YES];
-				strongSelf.curToolPopWebData = nil;
-			} else {
-				NSArray *elemIdList = [[BlackHole3D sharedSingleton].BIM getSelElemIDs];
-				NSMutableDictionary *params = [NSMutableDictionary dictionary];
-				params[@"baseUrl"] = strongSelf.sceneUniData.baseUrl;
-				params[@"token"] = strongSelf.sceneUniData.token;
-				params[@"toolBtnId"] = toolBtn.toolBtnId;
-				if (elemIdList.count) {
-					RESelElemInfo *selElemInfo = elemIdList.firstObject;
-					params[@"elemId"] = selElemInfo.elemIdList.firstObject;
-				}
-				[strongSelf.webViewManager showInView:strongSelf.view withHeight:toolBtn.popViewHeight];
-				[strongSelf.webViewManager loadUrl:toolBtn.popWebUrl withParams:params];
-				strongSelf.curToolPopWebData = toolBtn;
-			}
 		} else {
 			RETip_Level level = RETip_L0;
 			if ([btnName isEqualToString:@"BuiltIn_Btn_MainView"] || [btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"]) {
@@ -132,16 +145,76 @@ static CGFloat stateBarHeight = 0.0;
 				level = RETip_L2;
 			}
 			if (([btnName isEqualToString:@"BuiltIn_Btn_PickClipPlane"] && btnState == 1)) {
+				if (strongSelf.currIsRoomClip && [[BlackHole3D sharedSingleton].Clip getClipState]) {
+					strongSelf.currIsRoomClip = NO;
+					[[BlackHole3D sharedSingleton].Clip endClip];
+					[[BlackHole3D sharedSingleton].BIM resetElemAttr:@"" elemIdList:@[]];
+				}
 				[RETip showTipStaticAnimte:strongSelf.view message:@"请在场景中选择剖切基点" level:level];
+			}
+			if ([btnName isEqualToString:@"BuiltIn_Btn_More"]) {
+				// 更多操作引擎已经退出了剖切，需要处理样式重置
+				if (strongSelf.currIsRoomClip) {
+					strongSelf.currIsRoomClip = NO;
+					[[BlackHole3D sharedSingleton].BIM resetElemAttr:@"" elemIdList:@[]];
+				}
 			}
 		}
 	}];
 	
 	[[BlackHole3D sharedSingleton] systemSelElement:^(BOOL probeValid) {
 		STRONGSELF
-		if (strongSelf.curToolPopWebData) {
-			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurProbeRet];
-			[strongSelf.webViewManager sendObjectToJs:probe type:@"Probe.getCurProbeRet"];
+		if (probeValid) {
+			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurCombProbeRet];
+			if ([probe.elemType isEqualToString:@"BIMElem"]) {
+				NSInteger matchIndex = [strongSelf.sceneUniData.dataSetList indexOfObjectPassingTest:^BOOL(REDataSetUniData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+					return [obj.dataSetId isEqualToString:probe.dataSetId];
+				}];
+				REDataSetUniData *dataSet = nil;
+				if (matchIndex != NSNotFound) {
+					dataSet = [strongSelf.sceneUniData.dataSetList objectAtIndex:matchIndex];
+				}
+				if (dataSet == nil) {
+					strongSelf.curSelProInfo = nil;
+					return;
+				}
+				strongSelf.curSelProInfo = [NSMutableDictionary dictionary];
+				strongSelf.curSelProInfo[@"dataSetType"] = @(dataSet.dataSetType);
+				strongSelf.curSelProInfo[@"probeInfo"] = probe;
+				if (dataSet.dataSetType != 0) {
+					strongSelf.curSelProInfo[@"entityList"] = strongSelf.sceneUniData.entityList;
+				}
+			} else {
+				strongSelf.curSelProInfo = nil;
+				return;
+			}
+		} else {
+			strongSelf.curSelProInfo = nil;
+			return;
+		}
+		if (strongSelf.currWebPop != nil && strongSelf.curSelProInfo != nil) {
+			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Probe.getCurCombProbeRet"];
+		}
+	}];
+	
+	[[BlackHole3D sharedSingleton] systemSelShpElement:^(BOOL probeValid) {
+		STRONGSELF
+		if (probeValid) {
+			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurCombProbeRet];
+			if ([probe.elemType isEqualToString:@"ShapeElem"]) {
+				strongSelf.curSelProInfo = [NSMutableDictionary dictionary];
+				strongSelf.curSelProInfo[@"probeInfo"] = probe;
+				strongSelf.curSelProInfo[@"dataSetList"] = strongSelf.sceneUniData.dataSetList;
+			} else {
+				strongSelf.curSelProInfo = nil;
+				return;
+			}
+		} else {
+			strongSelf.curSelProInfo = nil;
+			return;
+		}
+		if (strongSelf.currWebPop != nil && strongSelf.curSelProInfo != nil) {
+			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Probe.getCurCombProbeRet"];
 		}
 	}];
 	
@@ -157,7 +230,7 @@ static CGFloat stateBarHeight = 0.0;
 #pragma mark - 初始化界面
 - (void)addReaderView {
 	[self changeEngineUI];
-	if (!self.isUniAppComp) [self addBtn];
+//	if (!self.isUniAppComp) [self addBtn];
 }
 
 - (void)changeEngineUI {
@@ -240,15 +313,19 @@ static CGFloat stateBarHeight = 0.0;
 }
 
 
+#pragma mark - 初始化PopWebView
+- (void)initWebView {
+	for (REWebPopData *webPopData in _webPopList) {
+		webPopData.webPopManager = [REWebViewManager initWithDelegate:self parentView:self.view height:webPopData.webPopHeight webViewUrl:webPopData.webPopUrl webViewParams:webPopData.webPopParams];
+	}
+}
+
+
 #pragma mark - REWebViewManagerDelegate
 - (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
 	NSLog(@"webData: %@", result);
 	
 	[self handleEngineSDK:result msgWhere:2];
-	
-	[REToolHandle handleEngineSDK:result msgWhere:2];
-	
-
 }
 
 - (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
@@ -263,53 +340,120 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 引擎sdk调用
 - (void)handleEngineSDK:(NSDictionary *)jsonObject msgWhere:(int)msgWhere {
+	NSString *msgId = [[jsonObject objectForKey:@"msdId"] stringValue];
 	NSString *type = [[jsonObject objectForKey:@"type"] stringValue];
 	NSDictionary *json_data = [jsonObject.allKeys containsObject:@"data"] ? [jsonObject objectForKey:@"data"] : nil;
 	if (!json_data) {
 		return;
 	}
+	REBridgeData *bridgeData = [REBridgeData yy_modelWithDictionary:json_data];
+	// 获取弹窗操作
+	REWebPopData *webPopData = nil;
+	if (bridgeData.webPopId.length > 0) {
+		NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+			return [obj.webPopId isEqualToString:bridgeData.webPopId];
+		}];
+		if (matchIndex != NSNotFound) {
+			webPopData = [_webPopList objectAtIndex:matchIndex];
+		}
+	}
 	
 	if ([type isEqualToString:@"cloose"]) {
-		[self.webViewManager hideAnimated:YES];
+		if (webPopData) {
+			[webPopData.webPopManager hiddenWebPop];
+			webPopData.webPopShow = NO;
+			[_re_btnPlane updateStateWithBtnId:webPopData.webPopId isSelected:NO];
+			if ([_currWebPop.webPopId isEqualToString:webPopData.webPopId]) {
+				_currWebPop = nil;
+			}
+		}
 	} else if ([type isEqualToString:@"popWebFull"]) {
-		[self.webViewManager toggleFullScreen:[json_data[@"full"] boolValue] animated:YES];
-	} else if ([type isEqualToString:@"setModelAlpha"]) {
-		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
-		[[BlackHole3D sharedSingleton].BIM setElemAlpha:modelUniData.dataSetId elemIdList:modelUniData.elemIdList elemAlpha:modelUniData.alpha alphaWeight:255];
-	} else if ([type isEqualToString:@"setModelVisible"]) {
-		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
-		[[BlackHole3D sharedSingleton].BIM setElemsValidState:modelUniData.dataSetId elemIdList:modelUniData.elemIdList enable:modelUniData.visible];
-	} else if ([type isEqualToString:@"locDataSet"]) {
-		[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:json_data[@"dataSetId"] backDepth:[json_data[@"backDepth"] doubleValue]];
-	} else if ([type isEqualToString:@"locElem"]) {
-		NSArray *arrElemInfo = [NSArray yy_modelArrayWithClass:RESelElemInfo.class json:json_data[@"locIDList"]];
-		[[BlackHole3D sharedSingleton].Camera setCamLocateToElem:arrElemInfo backDepth:[json_data[@"backDepth"] doubleValue]];
-	} else if ([type isEqualToString:@"setModelColor"]) {
-		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
+		if (_currWebPop) {
+			[_currWebPop.webPopManager setFullScreen:bridgeData.full];
+		}
+	} else if ([type isEqualToString:@"setElemAlpha"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemAlpha:bridgeData.dataSetId elemIdList:bridgeData.elemIdList elemAlpha:bridgeData.alpha alphaWeight:255];
+	} else if ([type isEqualToString:@"setElemsValidState"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemsValidState:bridgeData.dataSetId elemIdList:bridgeData.elemIdList enable:bridgeData.visible];
+	} else if ([type isEqualToString:@"setCamLocateToDataSet"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:bridgeData.dataSetId backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"setCamLocateToElem"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToElem:bridgeData.locIDList backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"setElemAttr"]) {
 		REElemAttr *elemAttr = [[REElemAttr alloc] init];
-		elemAttr.dataSetId = modelUniData.dataSetId;
-		elemAttr.elemIdList = modelUniData.elemIdList;
-		elemAttr.elemClr = [RETool arrtToColor:modelUniData.elemClr];
+		elemAttr.dataSetId = bridgeData.dataSetId;
+		elemAttr.elemIdList = bridgeData.elemIdList;
+		elemAttr.elemClr = bridgeData.elemClrObj;
 		[[BlackHole3D sharedSingleton].BIM setElemAttr:elemAttr];
-	} else if ([type isEqualToString:@"resetModelColor"]) {
-		REModelUniData *modelUniData = [REModelUniData yy_modelWithDictionary:json_data];
-		[[BlackHole3D sharedSingleton].BIM resetElemAttr:modelUniData.dataSetId elemIdList:modelUniData.elemIdList];
-	} else if ([type isEqualToString:@"setCamLocTo"]) {
-		RECamInfoUniData *camInfoUniData = [RECamInfoUniData yy_modelWithDictionary:json_data];
+	} else if ([type isEqualToString:@"resetElemAttr"]) {
+		[[BlackHole3D sharedSingleton].BIM resetElemAttr:bridgeData.dataSetId elemIdList:bridgeData.elemIdList];
+	} else if ([type isEqualToString:@"setCamLocateTo"]) {
 		RECamLoc *camLoc = [[RECamLoc alloc] init];
-		camLoc.camPos = [RETool arrtToDVec3:camInfoUniData.camPos];
-		camLoc.camDir = [RETool arrtToDVec3:camInfoUniData.camDir];
-		camLoc.camRotate = [RETool arrtToDVec4:camInfoUniData.camRotate];
-		[[BlackHole3D sharedSingleton].Camera setCamLocateTo:camLoc locDelay:camInfoUniData.locDelay locTime:camInfoUniData.locTime];
-	} else if ([type isEqualToString:@"clearModelSel"]) {
+		camLoc.camPos = bridgeData.camPosObj;
+		camLoc.camDir = bridgeData.camDirObj;
+		camLoc.camRotate = bridgeData.camRotateObj;
+		[[BlackHole3D sharedSingleton].Camera setCamLocateTo:camLoc locDelay:bridgeData.locDelay locTime:bridgeData.locTime];
+	} else if ([type isEqualToString:@"delAllSelElems"]) {
 		[[BlackHole3D sharedSingleton].BIM delAllSelElems];
-	} else if ([type isEqualToString:@"getCamLocInfo"]) {
+	} else if ([type isEqualToString:@"getCamLocate"]) {
 		RECamLoc *camLoc = [[BlackHole3D sharedSingleton].Camera getCamLocate];
-		if (self.curToolPopWebData && msgWhere == 2) {
-			[self.webViewManager sendObjectToJs:camLoc type:@"Camera.getCamLocate"];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:camLoc msgId:msgId];
 		} else if (msgWhere == 1) {
 			[REModule sendMsgAppToUni:REModule_GetCamLoc message:camLoc];
 		}
+	}else if ([type isEqualToString:@"setSelElemsAttr"]) {
+		RESelElemsAttr *reSelElemsAttr = [[RESelElemsAttr alloc] init];
+		reSelElemsAttr.elemClr = bridgeData.elemClrObj;
+		reSelElemsAttr.probeMask = bridgeData.probeMask;
+		reSelElemsAttr.attrValid = bridgeData.attrValid;
+		[[BlackHole3D sharedSingleton].BIM setSelElemsAttr:reSelElemsAttr];
+	} else if ([type isEqualToString:@"getBIMDataSetBV"]) {
+		REBBox3D *bbox = [[BlackHole3D sharedSingleton].BIM getTotalBV:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"getGridDataSetBV"]) {
+		REBBox3D *bbox = [[BlackHole3D sharedSingleton].Grid getDataSetBV:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setCamLocToWater"]) {
+		[[BlackHole3D sharedSingleton].Water setCamToData:bridgeData.waterNameList];
+	} else if ([type isEqualToString:@"setCamLocToExtrude"]) {
+		[[BlackHole3D sharedSingleton].Extrude setCamToData:bridgeData.extrudeIdst];
+	} else if ([type isEqualToString:@"getDataSetTerrId"]) {
+		NSString *terrId = [[BlackHole3D sharedSingleton].Terrain getDataSetTerrId:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:terrId msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"getAllUnitNames"]) {
+		NSArray *unitNames = [[BlackHole3D sharedSingleton].Terrain getAllUnitNames:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:unitNames msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setUnitActive"]) {
+		[[BlackHole3D sharedSingleton].Terrain setUnitActive:bridgeData.dataSetId unitId:bridgeData.unitId resType:bridgeData.terrResEm active:bridgeData.active];
+	} else if ([type isEqualToString:@"setGridValidState"]) {
+		[[BlackHole3D sharedSingleton].Grid setValidState:bridgeData.dataSetId enable:bridgeData.visible];
+	} else if ([type isEqualToString:@"waterVisible"]) {
+		[[BlackHole3D sharedSingleton].Water setVisible:bridgeData.waterName visible:bridgeData.visible];
+	} else if ([type isEqualToString:@"extrudeVisible"]) {
+		[[BlackHole3D sharedSingleton].Extrude setVisible:bridgeData.extrudeId visible:bridgeData.visible];
+	} else if ([type isEqualToString:@"setCamLocateToBound"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToBound:bridgeData.box3D backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"getDataSetAllElemIDs"]) {
+		[[BlackHole3D sharedSingleton].BIM getDataSetAllElemID:bridgeData.dataSetId visibalOnly:bridgeData.visibalOnly];
+	} else if ([type isEqualToString:@"setClipPlanesContourLineClr"]) {
+		[[BlackHole3D sharedSingleton].BIM setClipPlanesContourLineClr:bridgeData.lineClrObj];
+	} else if ([type isEqualToString:@"setClipSpecifyHeight"]) {
+		[[BlackHole3D sharedSingleton].Clip setClipSpecifyHeight:bridgeData.dataSetId topHeight:bridgeData.topHeight bottomHeight:bridgeData.bottomHeight single:bridgeData.single];
+		_currIsRoomClip = YES;
+	} else if ([type isEqualToString:@"endClip"]) {
+		_currIsRoomClip = NO;
+		[[BlackHole3D sharedSingleton].Clip endClip];
+	} else if ([type isEqualToString:@"setElemDepthBias"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemDepthBias:bridgeData.dataSetId elemIdList:bridgeData.elemIdList depthBias:bridgeData.depthBias];
 	}
 }
 
@@ -317,7 +461,12 @@ static CGFloat stateBarHeight = 0.0;
 
 
 
-
+#pragma mark - 按钮面板
+- (void)initBtnPlane {
+	if (self.sceneUniData.shareType != 1 || ([self.sceneUniData.shareDataType isEqualToString:@"Bim"] || [self.sceneUniData.shareDataType isEqualToString:@"bim"])) {
+		[self.view addSubview:self.re_btnPlane];
+	}
+}
 
 
 #pragma mark - 工具栏
@@ -342,36 +491,50 @@ static CGFloat stateBarHeight = 0.0;
 	}
 	
 	// 设置渲染模式
-	if (self.sceneUniData.shareViewMode.length > 0 && [self.sceneUniData.shareViewMode isEqual:@"Sphere"]) {
-		[[BlackHole3D sharedSingleton].Common setFakeSphMode:YES];
-	} else {
-		[[BlackHole3D sharedSingleton].Common setFakeSphMode:NO];
+	[[BlackHole3D sharedSingleton].Common setFakeSphMode:(self.sceneUniData.shareViewMode.length > 0 && [self.sceneUniData.shareViewMode isEqual:@"Sphere"])];
+	
+	//提前加载图片资源
+	if (_toolDataList.count) {
+		for (REToolData *toolData in _toolDataList) {
+			[[BlackHole3D sharedSingleton].Graphics setPreLoadPicPath:toolData.btnImg];
+		}
+	}
+	
+	//提前加载挤出纹理资源
+	if (_sceneUniData.extrudeList.count && _sceneUniData.extrudeTexList.count) {
+		for (REExtrudeTexUniData *texUniData in _sceneUniData.extrudeTexList) {
+			[[BlackHole3D sharedSingleton].Extrude addExtrudeFaceTex:texUniData.picPath size:texUniData.picSizeObj];
+		}
 	}
 
 	if (self.sceneUniData.shareType == 1) {
 		if ([self.sceneUniData.shareDataType isEqual:@"Bim"]
+			|| [self.sceneUniData.shareDataType isEqual:@"bim"]
 			|| [self.sceneUniData.shareDataType isEqual:@"Rs"]
 			|| [self.sceneUniData.shareDataType isEqual:@"Wmts"]
 			|| [self.sceneUniData.shareDataType isEqual:@"Osgb"]
 			|| [self.sceneUniData.shareDataType isEqual:@"PointCloud"]) {
 			[self loadBim];
-		} else if ([self.sceneUniData.shareDataType isEqual:@"Cad"]) {
+		} else if ([self.sceneUniData.shareDataType isEqual:@"Cad"]
+				   || [self.sceneUniData.shareDataType isEqual:@"CAD"]) {
 			[self loadCad];
 		} else {
 			[self endRenderAndExit];
 		}
 	} else {
+		//默认相机设置
 		if (self.sceneUniData.defaultCamLoc && self.sceneUniData.defaultCamLoc.camPos && self.sceneUniData.defaultCamLoc.force) {
 			REForceCamLoc *forceCamLoc = [[REForceCamLoc alloc] init];
 			forceCamLoc.force = YES;
-			forceCamLoc.camPos = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camPos];
-			forceCamLoc.camDir = [RETool arrtToDVec3:self.sceneUniData.defaultCamLoc.camDir];
-			forceCamLoc.camRotate = [RETool arrtToDVec4:self.sceneUniData.defaultCamLoc.camRotate];
+			forceCamLoc.camPos = [RETool arrToDVec3:self.sceneUniData.defaultCamLoc.camPos];
+			forceCamLoc.camDir = [RETool arrToDVec3:self.sceneUniData.defaultCamLoc.camDir];
+			forceCamLoc.camRotate = [RETool arrToDVec4:self.sceneUniData.defaultCamLoc.camRotate];
 			[[BlackHole3D sharedSingleton].Camera setCamForcedInitLoc:forceCamLoc];
 		}
 		[self loadBim];
 	}
 	
+	// 设置最大渲染面数
 	[[BlackHole3D sharedSingleton].Common setExpectMaxInstDrawFaceNum:self.sceneUniData.maxInstDrawFaceNum];
 }
 
@@ -411,7 +574,7 @@ static CGFloat stateBarHeight = 0.0;
 			if (success) {
 				if (![[BlackHole3D sharedSingleton].Model getAllDataSetReady]) return;
 				if (strongSelf.sceneUniData.shareType == 2 && strongSelf.sceneUniData.camDefaultDataSetId.length > 0 && (!(strongSelf.sceneUniData.defaultCamLoc && strongSelf.sceneUniData.defaultCamLoc.camPos && strongSelf.sceneUniData.defaultCamLoc.force))) {
-					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.sceneUniData.camDefaultDataSetId backDepth:1.0];
+					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.sceneUniData.camDefaultDataSetId backDepth:1.0 locType:CAM_DIR_CURRENT];
 				}
 				// 处理地形数据层级
 				for (REDataSetUniData *dataSetInfo in strongSelf.sceneUniData.dataSetList) {
@@ -422,6 +585,7 @@ static CGFloat stateBarHeight = 0.0;
 					}
 				}
 				[strongSelf initToolUI];
+				[strongSelf initBtnPlane];
 				[strongSelf addEntity];
 				[strongSelf addWater];
 				[strongSelf addExtrude];
@@ -496,7 +660,7 @@ static CGFloat stateBarHeight = 0.0;
 		RECornerRgnInfo *cornerRgnInfo = [[RECornerRgnInfo alloc] init];
 		NSMutableArray *potList = [NSMutableArray array];
 		for (NSArray<NSNumber *> *pot in uni_cornerRgnInfo.pointList) {
-			[potList addObject:[REPoint3D initDvec3:[RETool arrtToDVec3:pot]]];
+			[potList addObject:[REPoint3D initDvec3:[RETool arrToDVec3:pot]]];
 		}
 		cornerRgnInfo.pointList = potList;
 		cornerRgnInfo.indexList = uni_cornerRgnInfo.indexList;
@@ -504,7 +668,7 @@ static CGFloat stateBarHeight = 0.0;
 		
 		REWaterInfo *re_waterInfo = [[REWaterInfo alloc] init];
 		re_waterInfo.waterName = waterInfo.waterName;
-		re_waterInfo.waterClr = [RETool arrtToColor:waterInfo.waterClr];
+		re_waterInfo.waterClr = [RETool arrToColor:waterInfo.waterClr];
 		re_waterInfo.blendDist = waterInfo.blendDist;
 		re_waterInfo.visible = waterInfo.visible;
 		re_waterInfo.visDist = waterInfo.visDist;
@@ -527,22 +691,29 @@ static CGFloat stateBarHeight = 0.0;
 	
 	NSMutableArray *re_extrudeList = [NSMutableArray array];
 	for (REExtrudeUniData *extrudeInfo in self.sceneUniData.extrudeList) {
+		NSMutableArray *dataSetIdList_line = [NSMutableArray array];
+		for (REDataSetUniData *dataSet in self.sceneUniData.dataSetList) {
+			//无奈处理平台横线数据不一致的问题
+			if ([extrudeInfo.dataSetIdList containsObject:dataSet.dataSetId_noline]) {
+				[dataSetIdList_line addObject:dataSet.dataSetId];
+			}
+		}
 		NSMutableArray *rgnList = [NSMutableArray array];
 		NSMutableArray *potList = [NSMutableArray array];
 		NSArray *uni_cornerRgnInfo = extrudeInfo.rgnList.firstObject;
 		for (NSArray<NSNumber *> *pot in uni_cornerRgnInfo) {
-			[potList addObject:[REPoint3D initDvec3:[RETool arrtToDVec3:pot]]];
+			[potList addObject:[REPoint3D initDvec3:[RETool arrToDVec3:pot]]];
 		}
 		[rgnList addObject:potList];
 		
 		REExtrudeInfo *re_extrudeInfo = [[REExtrudeInfo alloc] init];
 		re_extrudeInfo.extrudeId = extrudeInfo.extrudeId;
-		re_extrudeInfo.dataSetIdList = extrudeInfo.dataSetIdList;
-		re_extrudeInfo.depthLimitRange = [RETool arrtToDVec2:extrudeInfo.depthLimitRange];
+		re_extrudeInfo.dataSetIdList = dataSetIdList_line;
+		re_extrudeInfo.depthLimitRange = [RETool arrToDVec2:extrudeInfo.depthLimitRange];
 		re_extrudeInfo.type = extrudeInfo.type;
 		re_extrudeInfo.texId = extrudeInfo.texId;
 		re_extrudeInfo.texPath = extrudeInfo.texPath;
-		re_extrudeInfo.texSize = [RETool arrtToDVec2:extrudeInfo.texSize];
+		re_extrudeInfo.texSize = [RETool arrToDVec2:extrudeInfo.texSize];
 		re_extrudeInfo.rgnList = rgnList;
 		
 		[re_extrudeList addObject:re_extrudeInfo];

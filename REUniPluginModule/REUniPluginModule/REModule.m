@@ -44,19 +44,36 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	
 	NSMutableArray *toolDataList = [NSMutableArray array];
 	// 添加自定义按钮数据
+//	{
+//		REToolData *tool_tree = [REToolData initWithType:1 popViewHeight:360 toolBtnId:@"web_pop_tree" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/cancelcut_nor.png" popWebUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/tree"];
+//		REToolData *tool_property = [REToolData initWithType:2 popViewHeight:360 toolBtnId:@"web_pop_property" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/confirmcut_nor.png" popWebUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/property"];
+//		REToolData *tool_cad = [REToolDat/*a initWithType:3 popViewHeight:400 toolBtnId:@"retool_btn_cad" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/ctrlmouse_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/cad"];*/
+//		[toolDataList addObject:tool_tree];
+//		[toolDataList addObject:tool_property];
+//		[toolDataList addObject:tool_cad];
+//	}
+	
+	
+	// 添加webPop数据
+	NSMutableArray *webPopList = [NSMutableArray array];
 	{
-		REToolData *tool_tree = [REToolData initWithType:1 popViewHeight:400 toolBtnId:@"retool_btn_tree" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/cancelcut_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/tree"];
-		REToolData *tool_property = [REToolData initWithType:2 popViewHeight:400 toolBtnId:@"retool_btn_property" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/confirmcut_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/property"];
-		REToolData *tool_cad = [REToolData initWithType:3 popViewHeight:400 toolBtnId:@"retool_btn_cad" btnImg:@"https://realbim.bjblackhole.cn:7999/TestPages/pic/pics/ctrlmouse_nor.png" popWebUrl:@"http://192.168.31.164:8080/#/cad"];
-		[toolDataList addObject:tool_tree];
-		[toolDataList addObject:tool_property];
-		[toolDataList addObject:tool_cad];
+		NSDictionary *params = @{
+			@"token":sceneUniData.token,
+			@"baseUrl":sceneUniData.baseUrl,
+			@"shareType":[NSString stringWithFormat:@"%d", sceneUniData.shareType],
+			@"sceneId":sceneUniData.sceneId,
+		};
+		REWebPopData *webPopData_tree = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_tree" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/tree" webPopParams:params webPopHeight:300];
+		REWebPopData *webPopData_property = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_property" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/property" webPopParams:params webPopHeight:300];
+		
+		[webPopList addObjectsFromArray:@[webPopData_tree, webPopData_property]];
 	}
+	
 	
 	REEngineVC *engineVC = [[REEngineVC alloc] init];
 	engineVC.sceneUniData = sceneUniData;
 	engineVC.toolDataList = toolDataList;
-	engineVC.isUniAppComp = NO;
+	engineVC.webPopList = webPopList;
 	engineVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	UIWindow *currWindow = [UIApplication sharedApplication].keyWindow;
 	[currWindow.rootViewController presentViewController:engineVC animated:YES completion:nil];

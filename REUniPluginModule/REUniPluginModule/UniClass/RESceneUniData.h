@@ -14,26 +14,30 @@ NS_ASSUME_NONNULL_BEGIN
 @class REEntityUniData;
 @class REWaterUniData;
 @class REExtrudeUniData;
+@class REExtrudeTexUniData;
 
 @interface RESceneUniData : NSObject
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, copy) NSString *baseUrl;
+@property (nonatomic, assign) int source;
 @property (nonatomic, copy) NSString *shareUrl;
 @property (nonatomic, copy) NSString *projName;
+@property (nonatomic, assign) int maxInstDrawFaceNum;
 @property (nonatomic, copy) NSString *worldCRS;
+@property (nonatomic, strong) NSArray<REDataSetUniData *> *dataSetList;
+@property (nonatomic, assign) BOOL collect;
+@property (nonatomic, assign) int shareType;
+@property (nonatomic, copy) NSString *sceneId;
 @property (nonatomic, copy) NSString *camDefaultDataSetId;
 @property (nonatomic, copy) NSString *shareViewMode;
 @property (nonatomic, copy) NSString *shareDataType;
-@property (nonatomic, assign) int maxInstDrawFaceNum;
-@property (nonatomic, assign) int shareType;
-@property (nonatomic, assign) BOOL collect;
 @property (nonatomic, strong) RECamInfoUniData *defaultCamLoc;
-@property (nonatomic, strong) NSArray<REDataSetUniData *> *dataSetList;
 @property (nonatomic, strong) NSArray<REEntityUniData *> *entityList;
 @property (nonatomic, strong) NSArray<REWaterUniData *> *waterList;
 @property (nonatomic, strong) NSArray<REExtrudeUniData *> *extrudeList;
+@property (nonatomic, strong) NSArray<REExtrudeTexUniData *> *extrudeTexList;
 
 @end
 

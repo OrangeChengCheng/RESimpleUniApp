@@ -9,6 +9,7 @@
 
 @class RESceneUniData;
 @class REToolData;
+@class REWebPopData;
 
 @protocol RERenderDelegate <NSObject>
 
@@ -23,12 +24,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface REEngineVC : UIViewController
-@property (nonatomic, assign) Boolean isUniAppComp;//是否是UniApp插件 yes：uniApp插件  no: 原生组件
+@property (nonatomic, assign) BOOL isUniAppComp;//是否是UniApp插件 yes：uniApp插件  no: 原生组件
 @property (nonatomic, weak) id<RERenderDelegate> delegate;
 @property (nonatomic, strong) UIView *customView;
 
 @property (nonatomic, strong) RESceneUniData *sceneUniData;
 @property (nonatomic, strong) NSArray<REToolData *> *toolDataList;
+@property (nonatomic, strong) NSArray<REWebPopData *> *webPopList;
 
 
 - (void)endRenderAndExit;//结束渲染并退出渲染

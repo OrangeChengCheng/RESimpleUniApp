@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) int type;// 0:模型  13：遥感影像 10：WMTS工程  11：OSGB工程  14：360全景图  15：点云工程  16：CAD图纸  20：矢量数据
 @property (nonatomic, copy) NSString *dataSetId;
+@property (nonatomic, copy) NSString *dataSetId_noline;//平台处理了数据造成数据使用混乱，无奈之举，自行调整（平台的数据中有的有横线，有的没有）
 @property (nonatomic, copy) NSString *resourcesAddress;
 @property (nonatomic, strong) NSArray *scale;
 @property (nonatomic, strong) NSArray *rotate;
