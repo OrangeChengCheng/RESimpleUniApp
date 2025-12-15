@@ -21,13 +21,11 @@
 }
 
 
-+ (REWebPopData *)initWithWebPopManager:(REWebViewManager *)webPopManager
-							 webPopId:(NSString *)webPopId
++ (REWebPopData *)initWithWebPopId:(NSString *)webPopId
 							webPopUrl:(NSString *)webPopUrl
 						  webPopParams:(NSDictionary *)webPopParams
 						 webPopHeight:(CGFloat)webPopHeight {
 	REWebPopData *webPopData = [[REWebPopData alloc] init];
-	webPopData.webPopManager = webPopManager;
 	webPopData.webPopId = webPopId;
 	webPopData.webPopUrl = webPopUrl;
 	webPopData.webPopParams = webPopParams;

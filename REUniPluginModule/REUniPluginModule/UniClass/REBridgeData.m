@@ -13,6 +13,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
+		_log = REEmptyStr;
 		_dataSetId = REEmptyStr; _elemIdList = @[];
 		_elemClr = @[]; _elemClrObj = REColorMake_RGBA(255, 255, 255, 255);
 		_visible = YES; _alpha = 255; _attrValid = YES; _probeMask = 1;
@@ -28,8 +29,15 @@
 		_camRotate = @[]; _camRotateObj = REDvec4Zero;
 		_force = YES; _locDelay = 0; _locTime = 0; _full = NO;
 		_webPopId = REEmptyStr;
+		_requestData = nil;
 	}
 	return self;
+}
+
++ (NSDictionary *)modelContainerPropertyGenericClass {
+	return @{
+		@"locIDList": [RESelElemInfo class]
+	};
 }
 
 

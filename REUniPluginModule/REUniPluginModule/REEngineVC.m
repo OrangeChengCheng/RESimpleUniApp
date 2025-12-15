@@ -11,6 +11,7 @@
 #import "REAppUIClass.h"
 #import "REToolHandle.h"
 #import "REModule.h"
+#import "REToolClass.h"
 
 static CGFloat stateBarHeight = 0.0;
 
@@ -323,7 +324,7 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - REWebViewManagerDelegate
 - (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
-	NSLog(@"webData: %@", result);
+//	NSLog(@"webData: %@", result);
 	
 	[self handleEngineSDK:result msgWhere:2];
 }
@@ -340,8 +341,9 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 引擎sdk调用
 - (void)handleEngineSDK:(NSDictionary *)jsonObject msgWhere:(int)msgWhere {
-	NSString *msgId = [[jsonObject objectForKey:@"msdId"] stringValue];
+	NSString *msgId = [[jsonObject objectForKey:@"msgId"] stringValue];
 	NSString *type = [[jsonObject objectForKey:@"type"] stringValue];
+	NSString *webPopId = [[jsonObject objectForKey:@"webPopId"] stringValue];
 	NSDictionary *json_data = [jsonObject.allKeys containsObject:@"data"] ? [jsonObject objectForKey:@"data"] : nil;
 	if (!json_data) {
 		return;
@@ -349,16 +351,24 @@ static CGFloat stateBarHeight = 0.0;
 	REBridgeData *bridgeData = [REBridgeData yy_modelWithDictionary:json_data];
 	// 获取弹窗操作
 	REWebPopData *webPopData = nil;
-	if (bridgeData.webPopId.length > 0) {
+	if (webPopId.length > 0) {
 		NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-			return [obj.webPopId isEqualToString:bridgeData.webPopId];
+			return [obj.webPopId isEqualToString:webPopId];
 		}];
 		if (matchIndex != NSNotFound) {
 			webPopData = [_webPopList objectAtIndex:matchIndex];
 		}
 	}
 	
-	if ([type isEqualToString:@"cloose"]) {
+	if ([type isEqualToString:@"log"]) {
+		NSLog(@"--->>【WebLog】: %@", bridgeData.log);
+	} else if ([type isEqualToString:@"requestAppToWeb"]) {
+		if (webPopData && msgWhere == 2) {
+			[RERequest requestWithUrl:bridgeData.requestData[@"url"] method:bridgeData.requestData[@"type"] headers:bridgeData.requestData[@"headers"] params:bridgeData.requestData[@"param"] finish:^(id  _Nonnull respone) {
+				[webPopData.webPopManager sendObjAppToWebCallbackWithObject:respone msgId:msgId];
+			}];
+		}
+	} else if ([type isEqualToString:@"cloose"]) {
 		if (webPopData) {
 			[webPopData.webPopManager hiddenWebPop];
 			webPopData.webPopShow = NO;
@@ -486,6 +496,18 @@ static CGFloat stateBarHeight = 0.0;
 
 #pragma mark - 加载资源
 - (void)loadDataSet {
+	// 设置请求头
+	if (self.sceneUniData.urlHeaderList.count) {
+		for(REUrlUniData *urlData in self.sceneUniData.urlHeaderList) {
+			[[BlackHole3D sharedSingleton] addUrlExtHeader:urlData.urlWildcard headerStr:urlData.headerStr];
+		}
+	}
+	// 设置授权信息
+	if (self.sceneUniData.authorData && self.sceneUniData.authorData.isMinio) {
+		[[BlackHole3D sharedSingleton] addAuthorPath:_sceneUniData.authorData.authorTxtId filePath:_sceneUniData.authorData.authorTxt];
+		[[BlackHole3D sharedSingleton] addPathIndex:_sceneUniData.authorData.authorIndexId rootURL:_sceneUniData.authorData.authorRes filePath:_sceneUniData.authorData.authorIndex];
+	}
+	
 	if (self.sceneUniData.worldCRS.length > 0) {
 		[[BlackHole3D sharedSingleton].Coordinate setEngineWorldCRS:self.sceneUniData.worldCRS];
 	}

@@ -21,10 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDictionary *webPopParams;
 
 
-+ (REWebPopData *)initWithWebPopManager:(REWebViewManager *)webPopManager
-							 webPopId:(NSString *)webPopId
++ (REWebPopData *)initWithWebPopId:(NSString *)webPopId
 							webPopUrl:(NSString *)webPopUrl
-						 webPopParams:(NSDictionary *)webPopParams
+						  webPopParams:(NSDictionary *)webPopParams
 						 webPopHeight:(CGFloat)webPopHeight;
 
 

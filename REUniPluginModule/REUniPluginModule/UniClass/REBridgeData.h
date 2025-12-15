@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface REBridgeData : NSObject
 
+
+@property (nonatomic, copy) NSString *log;
 @property (nonatomic, copy) NSString *dataSetId;
 @property (nonatomic, strong) NSArray<NSNumber *> *elemIdList;
 @property (nonatomic, strong) NSArray<NSNumber *> *elemClr;
@@ -52,6 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) double locTime;
 @property (nonatomic, assign) BOOL full;
 @property (nonatomic, copy) NSString *webPopId;
+@property (nonatomic, strong) NSDictionary *requestData;
 
 @end
 

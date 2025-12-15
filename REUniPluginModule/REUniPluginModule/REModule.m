@@ -11,7 +11,7 @@
 #import <objc/runtime.h>
 #import "YYModel.h"
 #import "REUniClass.h"
-
+#import "REToolClass.h"
 
 
 static UniModuleKeepAliveCallback appToUniCallBack = nil;
@@ -57,15 +57,27 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	// 添加webPop数据
 	NSMutableArray *webPopList = [NSMutableArray array];
 	{
+		NSString *webUrl = sceneUniData.noExternalNetwork ? [NSString stringWithFormat:@"%@/AppExpand/index.html#", sceneUniData.baseUrl] : @"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#";
+		
 		NSDictionary *params = @{
 			@"token":sceneUniData.token,
 			@"baseUrl":sceneUniData.baseUrl,
 			@"shareType":[NSString stringWithFormat:@"%d", sceneUniData.shareType],
 			@"sceneId":sceneUniData.sceneId,
 		};
-		REWebPopData *webPopData_tree = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_tree" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/tree" webPopParams:params webPopHeight:300];
-		REWebPopData *webPopData_property = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_property" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/property" webPopParams:params webPopHeight:300];
+		NSMutableDictionary *params_tree = params.mutableCopy;
+		params_tree[@"webPopId"] = @"web_pop_tree";
+//		REWebPopData *webPopData_tree = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_tree" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/tree" webPopParams:params webPopHeight:300];
+//		REWebPopData *webPopData_tree = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_tree" webPopUrl:@"http://192.168.31.169:8080/WebProj/AppExpand/index.html#/tree" webPopParams:params_tree webPopHeight:300];
+		REWebPopData *webPopData_tree = [REWebPopData initWithWebPopId:@"web_pop_tree" webPopUrl:[NSString stringWithFormat:@"%@/tree", webUrl] webPopParams:params_tree webPopHeight:300];
+
 		
+		NSMutableDictionary *params_property = params.mutableCopy;
+		params_property[@"webPopId"] = @"web_pop_property";
+		REWebPopData *webPopData_property = [REWebPopData initWithWebPopId:@"web_pop_property" webPopUrl:[NSString stringWithFormat:@"%@/property", webUrl] webPopParams:params_property webPopHeight:300];
+//		REWebPopData *webPopData_property = [REWebPopData initWithWebPopManager:nil webPopId:@"web_pop_property" webPopUrl:@"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#/property" webPopParams:params_property webPopHeight:300];
+		
+//		[webPopList addObjectsFromArray:@[webPopData_property]];
 		[webPopList addObjectsFromArray:@[webPopData_tree, webPopData_property]];
 	}
 	

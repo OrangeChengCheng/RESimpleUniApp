@@ -20,6 +20,8 @@
 #import "REModelUniData.h"
 #import "REWebPopData.h"
 #import "REBridgeData.h"
+#import "REUrlUniData.h"
+#import "REAuthorUniData.h"
 
 
 #endif /* REUniClass_h */

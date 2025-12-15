@@ -15,10 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class REWaterUniData;
 @class REExtrudeUniData;
 @class REExtrudeTexUniData;
+@class REUrlUniData;
+@class REAuthorUniData;
 
 @interface RESceneUniData : NSObject
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) BOOL noExternalNetwork;
 @property (nonatomic, copy) NSString *token;
 @property (nonatomic, copy) NSString *baseUrl;
 @property (nonatomic, assign) int source;
@@ -26,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *projName;
 @property (nonatomic, assign) int maxInstDrawFaceNum;
 @property (nonatomic, copy) NSString *worldCRS;
+@property (nonatomic, strong) REAuthorUniData *authorData;
+@property (nonatomic, strong) NSArray<REUrlUniData *> *urlHeaderList;
 @property (nonatomic, strong) NSArray<REDataSetUniData *> *dataSetList;
 @property (nonatomic, assign) BOOL collect;
 @property (nonatomic, assign) int shareType;

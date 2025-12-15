@@ -117,7 +117,9 @@
 		fullUrl = [self appendParams:url params:params];
 	}
 	_isUrlLoaded = NO;
-	NSLog(@"完整的webview url: %@", fullUrl);
+	NSLog(@"\n");
+	NSLog(@"【完整的webview】--> url: %@", fullUrl);
+	NSLog(@"\n");
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:fullUrl]];
 	[_webView loadRequest:request];
 }
@@ -402,8 +404,15 @@
 	};
 	
 	NSString *jsonString = [result yy_modelToJSONString];
-	if (jsonString) {
-		[self sendMsgAppToWebWithMessage:jsonString];
+	if (!jsonString) {
+		NSLog(@"序列化失败");
+		return;
+	}
+	
+	NSString *safeJsonString = [self fixYYModelJSONEscape:jsonString];
+	
+	if (safeJsonString) {
+		[self sendMsgAppToWebWithMessage:safeJsonString];
 	}
 }
 
@@ -427,6 +436,20 @@
 	[self sendObjAppToWebWithObject:object type:@"" isResponse:YES msgId:msgId];
 }
 
+
+// 修复YYModel生成的JSON字符串中的转义符问题
+- (NSString *)fixYYModelJSONEscape:(NSString *)jsonString {
+	if (!jsonString) return @"";
+	
+	// 关键：将所有 \ 转为 \\（确保JS解析时识别为单个 \）
+	NSString *fixed = [jsonString stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+	
+	// 补充处理其他可能的特殊字符（可选，根据实际数据）
+	fixed = [fixed stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+	fixed = [fixed stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+	
+	return fixed;
+}
 
 //- (void)sendObjectToJs:(id)object type:(NSString *)type {
 //	if (!object) return;
