@@ -46,7 +46,6 @@
 		185ABDFB2CB9091F003263DA /* RELoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 185ABDF62CB9091F003263DA /* RELoadingView.xib */; };
 		185ABDFC2CB9091F003263DA /* icon_back_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 185ABDF72CB9091F003263DA /* icon_back_circle.png */; };
 		185ABE002CBA7BCB003263DA /* REUniPluginModulePrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 185ABDFF2CBA7BCB003263DA /* REUniPluginModulePrefix.pch */; };
-		187D32F52CD0E5F0005DA0F5 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187D32F42CD0E5F0005DA0F5 /* CoreImage.framework */; };
 		187D32F82CD1DA72005DA0F5 /* REQRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D32F72CD1DA72005DA0F5 /* REQRCode.m */; };
 		187D32F92CD1DA72005DA0F5 /* REQRCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 187D32F62CD1DA72005DA0F5 /* REQRCode.h */; };
 		187D32FE2CD1DD5A005DA0F5 /* REQRCode.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187D32FC2CD1DB3F005DA0F5 /* REQRCode.xib */; };
@@ -114,31 +113,32 @@
 		18DCFEE62C80536A005BC93F /* REEngineVC.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFEC02C80536A005BC93F /* REEngineVC.h */; };
 		18DCFEE72C80536A005BC93F /* REModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DCFEC12C80536A005BC93F /* REModule.m */; };
 		18DCFEEA2C80541A005BC93F /* libBlackHole3DIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEE92C80541A005BC93F /* libBlackHole3DIOS.a */; };
-		18DCFEEC2C80543F005BC93F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEEB2C80543F005BC93F /* libiconv.tbd */; };
-		18DCFEEE2C805476005BC93F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEED2C805476005BC93F /* AudioToolbox.framework */; };
-		18DCFEF02C80547C005BC93F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEEF2C80547C005BC93F /* AVFoundation.framework */; };
-		18DCFEF22C805485005BC93F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEF12C805485005BC93F /* CoreAudio.framework */; };
-		18DCFEF42C80548B005BC93F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEF32C80548B005BC93F /* CoreBluetooth.framework */; };
-		18DCFEF62C805493005BC93F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEF52C805493005BC93F /* CoreFoundation.framework */; };
-		18DCFEF82C80549C005BC93F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEF72C80549C005BC93F /* CoreGraphics.framework */; };
-		18DCFEFA2C8054A3005BC93F /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEF92C8054A3005BC93F /* CoreHaptics.framework */; };
-		18DCFEFC2C8054AA005BC93F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEFB2C8054AA005BC93F /* CoreMotion.framework */; };
-		18DCFEFE2C8054B0005BC93F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEFD2C8054B0005BC93F /* CoreTelephony.framework */; };
-		18DCFF002C8054B6005BC93F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFEFF2C8054B6005BC93F /* CoreVideo.framework */; };
-		18DCFF022C8054BE005BC93F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF012C8054BE005BC93F /* Foundation.framework */; };
-		18DCFF042C8054C4005BC93F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF032C8054C4005BC93F /* GameController.framework */; };
-		18DCFF062C8054CD005BC93F /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF052C8054CD005BC93F /* Metal.framework */; };
 		18DCFF082C8054D3005BC93F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF072C8054D3005BC93F /* OpenGLES.framework */; platformFilter = ios; };
-		18DCFF0A2C8054DA005BC93F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF092C8054DA005BC93F /* QuartzCore.framework */; };
-		18DCFF0C2C8054E1005BC93F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF0B2C8054E1005BC93F /* Security.framework */; };
-		18DCFF0E2C8054E9005BC93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF0D2C8054E9005BC93F /* UIKit.framework */; };
-		18DCFF102C8054F0005BC93F /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF0F2C8054F0005BC93F /* IOKit.framework */; };
-		18DCFF122C8054F7005BC93F /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF112C8054F7005BC93F /* IOSurface.framework */; };
 		18DCFF262C8060DA005BC93F /* REDataSetUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFF242C8060DA005BC93F /* REDataSetUniData.h */; };
 		18DCFF272C8060DA005BC93F /* REDataSetUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DCFF252C8060DA005BC93F /* REDataSetUniData.m */; };
 		18EB94602DF14B3A009DCFBD /* REEntityUniData.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */; };
 		18EB94612DF14B3A009DCFBD /* REEntityUniData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */; };
 		18EB94652DF14D59009DCFBD /* REUniClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB94642DF14D59009DCFBD /* REUniClass.h */; };
+		18FF45CA2F15FA900080F5CC /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45C92F15FA900080F5CC /* CoreAudio.framework */; };
+		18FF45CC2F15FAA90080F5CC /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45CB2F15FAA90080F5CC /* CoreImage.framework */; };
+		18FF45CE2F15FABD0080F5CC /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45CD2F15FABD0080F5CC /* IOSurface.framework */; };
+		18FF45D02F15FAC80080F5CC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45CF2F15FAC80080F5CC /* IOKit.framework */; };
+		18FF45D22F15FAD10080F5CC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45D12F15FAD10080F5CC /* UIKit.framework */; };
+		18FF45D42F15FAD90080F5CC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45D32F15FAD90080F5CC /* Security.framework */; };
+		18FF45D62F15FAE10080F5CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45D52F15FAE10080F5CC /* QuartzCore.framework */; };
+		18FF45D82F15FAED0080F5CC /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45D72F15FAED0080F5CC /* Metal.framework */; };
+		18FF45DA2F15FAF50080F5CC /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45D92F15FAF50080F5CC /* GameController.framework */; };
+		18FF45DC2F15FB010080F5CC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45DB2F15FB010080F5CC /* Foundation.framework */; };
+		18FF45DE2F15FB080080F5CC /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45DD2F15FB080080F5CC /* CoreVideo.framework */; };
+		18FF45E02F15FB130080F5CC /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45DF2F15FB130080F5CC /* CoreTelephony.framework */; };
+		18FF45E22F15FB1B0080F5CC /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45E12F15FB1B0080F5CC /* CoreMotion.framework */; };
+		18FF45E42F15FB210080F5CC /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45E32F15FB210080F5CC /* CoreHaptics.framework */; };
+		18FF45E62F15FB280080F5CC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45E52F15FB280080F5CC /* CoreGraphics.framework */; };
+		18FF45E82F15FB2E0080F5CC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45E72F15FB2E0080F5CC /* CoreFoundation.framework */; };
+		18FF45EA2F15FB340080F5CC /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45E92F15FB340080F5CC /* CoreBluetooth.framework */; };
+		18FF45EC2F15FB3B0080F5CC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45EB2F15FB3B0080F5CC /* AVFoundation.framework */; };
+		18FF45EE2F15FB420080F5CC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45ED2F15FB420080F5CC /* AudioToolbox.framework */; };
+		18FF45F02F15FB490080F5CC /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FF45EF2F15FB490080F5CC /* libiconv.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,7 +192,6 @@
 		185ABDF62CB9091F003263DA /* RELoadingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RELoadingView.xib; sourceTree = "<group>"; };
 		185ABDF72CB9091F003263DA /* icon_back_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_back_circle.png; sourceTree = "<group>"; };
 		185ABDFF2CBA7BCB003263DA /* REUniPluginModulePrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REUniPluginModulePrefix.pch; sourceTree = "<group>"; };
-		187D32F42CD0E5F0005DA0F5 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreImage.framework; sourceTree = DEVELOPER_DIR; };
 		187D32F62CD1DA72005DA0F5 /* REQRCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REQRCode.h; sourceTree = "<group>"; };
 		187D32F72CD1DA72005DA0F5 /* REQRCode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REQRCode.m; sourceTree = "<group>"; };
 		187D32FC2CD1DB3F005DA0F5 /* REQRCode.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = REQRCode.xib; sourceTree = "<group>"; };
@@ -261,32 +260,34 @@
 		18DCFEC02C80536A005BC93F /* REEngineVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REEngineVC.h; sourceTree = "<group>"; };
 		18DCFEC12C80536A005BC93F /* REModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REModule.m; sourceTree = "<group>"; };
 		18DCFEE92C80541A005BC93F /* libBlackHole3DIOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBlackHole3DIOS.a; path = ../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/lib/libBlackHole3DIOS.a; sourceTree = "<group>"; };
-		18DCFEEB2C80543F005BC93F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
-		18DCFEED2C805476005BC93F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEEF2C80547C005BC93F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEF12C805485005BC93F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreAudio.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEF32C80548B005BC93F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEF52C805493005BC93F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEF72C80549C005BC93F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEF92C8054A3005BC93F /* CoreHaptics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreHaptics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreHaptics.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEFB2C8054AA005BC93F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEFD2C8054B0005BC93F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFEFF2C8054B6005BC93F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF012C8054BE005BC93F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF032C8054C4005BC93F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/iOSSupport/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF052C8054CD005BC93F /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
 		18DCFF072C8054D3005BC93F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		18DCFF092C8054DA005BC93F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF0B2C8054E1005BC93F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF0D2C8054E9005BC93F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF0F2C8054F0005BC93F /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
-		18DCFF112C8054F7005BC93F /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/IOSurface.framework; sourceTree = DEVELOPER_DIR; };
 		18DCFF242C8060DA005BC93F /* REDataSetUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REDataSetUniData.h; sourceTree = "<group>"; };
 		18DCFF252C8060DA005BC93F /* REDataSetUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REDataSetUniData.m; sourceTree = "<group>"; };
 		18EB945E2DF14B3A009DCFBD /* REEntityUniData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REEntityUniData.h; sourceTree = "<group>"; };
 		18EB945F2DF14B3A009DCFBD /* REEntityUniData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REEntityUniData.m; sourceTree = "<group>"; };
 		18EB94642DF14D59009DCFBD /* REUniClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REUniClass.h; sourceTree = "<group>"; };
 		18EB946C2DF29E7A009DCFBD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		18FF45C32F15F7290080F5CC /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = SDKROOT; };
+		18FF45C92F15FA900080F5CC /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		18FF45CB2F15FAA90080F5CC /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		18FF45CD2F15FABD0080F5CC /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		18FF45CF2F15FAC80080F5CC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		18FF45D12F15FAD10080F5CC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		18FF45D32F15FAD90080F5CC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		18FF45D52F15FAE10080F5CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		18FF45D72F15FAED0080F5CC /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		18FF45D92F15FAF50080F5CC /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		18FF45DB2F15FB010080F5CC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		18FF45DD2F15FB080080F5CC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		18FF45DF2F15FB130080F5CC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		18FF45E12F15FB1B0080F5CC /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		18FF45E32F15FB210080F5CC /* CoreHaptics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreHaptics.framework; path = System/Library/Frameworks/CoreHaptics.framework; sourceTree = SDKROOT; };
+		18FF45E52F15FB280080F5CC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		18FF45E72F15FB2E0080F5CC /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		18FF45E92F15FB340080F5CC /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		18FF45EB2F15FB3B0080F5CC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		18FF45ED2F15FB420080F5CC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		18FF45EF2F15FB490080F5CC /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,27 +302,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				187D32F52CD0E5F0005DA0F5 /* CoreImage.framework in Frameworks */,
-				18DCFF122C8054F7005BC93F /* IOSurface.framework in Frameworks */,
-				18DCFF102C8054F0005BC93F /* IOKit.framework in Frameworks */,
-				18DCFF0E2C8054E9005BC93F /* UIKit.framework in Frameworks */,
-				18DCFF0C2C8054E1005BC93F /* Security.framework in Frameworks */,
-				18DCFF0A2C8054DA005BC93F /* QuartzCore.framework in Frameworks */,
+				18FF45F02F15FB490080F5CC /* libiconv.tbd in Frameworks */,
+				18FF45EE2F15FB420080F5CC /* AudioToolbox.framework in Frameworks */,
+				18FF45EC2F15FB3B0080F5CC /* AVFoundation.framework in Frameworks */,
+				18FF45EA2F15FB340080F5CC /* CoreBluetooth.framework in Frameworks */,
+				18FF45E82F15FB2E0080F5CC /* CoreFoundation.framework in Frameworks */,
+				18FF45E62F15FB280080F5CC /* CoreGraphics.framework in Frameworks */,
+				18FF45E42F15FB210080F5CC /* CoreHaptics.framework in Frameworks */,
+				18FF45E22F15FB1B0080F5CC /* CoreMotion.framework in Frameworks */,
+				18FF45E02F15FB130080F5CC /* CoreTelephony.framework in Frameworks */,
+				18FF45DE2F15FB080080F5CC /* CoreVideo.framework in Frameworks */,
+				18FF45DC2F15FB010080F5CC /* Foundation.framework in Frameworks */,
+				18FF45DA2F15FAF50080F5CC /* GameController.framework in Frameworks */,
+				18FF45D82F15FAED0080F5CC /* Metal.framework in Frameworks */,
+				18FF45D62F15FAE10080F5CC /* QuartzCore.framework in Frameworks */,
+				18FF45D42F15FAD90080F5CC /* Security.framework in Frameworks */,
+				18FF45D22F15FAD10080F5CC /* UIKit.framework in Frameworks */,
+				18FF45D02F15FAC80080F5CC /* IOKit.framework in Frameworks */,
+				18FF45CE2F15FABD0080F5CC /* IOSurface.framework in Frameworks */,
+				18FF45CC2F15FAA90080F5CC /* CoreImage.framework in Frameworks */,
+				18FF45CA2F15FA900080F5CC /* CoreAudio.framework in Frameworks */,
 				18DCFF082C8054D3005BC93F /* OpenGLES.framework in Frameworks */,
-				18DCFF062C8054CD005BC93F /* Metal.framework in Frameworks */,
-				18DCFF042C8054C4005BC93F /* GameController.framework in Frameworks */,
-				18DCFF022C8054BE005BC93F /* Foundation.framework in Frameworks */,
-				18DCFF002C8054B6005BC93F /* CoreVideo.framework in Frameworks */,
-				18DCFEFE2C8054B0005BC93F /* CoreTelephony.framework in Frameworks */,
-				18DCFEFC2C8054AA005BC93F /* CoreMotion.framework in Frameworks */,
-				18DCFEFA2C8054A3005BC93F /* CoreHaptics.framework in Frameworks */,
-				18DCFEF82C80549C005BC93F /* CoreGraphics.framework in Frameworks */,
-				18DCFEF62C805493005BC93F /* CoreFoundation.framework in Frameworks */,
-				18DCFEF42C80548B005BC93F /* CoreBluetooth.framework in Frameworks */,
-				18DCFEF22C805485005BC93F /* CoreAudio.framework in Frameworks */,
-				18DCFEF02C80547C005BC93F /* AVFoundation.framework in Frameworks */,
-				18DCFEEE2C805476005BC93F /* AudioToolbox.framework in Frameworks */,
-				18DCFEEC2C80543F005BC93F /* libiconv.tbd in Frameworks */,
 				18DCFEEA2C80541A005BC93F /* libBlackHole3DIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -459,28 +460,29 @@
 		18DCFEE82C80541A005BC93F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18FF45EF2F15FB490080F5CC /* libiconv.tbd */,
+				18FF45ED2F15FB420080F5CC /* AudioToolbox.framework */,
+				18FF45EB2F15FB3B0080F5CC /* AVFoundation.framework */,
+				18FF45E92F15FB340080F5CC /* CoreBluetooth.framework */,
+				18FF45E72F15FB2E0080F5CC /* CoreFoundation.framework */,
+				18FF45E52F15FB280080F5CC /* CoreGraphics.framework */,
+				18FF45E32F15FB210080F5CC /* CoreHaptics.framework */,
+				18FF45E12F15FB1B0080F5CC /* CoreMotion.framework */,
+				18FF45DF2F15FB130080F5CC /* CoreTelephony.framework */,
+				18FF45DD2F15FB080080F5CC /* CoreVideo.framework */,
+				18FF45DB2F15FB010080F5CC /* Foundation.framework */,
+				18FF45D92F15FAF50080F5CC /* GameController.framework */,
+				18FF45D72F15FAED0080F5CC /* Metal.framework */,
+				18FF45D52F15FAE10080F5CC /* QuartzCore.framework */,
+				18FF45D32F15FAD90080F5CC /* Security.framework */,
+				18FF45D12F15FAD10080F5CC /* UIKit.framework */,
+				18FF45CF2F15FAC80080F5CC /* IOKit.framework */,
+				18FF45CD2F15FABD0080F5CC /* IOSurface.framework */,
+				18FF45CB2F15FAA90080F5CC /* CoreImage.framework */,
+				18FF45C92F15FA900080F5CC /* CoreAudio.framework */,
+				18FF45C32F15F7290080F5CC /* CoreAudioTypes.framework */,
 				18EB946C2DF29E7A009DCFBD /* WebKit.framework */,
-				187D32F42CD0E5F0005DA0F5 /* CoreImage.framework */,
-				18DCFF112C8054F7005BC93F /* IOSurface.framework */,
-				18DCFF0F2C8054F0005BC93F /* IOKit.framework */,
-				18DCFF0D2C8054E9005BC93F /* UIKit.framework */,
-				18DCFF0B2C8054E1005BC93F /* Security.framework */,
-				18DCFF092C8054DA005BC93F /* QuartzCore.framework */,
 				18DCFF072C8054D3005BC93F /* OpenGLES.framework */,
-				18DCFF052C8054CD005BC93F /* Metal.framework */,
-				18DCFF032C8054C4005BC93F /* GameController.framework */,
-				18DCFF012C8054BE005BC93F /* Foundation.framework */,
-				18DCFEFF2C8054B6005BC93F /* CoreVideo.framework */,
-				18DCFEFD2C8054B0005BC93F /* CoreTelephony.framework */,
-				18DCFEFB2C8054AA005BC93F /* CoreMotion.framework */,
-				18DCFEF92C8054A3005BC93F /* CoreHaptics.framework */,
-				18DCFEF72C80549C005BC93F /* CoreGraphics.framework */,
-				18DCFEF52C805493005BC93F /* CoreFoundation.framework */,
-				18DCFEF32C80548B005BC93F /* CoreBluetooth.framework */,
-				18DCFEF12C805485005BC93F /* CoreAudio.framework */,
-				18DCFEEF2C80547C005BC93F /* AVFoundation.framework */,
-				18DCFEED2C805476005BC93F /* AudioToolbox.framework */,
-				18DCFEEB2C80543F005BC93F /* libiconv.tbd */,
 				18DCFEE92C80541A005BC93F /* libBlackHole3DIOS.a */,
 			);
 			name = Frameworks;

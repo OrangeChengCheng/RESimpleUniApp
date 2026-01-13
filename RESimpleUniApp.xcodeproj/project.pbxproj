@@ -724,6 +724,8 @@
 		18DCFF1E2C805A49005BC93F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		18DCFF202C805A7B005BC93F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		18DCFF222C805F00005BC93F /* assets.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = assets.pak; path = ../../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/bin/assets.pak; sourceTree = "<group>"; };
+		18FF45C12F15F6F30080F5CC /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = SDKROOT; };
+		18FF45C62F15F7AB0080F5CC /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -843,6 +845,8 @@
 		18551C6F2C801709000F9A94 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18FF45C62F15F7AB0080F5CC /* CoreAudio.framework */,
+				18FF45C12F15F6F30080F5CC /* CoreAudioTypes.framework */,
 				18AE4E2B2CA3C985003FF7D2 /* storage.framework */,
 				18AE4E292CA3C978003FF7D2 /* liblibStorage.a */,
 				18DCFF202C805A7B005BC93F /* CoreMotion.framework */,
@@ -2209,7 +2213,7 @@
 					"\"$(SRCROOT)/../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/lib\"",
 					"$(PROJECT_DIR)/SDK/Libs",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = RealEngine.BlackHoleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2267,7 +2271,7 @@
 					"\"$(SRCROOT)/../../RealBIMEngineTestSDKDemo/RealBIMIOSEngineSDK/lib\"",
 					"$(PROJECT_DIR)/SDK/Libs",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = RealEngine.BlackHoleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
