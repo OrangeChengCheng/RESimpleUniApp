@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, strong) NSArray<NSString *> *waterNameList;
 @property (nonatomic, strong) NSArray<NSString *> *extrudeIdst;
+@property (nonatomic, strong) NSArray<NSString *> *monomerIds;
 
 @property (nonatomic, copy) NSString *waterName;
 @property (nonatomic, copy) NSString *extrudeId;
@@ -42,6 +43,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL single;
 @property (nonatomic, strong) NSArray<NSNumber *> *lineClr;
 @property (nonatomic, assign) REColor lineClrObj;
+@property (nonatomic, assign) int lineClrWeight;
+@property (nonatomic, assign) int lineAlphaWeight;
+@property (nonatomic, strong) NSArray<NSNumber *> *faceClr;
+@property (nonatomic, assign) REColor faceClrObj;
+@property (nonatomic, assign) int faceClrWeight;
+@property (nonatomic, assign) int faceAlphaWeight;
 @property (nonatomic, assign) BOOL visibalOnly;
 @property (nonatomic, strong) NSArray<NSNumber *> *camPos;
 @property (nonatomic, assign) REDVec3 camPosObj;
@@ -55,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL full;
 @property (nonatomic, copy) NSString *webPopId;
 @property (nonatomic, strong) NSDictionary *requestData;
+@property (nonatomic, strong) NSArray *treeData;
 
 @end
 

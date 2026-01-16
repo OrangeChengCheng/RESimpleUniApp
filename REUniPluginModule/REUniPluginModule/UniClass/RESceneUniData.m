@@ -25,7 +25,7 @@
 		_shareType = 0; _sceneId = REEmptyStr;
 		_camDefaultDataSetId = REEmptyStr; _shareViewMode = REEmptyStr; _shareDataType = REEmptyStr;
 		_defaultCamLoc = nil;
-		_entityList = @[]; _waterList = @[]; _extrudeList = @[]; _extrudeTexList = @[];
+		_entityList = @[]; _waterList = @[]; _extrudeList = @[]; _extrudeTexList = @[]; _monomerList = @[];
 	}
 	return self;
 }
@@ -41,6 +41,7 @@
 		@"extrudeList": [REExtrudeUniData class],
 		@"extrudeTexList": [REExtrudeTexUniData class],
 		@"urlHeaderList": [REUrlUniData class],
+		@"monomerList": [REMonomerUniData class],
 	};
 }
 

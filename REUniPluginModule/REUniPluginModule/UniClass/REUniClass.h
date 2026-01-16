@@ -22,6 +22,7 @@
 #import "REBridgeData.h"
 #import "REUrlUniData.h"
 #import "REAuthorUniData.h"
+#import "REMonomerUniData.h"
 
 
 #endif /* REUniClass_h */

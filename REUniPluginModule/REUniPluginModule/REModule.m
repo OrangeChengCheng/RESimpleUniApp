@@ -57,7 +57,8 @@ UNI_EXPORT_METHOD(@selector(realEngineRender:callback:))
 	// 添加webPop数据
 	NSMutableArray *webPopList = [NSMutableArray array];
 	{
-		NSString *webUrl = sceneUniData.noExternalNetwork ? [NSString stringWithFormat:@"%@/AppExpand/index.html#", sceneUniData.baseUrl] : @"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#";
+//		NSString *webUrl = sceneUniData.noExternalNetwork ? [NSString stringWithFormat:@"%@/AppExpand/index.html#", sceneUniData.baseUrl] : @"https://demo.bjblackhole.com/WebProj/AppExpand/index.html#";
+		NSString *webUrl = sceneUniData.noExternalNetwork ? [NSString stringWithFormat:@"%@/AppExpand/index.html#", sceneUniData.baseUrl] : @"http://192.168.31.153:8080/#";
 		
 		NSDictionary *params = @{
 			@"token":sceneUniData.token,

@@ -19,17 +19,20 @@
 		_visible = YES; _alpha = 255; _attrValid = YES; _probeMask = 1;
 		_unitId = REEmptyStr; _active = YES;
 		_resType = REEmptyStr; _terrResEm = RETerrResEm_ALL;
-		_waterNameList = @[]; _extrudeIdst = @[]; _waterName = REEmptyStr; _extrudeId = REEmptyStr;
+		_waterNameList = @[]; _extrudeIdst = @[]; _waterName = REEmptyStr; _extrudeId = REEmptyStr; _monomerIds = @[];
 		_depthBias = 1.0; _locIDList = @[];
 		_locType = @"CAM_DIR_CURRENT"; _locTypeEm = CAM_DIR_CURRENT;
 		_arrBound = @[]; _box3D = [REBBox3D new]; _depthBias = 0; _topHeight = 0; _bottomHeight = 0;
-		_single = NO; _lineClr = @[]; _lineClrObj = REColorMake_RGBA(255, 255, 255, 255); _visibalOnly = NO;
+		_single = NO; _visibalOnly = NO;
+		_lineClr = @[]; _lineClrObj = REColorMake_RGBA(255, 255, 255, 255); _lineClrWeight = 255; _lineAlphaWeight = 255;
+		_faceClr = @[]; _faceClrObj = REColorMake_RGBA(255, 255, 255, 255); _faceClrWeight = 255; _faceAlphaWeight = 255;
 		_camPos = @[]; _camPosObj = REDvec3Zero;
 		_camDir = @[]; _camDirObj = REDvec3Zero;
 		_camRotate = @[]; _camRotateObj = REDvec4Zero;
 		_force = YES; _locDelay = 0; _locTime = 0; _full = NO;
 		_webPopId = REEmptyStr;
 		_requestData = nil;
+		_treeData = @[];
 	}
 	return self;
 }
@@ -134,6 +137,11 @@
 - (void)setLineClr:(NSArray<NSNumber *> *)lineClr {
 	_lineClr = lineClr;
 	self.lineClrObj = [RETool arrToColor:lineClr];
+}
+
+- (void)setFaceClr:(NSArray<NSNumber *> *)faceClr {
+	_faceClr = faceClr;
+	self.faceClrObj = [RETool arrToColor:faceClr];
 }
 
 

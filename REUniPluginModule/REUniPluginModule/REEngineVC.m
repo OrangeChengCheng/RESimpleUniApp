@@ -164,6 +164,9 @@ static CGFloat stateBarHeight = 0.0;
 	}];
 	
 	[[BlackHole3D sharedSingleton] systemSelElement:^(BOOL probeValid) {
+		if ([[BlackHole3D sharedSingleton].Monomer getAllCurSel].count) {
+			[[BlackHole3D sharedSingleton].Monomer delFromSel:@[]];
+		}
 		STRONGSELF
 		if (probeValid) {
 			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurCombProbeRet];
@@ -194,7 +197,7 @@ static CGFloat stateBarHeight = 0.0;
 			return;
 		}
 		if (strongSelf.currWebPop != nil && strongSelf.curSelProInfo != nil) {
-			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Probe.getCurCombProbeRet"];
+			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Listen.systemSelElement"];
 		}
 	}];
 	
@@ -202,10 +205,20 @@ static CGFloat stateBarHeight = 0.0;
 		STRONGSELF
 		if (probeValid) {
 			REProbeInfo *probe = [[BlackHole3D sharedSingleton].Probe getCurCombProbeRet];
+			if ([[BlackHole3D sharedSingleton].Monomer getAllCurSel].count) {
+				if (![probe.elemType isEqualToString:@"ShapeElem"] || ![probe.elemIdStr containsString:@"Monomer"]) {
+					[[BlackHole3D sharedSingleton].Monomer delFromSel:@[]];// 平台逻辑需要清理单体化的选择操作，如果是单体化矢量则无需操作，自行按照点击逻辑，其他则清除单体化选择
+				}
+			}
 			if ([probe.elemType isEqualToString:@"ShapeElem"]) {
+				NSArray *temp = [NSArray arrayWithArray:strongSelf.sceneUniData.dataSetList];
+				for (REDataSetUniData *dataSet in temp) {
+					dataSet.dataSetSGContent = @"";
+				}
 				strongSelf.curSelProInfo = [NSMutableDictionary dictionary];
 				strongSelf.curSelProInfo[@"probeInfo"] = probe;
-				strongSelf.curSelProInfo[@"dataSetList"] = strongSelf.sceneUniData.dataSetList;
+				strongSelf.curSelProInfo[@"dataSetList"] = temp;// 交互操作的信息不需要content的数据，减少数据传输
+//				strongSelf.curSelProInfo[@"dataSetList"] = strongSelf.sceneUniData.dataSetList;
 			} else {
 				strongSelf.curSelProInfo = nil;
 				return;
@@ -215,7 +228,7 @@ static CGFloat stateBarHeight = 0.0;
 			return;
 		}
 		if (strongSelf.currWebPop != nil && strongSelf.curSelProInfo != nil) {
-			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Probe.getCurCombProbeRet"];
+			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Listen.systemSelShpElement"];
 		}
 	}];
 	
@@ -368,6 +381,19 @@ static CGFloat stateBarHeight = 0.0;
 				[webPopData.webPopManager sendObjAppToWebCallbackWithObject:respone msgId:msgId];
 			}];
 		}
+	} else if ([type isEqualToString:@"updateTreeData"]) {
+		if (webPopData && msgWhere == 2) {
+			REWebPopData *webPopData_property = nil;
+			NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+				return [obj.webPopId isEqualToString:@"web_pop_property"];
+			}];
+			if (matchIndex != NSNotFound) {
+				webPopData_property = [_webPopList objectAtIndex:matchIndex];
+			}
+			if (webPopData_property) {
+				[webPopData_property.webPopManager sendObjAppToWebWithObject:bridgeData.treeData type:@"updateTreeData"];
+			}
+		}
 	} else if ([type isEqualToString:@"cloose"]) {
 		if (webPopData) {
 			[webPopData.webPopManager hiddenWebPop];
@@ -464,6 +490,28 @@ static CGFloat stateBarHeight = 0.0;
 		[[BlackHole3D sharedSingleton].Clip endClip];
 	} else if ([type isEqualToString:@"setElemDepthBias"]) {
 		[[BlackHole3D sharedSingleton].BIM setElemDepthBias:bridgeData.dataSetId elemIdList:bridgeData.elemIdList depthBias:bridgeData.depthBias];
+	} else if ([type isEqualToString:@"setCamLocToMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer setCamToData:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"addToSelMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer addToSel:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"delFromSelMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer delFromSel:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"getMonomerSelAttr"]) {
+		REMonomerClrAttr *monomerClrAttr = [[BlackHole3D sharedSingleton].Monomer getSelAttr];
+		if (webPopData && msgWhere == 2) {
+			[webPopData.webPopManager sendObjAppToWebCallbackWithObject:monomerClrAttr msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setMonomerSelAttr"]) {
+		REMonomerClrAttr *monomerClrAttr = [[REMonomerClrAttr alloc] init];
+		monomerClrAttr.faceClr = bridgeData.faceClrObj;
+		monomerClrAttr.faceClrWeight = bridgeData.faceClrWeight;
+		monomerClrAttr.faceAlphaWeight = bridgeData.faceAlphaWeight;
+		monomerClrAttr.lineClr = bridgeData.lineClrObj;
+		monomerClrAttr.lineClrWeight = bridgeData.lineClrWeight;
+		monomerClrAttr.lineAlphaWeight = bridgeData.lineAlphaWeight;
+		[[BlackHole3D sharedSingleton].Monomer setSelAttr:monomerClrAttr];
+	} else if ([type isEqualToString:@"monomerVisible"]) {
+		[[BlackHole3D sharedSingleton].Monomer setVisible:bridgeData.monomerIds visible:bridgeData.visible];
 	}
 }
 
@@ -611,6 +659,7 @@ static CGFloat stateBarHeight = 0.0;
 				[strongSelf addEntity];
 				[strongSelf addWater];
 				[strongSelf addExtrude];
+				[strongSelf addMonomer];
 				[strongSelf.loadingView hiddenLoading];
 			} else {
 				[REModule sendMsgAppToUni:REModuleMsg_T2 message:@"模型资源加载失败！"];
@@ -741,6 +790,38 @@ static CGFloat stateBarHeight = 0.0;
 		[re_extrudeList addObject:re_extrudeInfo];
 	}
 	[[BlackHole3D sharedSingleton].Extrude setData:re_extrudeList];
+}
+
+
+#pragma mark - 单体化加载
+- (void)addMonomer {
+	if (!self.sceneUniData.monomerList || !self.sceneUniData.monomerList.count) {
+		return;
+	}
+	
+	NSMutableArray *re_monomerList = [NSMutableArray array];
+	for (REMonomerUniData *monomerInfo in self.sceneUniData.monomerList) {
+		NSMutableArray *rgnList = [NSMutableArray array];
+		NSMutableArray *potList = [NSMutableArray array];
+		NSArray *uni_cornerRgnInfo = monomerInfo.rgnList.firstObject;
+		for (NSArray<NSNumber *> *pot in uni_cornerRgnInfo) {
+			[potList addObject:[REPoint3D initDvec3:[RETool arrToDVec3:pot]]];
+		}
+		[rgnList addObject:potList];
+		
+		REMonomerInfo *re_monomerInfo = [[REMonomerInfo alloc] init];
+		re_monomerInfo.monomerId = monomerInfo.monomerId;
+		re_monomerInfo.dataSetId = monomerInfo.dataSetId;
+		re_monomerInfo.heightMax = monomerInfo.heightMax;
+		re_monomerInfo.heightMin = monomerInfo.heightMin;
+		re_monomerInfo.faceClr = [RETool arrToColor:monomerInfo.faceClr];
+		re_monomerInfo.lineClr = [RETool arrToColor:monomerInfo.lineClr];
+		re_monomerInfo.showState = monomerInfo.showState;
+		re_monomerInfo.rgnList = rgnList;
+		
+		[re_monomerList addObject:re_monomerInfo];
+	}
+	[[BlackHole3D sharedSingleton].Monomer setData:re_monomerList];
 }
 
 
