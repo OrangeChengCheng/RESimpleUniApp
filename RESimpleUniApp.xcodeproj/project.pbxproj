@@ -78,6 +78,8 @@
 		18AF50882C807BE100EF27D6 /* Default-Portrait7~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 18AF506B2C807BE100EF27D6 /* Default-Portrait7~ipad.png */; };
 		18AF50892C807BE100EF27D6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18AF506C2C807BE100EF27D6 /* Default.png */; };
 		18AF508A2C807BE100EF27D6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18AF506D2C807BE100EF27D6 /* Default@2x.png */; };
+		18D45B872F503DE9009AC730 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D45B862F503DE9009AC730 /* VideoToolbox.framework */; };
+		18D45B8A2F504D5D009AC730 /* REAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D45B892F504D5D009AC730 /* REAppDelegate.m */; };
 		18DCFC3C2C804D19005BC93F /* __uniappes6.js in Resources */ = {isa = PBXBuildFile; fileRef = 18DCFC122C804D19005BC93F /* __uniappes6.js */; };
 		18DCFC4E2C804D19005BC93F /* PandoraApi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18DCFC242C804D19005BC93F /* PandoraApi.bundle */; };
 		18DCFC562C804D19005BC93F /* uni-jsframework-vue3.js in Resources */ = {isa = PBXBuildFile; fileRef = 18DCFC2C2C804D19005BC93F /* uni-jsframework-vue3.js */; };
@@ -102,7 +104,6 @@
 		18DCFC7A2C804FB1005BC93F /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFC6E2C804FB1005BC93F /* libSDWebImage.a */; };
 		18DCFC7C2C804FED005BC93F /* KSCrash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFC7B2C804FED005BC93F /* KSCrash.framework */; };
 		18DCFE992C8051C6005BC93F /* REUniPluginModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFE962C80516C005BC93F /* REUniPluginModule.framework */; };
-		18DCFF1B2C80587E005BC93F /* REAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DCFF192C80587E005BC93F /* REAppDelegate.m */; };
 		18DCFF1D2C805A04005BC93F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF1C2C805A04005BC93F /* CoreBluetooth.framework */; };
 		18DCFF1F2C805A49005BC93F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF1E2C805A49005BC93F /* GameController.framework */; };
 		18DCFF212C805A7B005BC93F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18DCFF202C805A7B005BC93F /* CoreMotion.framework */; };
@@ -216,6 +217,8 @@
 		18AF506B2C807BE100EF27D6 /* Default-Portrait7~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait7~ipad.png"; sourceTree = "<group>"; };
 		18AF506C2C807BE100EF27D6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		18AF506D2C807BE100EF27D6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		18D45B862F503DE9009AC730 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		18D45B892F504D5D009AC730 /* REAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REAppDelegate.m; sourceTree = "<group>"; };
 		18DCFC122C804D19005BC93F /* __uniappes6.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = __uniappes6.js; sourceTree = "<group>"; };
 		18DCFC242C804D19005BC93F /* PandoraApi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PandoraApi.bundle; sourceTree = "<group>"; };
 		18DCFC2C2C804D19005BC93F /* uni-jsframework-vue3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "uni-jsframework-vue3.js"; sourceTree = "<group>"; };
@@ -718,7 +721,6 @@
 		18DCFE8E2C805096005BC93F /* PGObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGObject.h; sourceTree = "<group>"; };
 		18DCFE8F2C805096005BC93F /* PGPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPlugin.h; sourceTree = "<group>"; };
 		18DCFE912C80516C005BC93F /* REUniPluginModule.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = REUniPluginModule.xcodeproj; path = REUniPluginModule/REUniPluginModule.xcodeproj; sourceTree = "<group>"; };
-		18DCFF192C80587E005BC93F /* REAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REAppDelegate.m; sourceTree = "<group>"; };
 		18DCFF1A2C80587E005BC93F /* REAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REAppDelegate.h; sourceTree = "<group>"; };
 		18DCFF1C2C805A04005BC93F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		18DCFF1E2C805A49005BC93F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
@@ -733,6 +735,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D45B872F503DE9009AC730 /* VideoToolbox.framework in Frameworks */,
 				18DCFF212C805A7B005BC93F /* CoreMotion.framework in Frameworks */,
 				18DCFF1F2C805A49005BC93F /* GameController.framework in Frameworks */,
 				18DCFF1D2C805A04005BC93F /* CoreBluetooth.framework in Frameworks */,
@@ -816,7 +819,7 @@
 				18AF506E2C807BE100EF27D6 /* splash */,
 				18DCFF222C805F00005BC93F /* assets.pak */,
 				18DCFF1A2C80587E005BC93F /* REAppDelegate.h */,
-				18DCFF192C80587E005BC93F /* REAppDelegate.m */,
+				18D45B892F504D5D009AC730 /* REAppDelegate.m */,
 				18DCFE902C805096005BC93F /* inc */,
 				18551EB62C801A15000F9A94 /* Pandora */,
 				18551C0F2C801466000F9A94 /* AppDelegate.h */,
@@ -845,6 +848,7 @@
 		18551C6F2C801709000F9A94 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18D45B862F503DE9009AC730 /* VideoToolbox.framework */,
 				18FF45C62F15F7AB0080F5CC /* CoreAudio.framework */,
 				18FF45C12F15F6F30080F5CC /* CoreAudioTypes.framework */,
 				18AE4E2B2CA3C985003FF7D2 /* storage.framework */,
@@ -2011,7 +2015,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18551C132C801466000F9A94 /* ViewController.m in Sources */,
-				18DCFF1B2C80587E005BC93F /* REAppDelegate.m in Sources */,
+				18D45B8A2F504D5D009AC730 /* REAppDelegate.m in Sources */,
 				18551C092C8011CA000F9A94 /* main.mm in Sources */,
 				18551C142C801466000F9A94 /* AppDelegate.m in Sources */,
 			);
@@ -2221,7 +2225,7 @@
 				REGISTER_APP_GROUPS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2279,7 +2283,7 @@
 				REGISTER_APP_GROUPS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

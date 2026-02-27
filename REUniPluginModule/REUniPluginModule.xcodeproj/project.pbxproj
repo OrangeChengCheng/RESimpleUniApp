@@ -76,6 +76,8 @@
 		189178722EE97FC100B88A94 /* REToolClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 189178712EE97FC100B88A94 /* REToolClass.h */; };
 		18CF16CB2CD4780500F57EE7 /* Module-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18CF16CA2CD4780500F57EE7 /* Module-Info.plist */; };
 		18CF16CD2CD47A3D00F57EE7 /* ModuleRes-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18CF16CC2CD47A3C00F57EE7 /* ModuleRes-Info.plist */; };
+		18D45B832F503D80009AC730 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D45B822F503D80009AC730 /* CoreMedia.framework */; };
+		18D45B852F503DB9009AC730 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D45B842F503DB9009AC730 /* VideoToolbox.framework */; };
 		18DCFEC22C80536A005BC93F /* RETestView.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9A2C80536A005BC93F /* RETestView.h */; };
 		18DCFEC32C80536A005BC93F /* REModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9B2C80536A005BC93F /* REModule.h */; };
 		18DCFEC42C80536A005BC93F /* RERenderComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 18DCFE9C2C80536A005BC93F /* RERenderComponent.h */; };
@@ -224,6 +226,8 @@
 		189178712EE97FC100B88A94 /* REToolClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = REToolClass.h; sourceTree = "<group>"; };
 		18CF16CA2CD4780500F57EE7 /* Module-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Module-Info.plist"; sourceTree = "<group>"; };
 		18CF16CC2CD47A3C00F57EE7 /* ModuleRes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ModuleRes-Info.plist"; sourceTree = "<group>"; };
+		18D45B822F503D80009AC730 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		18D45B842F503DB9009AC730 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		18DCFBF32C804B6D005BC93F /* REUniPluginModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = REUniPluginModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18DCFE9A2C80536A005BC93F /* RETestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETestView.h; sourceTree = "<group>"; };
 		18DCFE9B2C80536A005BC93F /* REModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REModule.h; sourceTree = "<group>"; };
@@ -306,6 +310,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D45B852F503DB9009AC730 /* VideoToolbox.framework in Frameworks */,
+				18D45B832F503D80009AC730 /* CoreMedia.framework in Frameworks */,
 				18FF45F02F15FB490080F5CC /* libiconv.tbd in Frameworks */,
 				18FF45EE2F15FB420080F5CC /* AudioToolbox.framework in Frameworks */,
 				18FF45EC2F15FB3B0080F5CC /* AVFoundation.framework in Frameworks */,
@@ -464,6 +470,8 @@
 		18DCFEE82C80541A005BC93F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18D45B842F503DB9009AC730 /* VideoToolbox.framework */,
+				18D45B822F503D80009AC730 /* CoreMedia.framework */,
 				18FF45EF2F15FB490080F5CC /* libiconv.tbd */,
 				18FF45ED2F15FB420080F5CC /* AudioToolbox.framework */,
 				18FF45EB2F15FB3B0080F5CC /* AVFoundation.framework */,
@@ -1010,7 +1018,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1061,7 +1069,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

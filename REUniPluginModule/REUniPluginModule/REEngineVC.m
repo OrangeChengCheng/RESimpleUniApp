@@ -76,6 +76,9 @@ static CGFloat stateBarHeight = 0.0;
 				if (isSelected) {
 					[webPopData.webPopManager showWebPop];
 					[webPopData.webPopManager sendObjAppToWebWithObject:params type:@"open"];
+					if (strongSelf.curSelProInfo != nil) {
+						[webPopData.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:strongSelf.curSelProInfo[@"selType"]];
+					}
 					strongSelf.currWebPop = webPopData;
 				} else {
 					[webPopData.webPopManager sendObjAppToWebWithObject:params type:@"cloose"];
@@ -183,6 +186,7 @@ static CGFloat stateBarHeight = 0.0;
 					return;
 				}
 				strongSelf.curSelProInfo = [NSMutableDictionary dictionary];
+				strongSelf.curSelProInfo[@"selType"] = @"Listen.systemSelElement";
 				strongSelf.curSelProInfo[@"dataSetType"] = @(dataSet.dataSetType);
 				strongSelf.curSelProInfo[@"probeInfo"] = probe;
 				if (dataSet.dataSetType != 0) {
@@ -216,6 +220,7 @@ static CGFloat stateBarHeight = 0.0;
 					dataSet.dataSetSGContent = @"";
 				}
 				strongSelf.curSelProInfo = [NSMutableDictionary dictionary];
+				strongSelf.curSelProInfo[@"selType"] = @"Listen.systemSelShpElement";
 				strongSelf.curSelProInfo[@"probeInfo"] = probe;
 				strongSelf.curSelProInfo[@"dataSetList"] = temp;// 交互操作的信息不需要content的数据，减少数据传输
 //				strongSelf.curSelProInfo[@"dataSetList"] = strongSelf.sceneUniData.dataSetList;
