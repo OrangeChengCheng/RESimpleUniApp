@@ -32,7 +32,7 @@
 	];
 	self.tipLB.numberOfLines = 0;
 	// 显示第一条提示
-	self.tipLB.text = self.tipsArray.firstObject;
+	self.tipLB.text = @"正在为您加载数据，请稍等片刻";
 }
 
 
@@ -61,12 +61,12 @@
 
 - (void)showLoading {
 	self.hidden = NO;
-	// 设置定时器，每3秒更换一次提示
-	self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(changeTip) userInfo:nil repeats:YES];
+//	// 设置定时器，每3秒更换一次提示
+//	self.timer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(changeTip) userInfo:nil repeats:YES];
 }
 
 - (void)hiddenLoading {
-	[self changeTip];
+//	[self changeTip];
 	self.hidden = YES;
 }
 

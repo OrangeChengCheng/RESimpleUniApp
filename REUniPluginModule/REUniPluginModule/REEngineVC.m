@@ -112,9 +112,8 @@ static CGFloat stateBarHeight = 0.0;
 	self.view.backgroundColor = [UIColor whiteColor];
 	stateBarHeight = kStatusBarHeight;
 	
-	[self addReaderView];
-	
 	[self.view addSubview:self.re_nav];
+	[self addReaderView];
 	
 	[self.view addSubview:self.loadingView];
 	
@@ -122,6 +121,308 @@ static CGFloat stateBarHeight = 0.0;
 	
 	[self.loadingView showLoading];
 	
+	// 注册引擎事件
+	[self addEngineListen];
+	
+	// 注册UniToApp消息
+	WEAKSELF
+	[REModule registerUniToAppMsg:^(NSDictionary * _Nonnull options) {
+		STRONGSELF
+		[strongSelf handleEngineSDK:options msgWhere:1];
+	}];
+	[REModule sendMsgAppToUni:REModuleMsg_T1 message:@"iOS REEngineVC Created!"];
+}
+
+
+#pragma mark - 初始化界面
+- (void)addReaderView {
+	[self changeEngineUI];
+//	if (!self.isUniAppComp) [self addBtn];
+}
+
+- (void)changeEngineUI {
+	// 创建自定义界面
+	self.customView = [[UIView alloc] init];
+	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.re_nav.bounds.size.height, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - self.re_nav.bounds.size.height));
+	[self.view addSubview:self.customView];
+	self.customView.clipsToBounds = YES;
+	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+	
+	[[BlackHole3D sharedSingleton] getRenderView].frame = self.customView.bounds;
+	[self.customView addSubview:[[BlackHole3D sharedSingleton] getRenderView]];
+}
+
+- (void)addBtn {
+	UIView *backView = [[UIView alloc] init];
+	[self.customView addSubview:backView];
+	[backView mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.top.mas_equalTo(14 + kStatusBarHeight);
+		make.left.mas_equalTo(20);
+		make.width.mas_equalTo(60.0);
+		make.height.mas_equalTo(60.0);
+	}];
+	
+	UIImageView *backIV = [[UIImageView alloc] init];
+	backIV.image = [UIImage imageNamed:@"icon_back_circle.png" inBundle:REUniPluginModule_bundle compatibleWithTraitCollection:nil];
+	[backView addSubview:backIV];
+	[backIV mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.top.mas_equalTo(0);
+		make.left.mas_equalTo(0);
+		make.width.mas_equalTo(52.0);
+		make.height.mas_equalTo(52.0);
+	}];
+	
+	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+	[btn setTitle:@"" forState:UIControlStateNormal];
+	[backView addSubview:btn];
+	[btn mas_makeConstraints:^(MASConstraintMaker *make) {
+		make.top.right.bottom.left.equalTo(backView);
+	}];
+	[btn addTarget:self action:@selector(backBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
+#pragma mark - 返回操作
+- (void)backBtnAction:(UIButton *)sender {
+	[self endRenderAndExit];
+}
+
+
+- (void)endRenderAndExit {
+	if (_sceneUniData.waterList.count) { [[BlackHole3D sharedSingleton].Water delData:@[]]; }
+	if (_sceneUniData.extrudeList.count) { [[BlackHole3D sharedSingleton].Extrude delData:@[]]; }
+	if (_sceneUniData.monomerList.count) { [[BlackHole3D sharedSingleton].Monomer delData:@[]]; }
+	
+	[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];//关闭ui方式重新加载项目的时候先加载出来
+	[[BlackHole3D sharedSingleton] setViewMode:BIM viewport1:None screenMode:Single];
+	// 卸载所有场景
+	if (self.sceneUniData.shareType == 1 && [self.sceneUniData.shareDataType isEqual:@"Cad"]) {
+		[[BlackHole3D sharedSingleton].CAD unloadCAD];
+	} else {
+		[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
+	}
+	double delayInSeconds = 0.15;
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		// 界面移除
+		if (self.isUniAppComp) {
+			if ([self.delegate respondsToSelector:@selector(exitRenderCallback:)]) {
+				[self.delegate exitRenderCallback:YES];
+			}
+		} else {
+			// 界面移除
+			[self.customView removeFromSuperview];
+			[[BlackHole3D sharedSingleton] endRender];
+			[self dismissViewControllerAnimated:YES completion:^{
+				UINavigationController *rootC = [UIApplication sharedApplication].keyWindow.rootViewController;
+				UIViewController *currentViewController = rootC.visibleViewController;
+				[currentViewController setNeedsStatusBarAppearanceUpdate];
+			}];
+		}
+	});
+}
+
+
+#pragma mark - 初始化PopWebView
+- (void)initWebView {
+	for (REWebPopData *webPopData in _webPopList) {
+		webPopData.webPopManager = [REWebViewManager initWithDelegate:self parentView:self.view height:webPopData.webPopHeight webViewUrl:webPopData.webPopUrl webViewParams:webPopData.webPopParams];
+	}
+}
+
+
+#pragma mark - REWebViewManagerDelegate
+- (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
+//	NSLog(@"webData: %@", result);
+	
+	[self handleEngineSDK:result msgWhere:2];
+}
+
+- (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
+	if (success) {
+		NSLog(@"WebView 加载成功");
+	} else {
+		NSLog(@"WebView 加载失败");
+		[RETip showTipStaticAnimte:self.view message:@"WebView 弹窗加载失败" level:RETip_L1];
+	}
+}
+
+
+
+#pragma mark - 引擎sdk调用
+- (void)handleEngineSDK:(NSDictionary *)jsonObject msgWhere:(int)msgWhere {
+	NSString *msgId = [[jsonObject objectForKey:@"msgId"] stringValue];
+	NSString *type = [[jsonObject objectForKey:@"type"] stringValue];
+	NSString *webPopId = [[jsonObject objectForKey:@"webPopId"] stringValue];
+	NSDictionary *json_data = [jsonObject.allKeys containsObject:@"data"] ? [jsonObject objectForKey:@"data"] : nil;
+	if (!json_data) {
+		return;
+	}
+	REBridgeData *bridgeData = [REBridgeData yy_modelWithDictionary:json_data];
+	// 获取弹窗操作
+	REWebPopData *webPopData = nil;
+	if (webPopId.length > 0) {
+		NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+			return [obj.webPopId isEqualToString:webPopId];
+		}];
+		if (matchIndex != NSNotFound) {
+			webPopData = [_webPopList objectAtIndex:matchIndex];
+		}
+	}
+	
+	if ([type isEqualToString:@"log"]) {
+		NSLog(@"--->>【WebLog】: %@", bridgeData.log);
+	} else if ([type isEqualToString:@"requestAppToWeb"]) {
+		if (webPopData && msgWhere == 2) {
+			[RERequest requestWithUrl:bridgeData.requestData[@"url"] method:bridgeData.requestData[@"type"] headers:bridgeData.requestData[@"headers"] params:bridgeData.requestData[@"param"] finish:^(id  _Nonnull respone) {
+				[webPopData.webPopManager sendObjAppToWebCallbackWithObject:respone msgId:msgId];
+			}];
+		}
+	} else if ([type isEqualToString:@"updateTreeData"]) {
+		if (webPopData && msgWhere == 2) {
+			REWebPopData *webPopData_property = nil;
+			NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+				return [obj.webPopId isEqualToString:@"web_pop_property"];
+			}];
+			if (matchIndex != NSNotFound) {
+				webPopData_property = [_webPopList objectAtIndex:matchIndex];
+			}
+			if (webPopData_property) {
+				[webPopData_property.webPopManager sendObjAppToWebWithObject:bridgeData.treeData type:@"updateTreeData"];
+			}
+		}
+	} else if ([type isEqualToString:@"cloose"]) {
+		if (webPopData) {
+			[webPopData.webPopManager hiddenWebPop];
+			webPopData.webPopShow = NO;
+			[_re_btnPlane updateStateWithBtnId:webPopData.webPopId isSelected:NO];
+			if ([_currWebPop.webPopId isEqualToString:webPopData.webPopId]) {
+				_currWebPop = nil;
+			}
+		}
+	} else if ([type isEqualToString:@"popWebFull"]) {
+		if (_currWebPop) {
+			[_currWebPop.webPopManager setFullScreen:bridgeData.full];
+		}
+	} else if ([type isEqualToString:@"setElemAlpha"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemAlpha:bridgeData.dataSetId elemIdList:bridgeData.elemIdList elemAlpha:bridgeData.alpha alphaWeight:255];
+	} else if ([type isEqualToString:@"setElemsValidState"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemsValidState:bridgeData.dataSetId elemIdList:bridgeData.elemIdList enable:bridgeData.visible];
+	} else if ([type isEqualToString:@"setCamLocateToDataSet"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:bridgeData.dataSetId backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"setCamLocateToElem"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToElem:bridgeData.locIDList backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"setElemAttr"]) {
+		REElemAttr *elemAttr = [[REElemAttr alloc] init];
+		elemAttr.dataSetId = bridgeData.dataSetId;
+		elemAttr.elemIdList = bridgeData.elemIdList;
+		elemAttr.elemClr = bridgeData.elemClrObj;
+		[[BlackHole3D sharedSingleton].BIM setElemAttr:elemAttr];
+	} else if ([type isEqualToString:@"resetElemAttr"]) {
+		[[BlackHole3D sharedSingleton].BIM resetElemAttr:bridgeData.dataSetId elemIdList:bridgeData.elemIdList];
+	} else if ([type isEqualToString:@"setCamLocateTo"]) {
+		RECamLoc *camLoc = [[RECamLoc alloc] init];
+		camLoc.camPos = bridgeData.camPosObj;
+		camLoc.camDir = bridgeData.camDirObj;
+		camLoc.camRotate = bridgeData.camRotateObj;
+		[[BlackHole3D sharedSingleton].Camera setCamLocateTo:camLoc locDelay:bridgeData.locDelay locTime:bridgeData.locTime];
+	} else if ([type isEqualToString:@"delAllSelElems"]) {
+		[[BlackHole3D sharedSingleton].BIM delAllSelElems];
+	} else if ([type isEqualToString:@"addToSelElems"]) {
+		[[BlackHole3D sharedSingleton].BIM addToSelElems:bridgeData.dataSetId elemIdList:bridgeData.elemIdList];
+	} else if ([type isEqualToString:@"getCamLocate"]) {
+		RECamLoc *camLoc = [[BlackHole3D sharedSingleton].Camera getCamLocate];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:camLoc msgId:msgId];
+		} else if (msgWhere == 1) {
+			[REModule sendMsgAppToUni:REModule_GetCamLoc message:camLoc];
+		}
+	}else if ([type isEqualToString:@"setSelElemsAttr"]) {
+		RESelElemsAttr *reSelElemsAttr = [[RESelElemsAttr alloc] init];
+		reSelElemsAttr.elemClr = bridgeData.elemClrObj;
+		reSelElemsAttr.probeMask = bridgeData.probeMask;
+		reSelElemsAttr.attrValid = bridgeData.attrValid;
+		[[BlackHole3D sharedSingleton].BIM setSelElemsAttr:reSelElemsAttr];
+	} else if ([type isEqualToString:@"getBIMDataSetBV"]) {
+		REBBox3D *bbox = [[BlackHole3D sharedSingleton].BIM getTotalBV:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"getGridDataSetBV"]) {
+		REBBox3D *bbox = [[BlackHole3D sharedSingleton].Grid getDataSetBV:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setCamLocToWater"]) {
+		[[BlackHole3D sharedSingleton].Water setCamToData:bridgeData.waterNameList];
+	} else if ([type isEqualToString:@"setCamLocToExtrude"]) {
+		[[BlackHole3D sharedSingleton].Extrude setCamToData:bridgeData.extrudeIdst];
+	} else if ([type isEqualToString:@"getDataSetTerrId"]) {
+		NSString *terrId = [[BlackHole3D sharedSingleton].Terrain getDataSetTerrId:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:terrId msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"getAllUnitNames"]) {
+		NSArray *unitNames = [[BlackHole3D sharedSingleton].Terrain getAllUnitNames:bridgeData.dataSetId];
+		if (_currWebPop && msgWhere == 2) {
+			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:unitNames msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setUnitActive"]) {
+		[[BlackHole3D sharedSingleton].Terrain setUnitActive:bridgeData.dataSetId unitId:bridgeData.unitId resType:bridgeData.terrResEm active:bridgeData.active];
+	} else if ([type isEqualToString:@"setGridValidState"]) {
+		[[BlackHole3D sharedSingleton].Grid setValidState:bridgeData.dataSetId enable:bridgeData.visible];
+	} else if ([type isEqualToString:@"waterVisible"]) {
+		[[BlackHole3D sharedSingleton].Water setVisible:bridgeData.waterName visible:bridgeData.visible];
+	} else if ([type isEqualToString:@"extrudeVisible"]) {
+		[[BlackHole3D sharedSingleton].Extrude setVisible:bridgeData.extrudeId visible:bridgeData.visible];
+	} else if ([type isEqualToString:@"setCamLocateToBound"]) {
+		[[BlackHole3D sharedSingleton].Camera setCamLocateToBound:bridgeData.box3D backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
+	} else if ([type isEqualToString:@"getDataSetAllElemIDs"]) {
+		NSArray *elemIdList = [[BlackHole3D sharedSingleton].BIM getDataSetAllElemID:bridgeData.dataSetId visibalOnly:bridgeData.visibalOnly];
+		if (webPopData && msgWhere == 2) {
+			[webPopData.webPopManager sendObjAppToWebCallbackWithObject:elemIdList msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setClipPlanesContourLineClr"]) {
+		[[BlackHole3D sharedSingleton].BIM setClipPlanesContourLineClr:bridgeData.lineClrObj];
+	} else if ([type isEqualToString:@"setClipSpecifyHeight"]) {
+		[[BlackHole3D sharedSingleton].Clip setClipSpecifyHeight:bridgeData.dataSetId topHeight:bridgeData.topHeight bottomHeight:bridgeData.bottomHeight single:bridgeData.single];
+		_currIsRoomClip = YES;
+	} else if ([type isEqualToString:@"endClip"]) {
+		_currIsRoomClip = NO;
+		[[BlackHole3D sharedSingleton].Clip endClip];
+	} else if ([type isEqualToString:@"setElemDepthBias"]) {
+		[[BlackHole3D sharedSingleton].BIM setElemDepthBias:bridgeData.dataSetId elemIdList:bridgeData.elemIdList depthBias:bridgeData.depthBias];
+	} else if ([type isEqualToString:@"setCamLocToMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer setCamToData:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"addToSelMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer addToSel:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"delFromSelMonomer"]) {
+		[[BlackHole3D sharedSingleton].Monomer delFromSel:bridgeData.monomerIds];
+	} else if ([type isEqualToString:@"getMonomerSelAttr"]) {
+		REMonomerClrAttr *monomerClrAttr = [[BlackHole3D sharedSingleton].Monomer getSelAttr];
+		if (webPopData && msgWhere == 2) {
+			[webPopData.webPopManager sendObjAppToWebCallbackWithObject:monomerClrAttr msgId:msgId];
+		}
+	} else if ([type isEqualToString:@"setMonomerSelAttr"]) {
+		REMonomerClrAttr *monomerClrAttr = [[REMonomerClrAttr alloc] init];
+		monomerClrAttr.faceClr = bridgeData.faceClrObj;
+		monomerClrAttr.faceClrWeight = bridgeData.faceClrWeight;
+		monomerClrAttr.faceAlphaWeight = bridgeData.faceAlphaWeight;
+		monomerClrAttr.lineClr = bridgeData.lineClrObj;
+		monomerClrAttr.lineClrWeight = bridgeData.lineClrWeight;
+		monomerClrAttr.lineAlphaWeight = bridgeData.lineAlphaWeight;
+		[[BlackHole3D sharedSingleton].Monomer setSelAttr:monomerClrAttr];
+	} else if ([type isEqualToString:@"monomerVisible"]) {
+		[[BlackHole3D sharedSingleton].Monomer setVisible:bridgeData.monomerIds visible:bridgeData.visible];
+	}
+}
+
+
+
+
+
+#pragma mark - 引擎监听事件
+- (void)addEngineListen {
 	WEAKSELF
 	[[BlackHole3D sharedSingleton] dataSetLoadProgress:^(float progress, NSString * _Nullable info) {
 		STRONGSELF
@@ -236,292 +537,7 @@ static CGFloat stateBarHeight = 0.0;
 			[strongSelf.currWebPop.webPopManager sendObjAppToWebWithObject:strongSelf.curSelProInfo type:@"Listen.systemSelShpElement"];
 		}
 	}];
-	
-	// 注册UniToApp消息
-	[REModule registerUniToAppMsg:^(NSDictionary * _Nonnull options) {
-		STRONGSELF
-		[strongSelf handleEngineSDK:options msgWhere:1];
-	}];
-	[REModule sendMsgAppToUni:REModuleMsg_T1 message:@"iOS REEngineVC Created!"];
 }
-
-
-#pragma mark - 初始化界面
-- (void)addReaderView {
-	[self changeEngineUI];
-//	if (!self.isUniAppComp) [self addBtn];
-}
-
-- (void)changeEngineUI {
-	// 创建自定义界面
-	self.customView = [[UIView alloc] init];
-	self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
-	[self.view addSubview:self.customView];
-	self.customView.clipsToBounds = YES;
-	self.customView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-
-	[[BlackHole3D sharedSingleton] getRenderView].frame = self.customView.bounds;
-	[self.customView addSubview:[[BlackHole3D sharedSingleton] getRenderView]];
-}
-
-
-- (void)addBtn {
-	UIView *backView = [[UIView alloc] init];
-	[self.customView addSubview:backView];
-	[backView mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.mas_equalTo(14 + kStatusBarHeight);
-		make.left.mas_equalTo(20);
-		make.width.mas_equalTo(60.0);
-		make.height.mas_equalTo(60.0);
-	}];
-	
-	UIImageView *backIV = [[UIImageView alloc] init];
-	backIV.image = [UIImage imageNamed:@"icon_back_circle.png" inBundle:REUniPluginModule_bundle compatibleWithTraitCollection:nil];
-	[backView addSubview:backIV];
-	[backIV mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.mas_equalTo(0);
-		make.left.mas_equalTo(0);
-		make.width.mas_equalTo(52.0);
-		make.height.mas_equalTo(52.0);
-	}];
-	
-	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-	[btn setTitle:@"" forState:UIControlStateNormal];
-	[backView addSubview:btn];
-	[btn mas_makeConstraints:^(MASConstraintMaker *make) {
-		make.top.right.bottom.left.equalTo(backView);
-	}];
-	[btn addTarget:self action:@selector(backBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-}
-
-
-#pragma mark - 返回操作
-- (void)backBtnAction:(UIButton *)sender {
-	[self endRenderAndExit];
-}
-
-
-- (void)endRenderAndExit {
-	[[BlackHole3D sharedSingleton].Graphics setSysUIPanelVisible:NO];//关闭ui方式重新加载项目的时候先加载出来
-	[[BlackHole3D sharedSingleton] setViewMode:BIM viewport1:None screenMode:Single];
-	// 卸载所有场景
-	if (self.sceneUniData.shareType == 1 && [self.sceneUniData.shareDataType isEqual:@"Cad"]) {
-		[[BlackHole3D sharedSingleton].CAD unloadCAD];
-	} else {
-		[[BlackHole3D sharedSingleton].Model unloadAllDataSet];
-	}
-	double delayInSeconds = 0.15;
-	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		// 界面移除
-		if (self.isUniAppComp) {
-			if ([self.delegate respondsToSelector:@selector(exitRenderCallback:)]) {
-				[self.delegate exitRenderCallback:YES];
-			}
-		} else {
-			// 界面移除
-			[self.customView removeFromSuperview];
-			[[BlackHole3D sharedSingleton] endRender];
-			[self dismissViewControllerAnimated:YES completion:^{
-				UINavigationController *rootC = [UIApplication sharedApplication].keyWindow.rootViewController;
-				UIViewController *currentViewController = rootC.visibleViewController;
-				[currentViewController setNeedsStatusBarAppearanceUpdate];
-			}];
-		}
-	});
-}
-
-
-#pragma mark - 初始化PopWebView
-- (void)initWebView {
-	for (REWebPopData *webPopData in _webPopList) {
-		webPopData.webPopManager = [REWebViewManager initWithDelegate:self parentView:self.view height:webPopData.webPopHeight webViewUrl:webPopData.webPopUrl webViewParams:webPopData.webPopParams];
-	}
-}
-
-
-#pragma mark - REWebViewManagerDelegate
-- (void)webViewManager:(id)manager didReceiveResult:(NSDictionary *)result {
-//	NSLog(@"webData: %@", result);
-	
-	[self handleEngineSDK:result msgWhere:2];
-}
-
-- (void)webViewManager:(id)manager didFinishLoading:(BOOL)success {
-	if (success) {
-		NSLog(@"WebView 加载成功");
-	} else {
-		NSLog(@"WebView 加载失败");
-	}
-}
-
-
-
-#pragma mark - 引擎sdk调用
-- (void)handleEngineSDK:(NSDictionary *)jsonObject msgWhere:(int)msgWhere {
-	NSString *msgId = [[jsonObject objectForKey:@"msgId"] stringValue];
-	NSString *type = [[jsonObject objectForKey:@"type"] stringValue];
-	NSString *webPopId = [[jsonObject objectForKey:@"webPopId"] stringValue];
-	NSDictionary *json_data = [jsonObject.allKeys containsObject:@"data"] ? [jsonObject objectForKey:@"data"] : nil;
-	if (!json_data) {
-		return;
-	}
-	REBridgeData *bridgeData = [REBridgeData yy_modelWithDictionary:json_data];
-	// 获取弹窗操作
-	REWebPopData *webPopData = nil;
-	if (webPopId.length > 0) {
-		NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-			return [obj.webPopId isEqualToString:webPopId];
-		}];
-		if (matchIndex != NSNotFound) {
-			webPopData = [_webPopList objectAtIndex:matchIndex];
-		}
-	}
-	
-	if ([type isEqualToString:@"log"]) {
-		NSLog(@"--->>【WebLog】: %@", bridgeData.log);
-	} else if ([type isEqualToString:@"requestAppToWeb"]) {
-		if (webPopData && msgWhere == 2) {
-			[RERequest requestWithUrl:bridgeData.requestData[@"url"] method:bridgeData.requestData[@"type"] headers:bridgeData.requestData[@"headers"] params:bridgeData.requestData[@"param"] finish:^(id  _Nonnull respone) {
-				[webPopData.webPopManager sendObjAppToWebCallbackWithObject:respone msgId:msgId];
-			}];
-		}
-	} else if ([type isEqualToString:@"updateTreeData"]) {
-		if (webPopData && msgWhere == 2) {
-			REWebPopData *webPopData_property = nil;
-			NSInteger matchIndex = [_webPopList indexOfObjectPassingTest:^BOOL(REWebPopData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-				return [obj.webPopId isEqualToString:@"web_pop_property"];
-			}];
-			if (matchIndex != NSNotFound) {
-				webPopData_property = [_webPopList objectAtIndex:matchIndex];
-			}
-			if (webPopData_property) {
-				[webPopData_property.webPopManager sendObjAppToWebWithObject:bridgeData.treeData type:@"updateTreeData"];
-			}
-		}
-	} else if ([type isEqualToString:@"cloose"]) {
-		if (webPopData) {
-			[webPopData.webPopManager hiddenWebPop];
-			webPopData.webPopShow = NO;
-			[_re_btnPlane updateStateWithBtnId:webPopData.webPopId isSelected:NO];
-			if ([_currWebPop.webPopId isEqualToString:webPopData.webPopId]) {
-				_currWebPop = nil;
-			}
-		}
-	} else if ([type isEqualToString:@"popWebFull"]) {
-		if (_currWebPop) {
-			[_currWebPop.webPopManager setFullScreen:bridgeData.full];
-		}
-	} else if ([type isEqualToString:@"setElemAlpha"]) {
-		[[BlackHole3D sharedSingleton].BIM setElemAlpha:bridgeData.dataSetId elemIdList:bridgeData.elemIdList elemAlpha:bridgeData.alpha alphaWeight:255];
-	} else if ([type isEqualToString:@"setElemsValidState"]) {
-		[[BlackHole3D sharedSingleton].BIM setElemsValidState:bridgeData.dataSetId elemIdList:bridgeData.elemIdList enable:bridgeData.visible];
-	} else if ([type isEqualToString:@"setCamLocateToDataSet"]) {
-		[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:bridgeData.dataSetId backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
-	} else if ([type isEqualToString:@"setCamLocateToElem"]) {
-		[[BlackHole3D sharedSingleton].Camera setCamLocateToElem:bridgeData.locIDList backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
-	} else if ([type isEqualToString:@"setElemAttr"]) {
-		REElemAttr *elemAttr = [[REElemAttr alloc] init];
-		elemAttr.dataSetId = bridgeData.dataSetId;
-		elemAttr.elemIdList = bridgeData.elemIdList;
-		elemAttr.elemClr = bridgeData.elemClrObj;
-		[[BlackHole3D sharedSingleton].BIM setElemAttr:elemAttr];
-	} else if ([type isEqualToString:@"resetElemAttr"]) {
-		[[BlackHole3D sharedSingleton].BIM resetElemAttr:bridgeData.dataSetId elemIdList:bridgeData.elemIdList];
-	} else if ([type isEqualToString:@"setCamLocateTo"]) {
-		RECamLoc *camLoc = [[RECamLoc alloc] init];
-		camLoc.camPos = bridgeData.camPosObj;
-		camLoc.camDir = bridgeData.camDirObj;
-		camLoc.camRotate = bridgeData.camRotateObj;
-		[[BlackHole3D sharedSingleton].Camera setCamLocateTo:camLoc locDelay:bridgeData.locDelay locTime:bridgeData.locTime];
-	} else if ([type isEqualToString:@"delAllSelElems"]) {
-		[[BlackHole3D sharedSingleton].BIM delAllSelElems];
-	} else if ([type isEqualToString:@"getCamLocate"]) {
-		RECamLoc *camLoc = [[BlackHole3D sharedSingleton].Camera getCamLocate];
-		if (_currWebPop && msgWhere == 2) {
-			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:camLoc msgId:msgId];
-		} else if (msgWhere == 1) {
-			[REModule sendMsgAppToUni:REModule_GetCamLoc message:camLoc];
-		}
-	}else if ([type isEqualToString:@"setSelElemsAttr"]) {
-		RESelElemsAttr *reSelElemsAttr = [[RESelElemsAttr alloc] init];
-		reSelElemsAttr.elemClr = bridgeData.elemClrObj;
-		reSelElemsAttr.probeMask = bridgeData.probeMask;
-		reSelElemsAttr.attrValid = bridgeData.attrValid;
-		[[BlackHole3D sharedSingleton].BIM setSelElemsAttr:reSelElemsAttr];
-	} else if ([type isEqualToString:@"getBIMDataSetBV"]) {
-		REBBox3D *bbox = [[BlackHole3D sharedSingleton].BIM getTotalBV:bridgeData.dataSetId];
-		if (_currWebPop && msgWhere == 2) {
-			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
-		}
-	} else if ([type isEqualToString:@"getGridDataSetBV"]) {
-		REBBox3D *bbox = [[BlackHole3D sharedSingleton].Grid getDataSetBV:bridgeData.dataSetId];
-		if (_currWebPop && msgWhere == 2) {
-			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:bbox msgId:msgId];
-		}
-	} else if ([type isEqualToString:@"setCamLocToWater"]) {
-		[[BlackHole3D sharedSingleton].Water setCamToData:bridgeData.waterNameList];
-	} else if ([type isEqualToString:@"setCamLocToExtrude"]) {
-		[[BlackHole3D sharedSingleton].Extrude setCamToData:bridgeData.extrudeIdst];
-	} else if ([type isEqualToString:@"getDataSetTerrId"]) {
-		NSString *terrId = [[BlackHole3D sharedSingleton].Terrain getDataSetTerrId:bridgeData.dataSetId];
-		if (_currWebPop && msgWhere == 2) {
-			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:terrId msgId:msgId];
-		}
-	} else if ([type isEqualToString:@"getAllUnitNames"]) {
-		NSArray *unitNames = [[BlackHole3D sharedSingleton].Terrain getAllUnitNames:bridgeData.dataSetId];
-		if (_currWebPop && msgWhere == 2) {
-			[_currWebPop.webPopManager sendObjAppToWebCallbackWithObject:unitNames msgId:msgId];
-		}
-	} else if ([type isEqualToString:@"setUnitActive"]) {
-		[[BlackHole3D sharedSingleton].Terrain setUnitActive:bridgeData.dataSetId unitId:bridgeData.unitId resType:bridgeData.terrResEm active:bridgeData.active];
-	} else if ([type isEqualToString:@"setGridValidState"]) {
-		[[BlackHole3D sharedSingleton].Grid setValidState:bridgeData.dataSetId enable:bridgeData.visible];
-	} else if ([type isEqualToString:@"waterVisible"]) {
-		[[BlackHole3D sharedSingleton].Water setVisible:bridgeData.waterName visible:bridgeData.visible];
-	} else if ([type isEqualToString:@"extrudeVisible"]) {
-		[[BlackHole3D sharedSingleton].Extrude setVisible:bridgeData.extrudeId visible:bridgeData.visible];
-	} else if ([type isEqualToString:@"setCamLocateToBound"]) {
-		[[BlackHole3D sharedSingleton].Camera setCamLocateToBound:bridgeData.box3D backDepth:bridgeData.backDepth locType:bridgeData.locTypeEm];
-	} else if ([type isEqualToString:@"getDataSetAllElemIDs"]) {
-		[[BlackHole3D sharedSingleton].BIM getDataSetAllElemID:bridgeData.dataSetId visibalOnly:bridgeData.visibalOnly];
-	} else if ([type isEqualToString:@"setClipPlanesContourLineClr"]) {
-		[[BlackHole3D sharedSingleton].BIM setClipPlanesContourLineClr:bridgeData.lineClrObj];
-	} else if ([type isEqualToString:@"setClipSpecifyHeight"]) {
-		[[BlackHole3D sharedSingleton].Clip setClipSpecifyHeight:bridgeData.dataSetId topHeight:bridgeData.topHeight bottomHeight:bridgeData.bottomHeight single:bridgeData.single];
-		_currIsRoomClip = YES;
-	} else if ([type isEqualToString:@"endClip"]) {
-		_currIsRoomClip = NO;
-		[[BlackHole3D sharedSingleton].Clip endClip];
-	} else if ([type isEqualToString:@"setElemDepthBias"]) {
-		[[BlackHole3D sharedSingleton].BIM setElemDepthBias:bridgeData.dataSetId elemIdList:bridgeData.elemIdList depthBias:bridgeData.depthBias];
-	} else if ([type isEqualToString:@"setCamLocToMonomer"]) {
-		[[BlackHole3D sharedSingleton].Monomer setCamToData:bridgeData.monomerIds];
-	} else if ([type isEqualToString:@"addToSelMonomer"]) {
-		[[BlackHole3D sharedSingleton].Monomer addToSel:bridgeData.monomerIds];
-	} else if ([type isEqualToString:@"delFromSelMonomer"]) {
-		[[BlackHole3D sharedSingleton].Monomer delFromSel:bridgeData.monomerIds];
-	} else if ([type isEqualToString:@"getMonomerSelAttr"]) {
-		REMonomerClrAttr *monomerClrAttr = [[BlackHole3D sharedSingleton].Monomer getSelAttr];
-		if (webPopData && msgWhere == 2) {
-			[webPopData.webPopManager sendObjAppToWebCallbackWithObject:monomerClrAttr msgId:msgId];
-		}
-	} else if ([type isEqualToString:@"setMonomerSelAttr"]) {
-		REMonomerClrAttr *monomerClrAttr = [[REMonomerClrAttr alloc] init];
-		monomerClrAttr.faceClr = bridgeData.faceClrObj;
-		monomerClrAttr.faceClrWeight = bridgeData.faceClrWeight;
-		monomerClrAttr.faceAlphaWeight = bridgeData.faceAlphaWeight;
-		monomerClrAttr.lineClr = bridgeData.lineClrObj;
-		monomerClrAttr.lineClrWeight = bridgeData.lineClrWeight;
-		monomerClrAttr.lineAlphaWeight = bridgeData.lineAlphaWeight;
-		[[BlackHole3D sharedSingleton].Monomer setSelAttr:monomerClrAttr];
-	} else if ([type isEqualToString:@"monomerVisible"]) {
-		[[BlackHole3D sharedSingleton].Monomer setVisible:bridgeData.monomerIds visible:bridgeData.visible];
-	}
-}
-
-
-
 
 
 #pragma mark - 按钮面板
@@ -648,7 +664,7 @@ static CGFloat stateBarHeight = 0.0;
 		} else {
 			if (success) {
 				if (![[BlackHole3D sharedSingleton].Model getAllDataSetReady]) return;
-				if (strongSelf.sceneUniData.shareType == 2 && strongSelf.sceneUniData.camDefaultDataSetId.length > 0 && (!(strongSelf.sceneUniData.defaultCamLoc && strongSelf.sceneUniData.defaultCamLoc.camPos && strongSelf.sceneUniData.defaultCamLoc.force))) {
+				if (strongSelf.sceneUniData.shareType == 2 && strongSelf.sceneUniData.camDefaultDataSetId.length > 0 && !strongSelf.sceneUniData.defaultCamLoc) {
 					[[BlackHole3D sharedSingleton].Camera setCamLocateToDataSet:strongSelf.sceneUniData.camDefaultDataSetId backDepth:1.0 locType:CAM_DIR_CURRENT];
 				}
 				// 处理地形数据层级

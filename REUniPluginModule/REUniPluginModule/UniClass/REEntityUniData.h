@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *dataSetId;
 @property (nonatomic, copy) NSString *entityType;
 @property (nonatomic, copy) NSString *dataSetCRS;
+@property (nonatomic, copy) NSString *entityId;
 @property (nonatomic, assign) unsigned int elemId;
 @property (nonatomic, strong) NSArray *scale;
 @property (nonatomic, strong) NSArray *rotate;

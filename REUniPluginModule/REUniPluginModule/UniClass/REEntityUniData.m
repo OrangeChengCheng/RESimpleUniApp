@@ -14,7 +14,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		_dataSetId = @""; _entityType = @""; _dataSetCRS = @""; _elemId = 0;
+		_dataSetId = @""; _entityType = @""; _dataSetCRS = @""; _entityId = @""; _elemId = 0;
 		_scale = @[@1.0, @1.0, @1.0]; _rotate = @[@0.0, @0.0, @0.0, @1.0]; _offset = @[@0.0, @0.0, @0.0];
 	}
 	return self;
