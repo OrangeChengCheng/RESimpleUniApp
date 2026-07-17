@@ -184,6 +184,12 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
 	<key>dcloud_appkey</key>
 	<string>8bb13a734bae754a0c0d33c276e58d3e</string>
 	<key>dcloud_uniplugins</key>

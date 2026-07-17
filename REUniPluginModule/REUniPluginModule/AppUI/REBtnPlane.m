@@ -8,12 +8,6 @@
 #import "REBtnPlane.h"
 
 
-#define RREBtnPlaneLeft (12)
-#define RREBtnPlaneTop (20)
-#define RREBtnPlaneWidth (40)
-#define RREBtnPlaneHeight (92)
-
-
 @interface REBtnPlane ()
 @property (weak, nonatomic) IBOutlet UIView *reBtnPlanTree;
 @property (weak, nonatomic) IBOutlet UIView *reBtnPlanProperty;
@@ -52,7 +46,7 @@
 + (instancetype)initWithCallback:(REBtnPlaneCallback)callback {
 	NSArray *nibs = [REUniPluginModule_bundle loadNibNamed:@"REBtnPlane" owner:nil options:nil];
 	REBtnPlane *re_btnPlane = nibs.firstObject;
-	re_btnPlane.frame = CGRectMake(RREBtnPlaneLeft, kStatusBarHeight + kNavBarHeight + RREBtnPlaneTop, RREBtnPlaneWidth, RREBtnPlaneHeight);
+	re_btnPlane.frame = CGRectMake(REBtnPlaneLeft, kStatusBarHeight + kNavBarHeight + REBtnPlaneTop, REBtnPlaneWidth, REBtnPlaneHeight);
 	re_btnPlane.onClickCallback = callback;
 		
 	return re_btnPlane;

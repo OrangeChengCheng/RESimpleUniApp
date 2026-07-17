@@ -544,6 +544,13 @@ static CGFloat stateBarHeight = 0.0;
 - (void)initBtnPlane {
 	if (self.sceneUniData.shareType != 1 || ([self.sceneUniData.shareDataType isEqualToString:@"Bim"] || [self.sceneUniData.shareDataType isEqualToString:@"bim"])) {
 		[self.view addSubview:self.re_btnPlane];
+		// 底部居中，距离安全区底部16
+		[self.re_btnPlane mas_makeConstraints:^(MASConstraintMaker *make) {
+			make.leftMargin.mas_equalTo(REBtnPlaneLeft);
+			make.topMargin.mas_equalTo(kStatusBarHeight + kNavBarHeight + REBtnPlaneTop);
+			make.width.mas_equalTo(REBtnPlaneWidth);
+			make.height.mas_equalTo(REBtnPlaneHeight);
+		}];
 	}
 }
 
@@ -852,11 +859,21 @@ static CGFloat stateBarHeight = 0.0;
 #pragma mark - 设备支持操作
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-	return UIInterfaceOrientationMaskPortrait;
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		// iPad：支持所有方向（竖屏+左右横屏，不含倒竖屏）
+		return UIInterfaceOrientationMaskAllButUpsideDown;
+	} else {
+		// iPhone：仅竖屏，禁止横屏
+		return UIInterfaceOrientationMaskPortrait;
+	}
 }
 
 - (BOOL)shouldAutorotate {
-	return false;
+	// iPad允许自动旋转，iPhone禁止自动旋转
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		return YES;
+	}
+	return NO;
 }
 
 
@@ -883,18 +900,18 @@ static CGFloat stateBarHeight = 0.0;
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 //	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-//
 //	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
 //	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-//		// 在动画过程中执行布局更改
+//		// 导航栏 & 3D画布适配
 //		if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
 //			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), kNavBarHeight);
-//			_customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
+//			self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight));
 //		} else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
 //			_re_nav.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, CGRectGetWidth(self.view.bounds), stateBarHeight + kNavBarHeight);
 //			self.customView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + stateBarHeight + kNavBarHeight, CGRectGetWidth(self.view.bounds), (CGRectGetHeight(self.view.bounds) - kNavBarHeight - stateBarHeight));
 //		}
-//
+//		// 刷新3D渲染画布
+//		[[BlackHole3D sharedSingleton] getRenderView].frame = self.customView.bounds;
 //	} completion:nil];
 //}
 

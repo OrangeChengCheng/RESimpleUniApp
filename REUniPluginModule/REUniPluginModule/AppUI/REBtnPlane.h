@@ -7,6 +7,11 @@
 
 #import <UIKit/UIKit.h>
 
+#define REBtnPlaneLeft (12)
+#define REBtnPlaneTop (20)
+#define REBtnPlaneWidth (40)
+#define REBtnPlaneHeight (92)
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^ REBtnPlaneCallback)(NSString *btnId, BOOL isSelected);
