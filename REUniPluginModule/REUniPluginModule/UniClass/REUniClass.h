@@ -23,6 +23,7 @@
 #import "REUrlUniData.h"
 #import "REAuthorUniData.h"
 #import "REMonomerUniData.h"
+#import "REProjectionUniData.h"
 
 
 #endif /* REUniClass_h */

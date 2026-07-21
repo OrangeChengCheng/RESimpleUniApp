@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class REUrlUniData;
 @class REAuthorUniData;
 @class REMonomerUniData;
+@class REProjectionUniData;
 
 @interface RESceneUniData : NSObject
 
@@ -45,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<REExtrudeUniData *> *extrudeList;
 @property (nonatomic, strong) NSArray<REExtrudeTexUniData *> *extrudeTexList;
 @property (nonatomic, strong) NSArray<REMonomerUniData *> *monomerList;
+@property (nonatomic, strong) NSArray<REProjectionUniData *> *projectionList;
 
 @end
 

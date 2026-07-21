@@ -42,6 +42,7 @@
 		@"extrudeTexList": [REExtrudeTexUniData class],
 		@"urlHeaderList": [REUrlUniData class],
 		@"monomerList": [REMonomerUniData class],
+		@"projectionList": [REProjectionUniData class],
 	};
 }
 

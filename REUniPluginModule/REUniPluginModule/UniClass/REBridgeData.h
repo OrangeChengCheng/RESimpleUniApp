@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<NSString *> *waterNameList;
 @property (nonatomic, strong) NSArray<NSString *> *extrudeIdst;
 @property (nonatomic, strong) NSArray<NSString *> *monomerIds;
+@property (nonatomic, strong) NSArray<NSString *> *projectionIds;
 
 @property (nonatomic, copy) NSString *waterName;
 @property (nonatomic, copy) NSString *extrudeId;

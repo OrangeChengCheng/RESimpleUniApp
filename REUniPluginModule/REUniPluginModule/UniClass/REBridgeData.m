@@ -19,7 +19,7 @@
 		_visible = YES; _alpha = 255; _attrValid = YES; _probeMask = 1;
 		_unitId = REEmptyStr; _active = YES;
 		_resType = REEmptyStr; _terrResEm = RETerrResEm_ALL;
-		_waterNameList = @[]; _extrudeIdst = @[]; _waterName = REEmptyStr; _extrudeId = REEmptyStr; _monomerIds = @[];
+		_waterNameList = @[]; _extrudeIdst = @[]; _waterName = REEmptyStr; _extrudeId = REEmptyStr; _monomerIds = @[]; _projectionIds = @[];
 		_depthBias = 1.0; _locIDList = @[];
 		_locType = @"CAM_DIR_CURRENT"; _locTypeEm = CAM_DIR_CURRENT;
 		_arrBound = @[]; _box3D = [REBBox3D new]; _depthBias = 0; _topHeight = 0; _bottomHeight = 0;

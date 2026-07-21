@@ -414,6 +414,8 @@ static CGFloat stateBarHeight = 0.0;
 		[[BlackHole3D sharedSingleton].Monomer setSelAttr:monomerClrAttr];
 	} else if ([type isEqualToString:@"monomerVisible"]) {
 		[[BlackHole3D sharedSingleton].Monomer setVisible:bridgeData.monomerIds visible:bridgeData.visible];
+	} else if ([type isEqualToString:@"projectionVisible"]) {
+		[[BlackHole3D sharedSingleton].Projection setVisible:bridgeData.projectionIds visible:bridgeData.visible];
 	}
 }
 
@@ -688,6 +690,7 @@ static CGFloat stateBarHeight = 0.0;
 				[strongSelf addWater];
 				[strongSelf addExtrude];
 				[strongSelf addMonomer];
+				[strongSelf addProjection];
 				[strongSelf.loadingView hiddenLoading];
 			} else {
 				[REModule sendMsgAppToUni:REModuleMsg_T2 message:@"模型资源加载失败！"];
@@ -850,6 +853,49 @@ static CGFloat stateBarHeight = 0.0;
 		[re_monomerList addObject:re_monomerInfo];
 	}
 	[[BlackHole3D sharedSingleton].Monomer setData:re_monomerList];
+}
+
+
+
+#pragma mark - 视频投射加载
+- (void)addProjection {
+	if (!self.sceneUniData.projectionList || !self.sceneUniData.projectionList.count) {
+		return;
+	}
+	NSMutableArray *re_projectionList = [NSMutableArray array];
+	for (REProjectionUniData *projectionInfo in self.sceneUniData.projectionList) {
+		REProjectionInfo *re_projectionInfo = [[REProjectionInfo alloc] init];
+		re_projectionInfo.projectionId = projectionInfo.projectionId;
+		re_projectionInfo.camPos = [RETool arrToDVec3:projectionInfo.camPos];
+		re_projectionInfo.targetPos = [RETool arrToDVec3:projectionInfo.targetPos];
+		re_projectionInfo.type = projectionInfo.type;
+		re_projectionInfo.planeNormal = [RETool arrToDVec3:projectionInfo.planeNormal];
+		re_projectionInfo.planeRight = [RETool arrToDVec3:projectionInfo.planeRight];
+		re_projectionInfo.nearFarPlaneOffset = [RETool arrToDVec2:projectionInfo.nearFarPlaneOffset];
+		re_projectionInfo.nearPlaneRect = [RETool arrToDVec4:projectionInfo.nearPlaneRect];
+		re_projectionInfo.aspectRatio = projectionInfo.aspectRatio;
+		re_projectionInfo.fieldAngle = projectionInfo.fieldAngle;
+		re_projectionInfo.texPath = projectionInfo.texPath;
+		re_projectionInfo.texType = projectionInfo.texType;
+		re_projectionInfo.texClrMult = [RETool arrToColor:projectionInfo.texClrMult];
+		re_projectionInfo.uvRect = [RETool arrToDVec4:projectionInfo.uvRect];
+		re_projectionInfo.uvMapPtNum = [RETool arrToDVec2:projectionInfo.uvMapPtNum];
+		NSMutableArray *uvMapPtPosList = [NSMutableArray array];
+		for (NSArray<NSNumber *> *pot in projectionInfo.uvMapPtPosList) {
+			[uvMapPtPosList addObject:[REPoint4D initDvec4:[RETool arrToDVec4:pot]]];
+		}
+		re_projectionInfo.uvMapPtPosList = uvMapPtPosList;
+		re_projectionInfo.showState = projectionInfo.showState;
+		re_projectionInfo.clipPlaneValid = projectionInfo.clipPlaneValid;
+		NSMutableArray *clipBoxGeom = [NSMutableArray array];
+		for (NSArray<NSNumber *> *pot in projectionInfo.clipBoxGeom) {
+			[clipBoxGeom addObject:[REPoint3D initDvec3:[RETool arrToDVec3:pot]]];
+		}
+		re_projectionInfo.clipBoxGeom = clipBoxGeom;
+		
+		[re_projectionList addObject:re_projectionInfo];
+	}
+	[[BlackHole3D sharedSingleton].Projection setData:re_projectionList];
 }
 
 
